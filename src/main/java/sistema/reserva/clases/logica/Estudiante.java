@@ -31,4 +31,27 @@ public class Estudiante {
         this.presupuesto = presupuesto;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMateriaDeseada() {
+        return materiaDeseada;
+    }
+
+    public List<String> getHorarioDisp() {
+        return horarioDisp;
+    }
+
+    public int getPresupuesto() {
+        return presupuesto;
+    }
 }
