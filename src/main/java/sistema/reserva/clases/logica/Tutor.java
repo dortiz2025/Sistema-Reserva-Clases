@@ -30,4 +30,32 @@ public class Tutor {
     public void setMaxAlum(int maxAlum){
         this.maxAlum = maxAlum;
     }
+
+    public String getNombre(){
+        return this.nombre;
+    }
+
+    public String getApellidos(){
+        return this.apellidos;
+    }
+
+    public String getEmail(){
+        return this.email;
+    }
+
+    public String getMateria(){
+        return this.materia;
+    }
+
+    public String getHorariosDisp(){
+        return this.horariosDisp;
+    }
+
+    public int getMaxAlum() {
+        return maxAlum;
+    }
+
+    public int getTarifa() {
+        return tarifa;
+    }
 }
