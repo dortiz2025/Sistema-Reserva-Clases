@@ -18,4 +18,17 @@ public class Estudiante {
 
     }
 
+
+    public void setMateriaDeseada(String materiaDeseada) {
+        this.materiaDeseada = materiaDeseada;
+    }
+
+    public void setHorarioDisp(List<String> horarioDisp) {
+        this.horarioDisp = horarioDisp;
+    }
+
+    public void setPresupuesto(int presupuesto) {
+        this.presupuesto = presupuesto;
+    }
+
 }
