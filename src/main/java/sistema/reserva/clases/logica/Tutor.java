@@ -6,7 +6,7 @@ public class Tutor {
     private String apellidos;
     private String email;
     private String materia;
-    private String horariosDisp;
+    private List<String> horariosDisp;
     private int tarifa;
     private int maxAlum;
 
@@ -19,7 +19,7 @@ public class Tutor {
     }
 
 
-    public void setHorariosDisp(String horariosDisp){
+    public void setHorariosDisp(List<String> horariosDisp){
         this.horariosDisp = horariosDisp;
     }
 
@@ -47,7 +47,7 @@ public class Tutor {
         return this.materia;
     }
 
-    public String getHorariosDisp(){
+    public List<String> getHorariosDisp(){
         return this.horariosDisp;
     }
 
