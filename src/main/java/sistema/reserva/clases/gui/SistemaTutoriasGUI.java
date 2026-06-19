@@ -89,10 +89,24 @@ public class SistemaTutoriasGUI extends JFrame {
     private JPanel crearPanelTutores() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
-        form.add(new JLabel("Nombre:")); form.add(new JTextField(15));
-        form.add(new JLabel("Materia:")); form.add(new JTextField(15));
-        form.add(new JLabel("Cupos:")); form.add(new JTextField(15));
-        form.add(new JButton("Registrar Tutor"));
+
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtMateria = new JTextField(15);
+        JTextField txtCupos = new JTextField(15);
+        JButton btnGuardar = new JButton("Registrar Tutor");
+
+        btnGuardar.addActionListener(e -> {
+            String nombre = txtNombre.getText();
+            String materia = txtMateria.getText();
+            String cupos = txtCupos.getText();
+            // aqui se espera la llamada a admin.registrarTutor(nombre, materia, cupos)
+        });
+
+        form.add(new JLabel("Nombre:")); form.add(txtNombre);
+        form.add(new JLabel("Materia:")); form.add(txtMateria);
+        form.add(new JLabel("Cupos:")); form.add(txtCupos);
+        form.add(new JLabel("")); form.add(btnGuardar);
+
         panel.add(form);
         return panel;
     }
