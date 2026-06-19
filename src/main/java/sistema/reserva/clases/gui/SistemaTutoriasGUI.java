@@ -119,7 +119,9 @@ public class SistemaTutoriasGUI extends JFrame {
 
         btnConfirmar.addActionListener(e -> {
             String estudiante = (String) comboEstudiantes.getSelectedItem();
+            String materia = (String) comboMaterias.getSelectedItem();
             String tutor = (String) comboTutores.getSelectedItem();
+            String horario = (String) comboHorarios.getSelectedItem();
             //aqui habria que realizar las validaciones de cupos cruzados y registrar la reserva
         });
 
@@ -135,8 +137,16 @@ public class SistemaTutoriasGUI extends JFrame {
 
     private JPanel crearPanelCalendario() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JScrollPane(new JTextArea()), BorderLayout.CENTER);
-        panel.add(new JButton("Actualizar"), BorderLayout.SOUTH);
+
+        JTextArea txtArea = new JTextArea();
+        JButton btnActualizar = new JButton("Actualizar");
+
+        btnActualizar.addActionListener(e -> {
+            //aqui se espera que se consulte la lista de reservas al administrador y se muestre en txtArea
+        });
+
+        panel.add(new JScrollPane(txtArea), BorderLayout.CENTER);
+        panel.add(btnActualizar, BorderLayout.SOUTH);
         return panel;
     }
 
