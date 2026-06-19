@@ -64,22 +64,25 @@ public class SistemaTutoriasGUI extends JFrame {
 
     private JPanel crearPanelEstudiantes() {
         JPanel panel = new JPanel(new GridBagLayout());
-        JPanel form = new JPanel(new GridLayout(4, 2, 10, 20));
+        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
 
         //componentes en variables
         JTextField txtNombre = new JTextField(15);
         JTextField txtMatricula = new JTextField(15);
+        JTextField txtPresupuesto = new JTextField(15);
         JButton btnGuardar = new JButton("Registrar Estudiante");
 
         //boton configurado para usarse
         btnGuardar.addActionListener(e -> {
             String nombre = txtNombre.getText();
             String matricula = txtMatricula.getText();
-            // aqui se espera la llamada a admin.registrarEstudiante(nombre, matricula)
+            String presupuesto = txtPresupuesto.getText();
+            //aqui se espera la llamada a admin.registrarEstudiante(nombre, matricula, presupuesto)
         });
 
         form.add(new JLabel("Nombre:")); form.add(txtNombre);
         form.add(new JLabel("Matrícula:")); form.add(txtMatricula);
+        form.add(new JLabel("Presupuesto ($):")); form.add(txtPresupuesto);
         form.add(new JLabel("")); form.add(btnGuardar); //el espacio vacio alinea el boton a la derecha
 
         panel.add(form);
@@ -88,22 +91,26 @@ public class SistemaTutoriasGUI extends JFrame {
 
     private JPanel crearPanelTutores() {
         JPanel panel = new JPanel(new GridBagLayout());
-        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
+        JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
 
+        //componentes en variables
         JTextField txtNombre = new JTextField(15);
         JTextField txtMateria = new JTextField(15);
+        JTextField txtTarifa = new JTextField(15);
         JTextField txtCupos = new JTextField(15);
         JButton btnGuardar = new JButton("Registrar Tutor");
 
         btnGuardar.addActionListener(e -> {
             String nombre = txtNombre.getText();
             String materia = txtMateria.getText();
+            String tarifa = txtTarifa.getText();
             String cupos = txtCupos.getText();
-            // aqui se espera la llamada a admin.registrarTutor(nombre, materia, cupos)
+            //aqui se espera la llamada a admin.registrarTutor(nombre, materia, tarifa, cupos)
         });
 
         form.add(new JLabel("Nombre:")); form.add(txtNombre);
         form.add(new JLabel("Materia:")); form.add(txtMateria);
+        form.add(new JLabel("Tarifa ($):")); form.add(txtTarifa);
         form.add(new JLabel("Cupos:")); form.add(txtCupos);
         form.add(new JLabel("")); form.add(btnGuardar);
 
@@ -122,14 +129,17 @@ public class SistemaTutoriasGUI extends JFrame {
             String materia = (String) comboMaterias.getSelectedItem();
             String tutor = (String) comboTutores.getSelectedItem();
             String horario = (String) comboHorarios.getSelectedItem();
-            //aqui habria que realizar las validaciones de cupos cruzados y registrar la reserva
+            //aqui habria que realizar las validaciones de cupos cruzados,
+            // verificar si el presupuesto alcanza para la tarifa y registrar la reserva
         });
 
         form.add(new JLabel("Estudiante:")); form.add(comboEstudiantes);
         form.add(new JLabel("Materia:")); form.add(comboMaterias);
         form.add(new JLabel("Tutor:")); form.add(comboTutores);
         form.add(new JLabel("Horario:")); form.add(comboHorarios);
-        form.add(new JLabel("")); form.add(btnConfirmar);
+
+        form.add(new JLabel(""));
+        form.add(btnConfirmar);
 
         panel.add(form);
         return panel;
