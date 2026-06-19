@@ -20,4 +20,12 @@ public class Reserva {
     public Tutor getTutor() {
         return tutor;
     }
+    public String getMateria(){
+        return materia;
+    }
+
+    public String getHorario(){
+        return horario;
+    }
+
 }
