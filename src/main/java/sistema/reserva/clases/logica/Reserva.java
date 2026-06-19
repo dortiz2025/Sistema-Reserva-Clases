@@ -5,4 +5,11 @@ public class Reserva {
     private Tutor tutor;
     private String materia;
     private String horario;
+
+    public Reserva (Estudiante estudiante, Tutor tutor, String materia, String horario) {
+        this.estudiante = estudiante;
+        this.tutor = tutor;
+        this.materia = materia;
+        this.horario = horario;
+    }
 }
