@@ -4,18 +4,16 @@ import java.util.List;
 
 public class Estudiante {
     private String nombre;
-    private String apellidos;
-    private String email;
+    private String matricula;
 
     private String materiaDeseada;
     private List<String> horarioDisp;
     private int presupuesto;
 
-    public Estudiante(String nombre, String apellidos, String email){
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.email = email;
+    public Estudiante(String nombre, String matricula){
 
+        this.nombre = nombre;
+        this.matricula = matricula;
     }
 
 
@@ -35,12 +33,8 @@ public class Estudiante {
         return nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public String getEmail() {
-        return email;
+    public String getMatricula() {
+        return matricula;
     }
 
     public String getMateriaDeseada() {
