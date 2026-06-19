@@ -54,4 +54,9 @@ public class Estudiante {
     public int getPresupuesto() {
         return presupuesto;
     }
+
+    @Override
+    public String toString() {
+        return nombre  + " | #" + matricula + " | $" + presupuesto;
+    }
 }
