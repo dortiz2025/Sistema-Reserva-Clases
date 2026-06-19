@@ -22,10 +22,22 @@ public class SistemaTutoriasGUI extends JFrame {
         panelMenu.setBackground(new Color(45, 52, 54));
         panelMenu.setPreferredSize(new Dimension(200, 0));
 
-        panelMenu.add(crearBotonMenu("Gestión Tutores"));
-        panelMenu.add(crearBotonMenu("Gestión Estudiantes"));
-        panelMenu.add(crearBotonMenu("Agendar Clase"));
-        panelMenu.add(crearBotonMenu("Ver Calendario"));
+        //botones
+        JButton btnTutores = crearBotonMenu("Gestión Tutores");
+        JButton btnEstudiantes = crearBotonMenu("Gestión Estudiantes");
+        JButton btnAgendar = crearBotonMenu("Agendar Clase");
+        JButton btnCalendario = crearBotonMenu("Ver Calendario");
+
+        //cambiar de pantalla
+        btnTutores.addActionListener(e -> cardLayout.show(panelDerecho, "TUTORES"));
+        btnEstudiantes.addActionListener(e -> cardLayout.show(panelDerecho, "ESTUDIANTES"));
+        btnAgendar.addActionListener(e -> cardLayout.show(panelDerecho, "AGENDAR"));
+        btnCalendario.addActionListener(e -> cardLayout.show(panelDerecho, "CALENDARIO"));
+        
+        panelMenu.add(btnTutores);
+        panelMenu.add(btnEstudiantes);
+        panelMenu.add(btnAgendar);
+        panelMenu.add(btnCalendario);
 
 
         cardLayout = new CardLayout();
