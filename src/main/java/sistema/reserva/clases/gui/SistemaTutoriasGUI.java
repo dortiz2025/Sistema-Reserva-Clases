@@ -115,13 +115,19 @@ public class SistemaTutoriasGUI extends JFrame {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
 
+        JButton btnConfirmar = new JButton("Confirmar Reserva");
+
+        btnConfirmar.addActionListener(e -> {
+            String estudiante = (String) comboEstudiantes.getSelectedItem();
+            String tutor = (String) comboTutores.getSelectedItem();
+            //aqui habria que realizar las validaciones de cupos cruzados y registrar la reserva
+        });
+
         form.add(new JLabel("Estudiante:")); form.add(comboEstudiantes);
         form.add(new JLabel("Materia:")); form.add(comboMaterias);
         form.add(new JLabel("Tutor:")); form.add(comboTutores);
         form.add(new JLabel("Horario:")); form.add(comboHorarios);
-
-        form.add(new JLabel(""));
-        form.add(new JButton("Confirmar Reserva"));
+        form.add(new JLabel("")); form.add(btnConfirmar);
 
         panel.add(form);
         return panel;
