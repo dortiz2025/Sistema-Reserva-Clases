@@ -26,6 +26,7 @@ public class SistemaTutoriasGUI extends JFrame {
         panelMenu.add(crearBotonMenu("Gestión Estudiantes"));
         panelMenu.add(crearBotonMenu("Agendar Clase"));
         panelMenu.add(crearBotonMenu("Ver Calendario"));
+        panelDerecho.add(crearPanelCalendario(), "CALENDARIO");
 
         cardLayout = new CardLayout();
         panelDerecho = new JPanel(cardLayout);
@@ -71,7 +72,14 @@ public class SistemaTutoriasGUI extends JFrame {
         panel.add(form);
         return panel;
     }
-    
+
+    private JPanel crearPanelCalendario() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JScrollPane(new JTextArea()), BorderLayout.CENTER);
+        panel.add(new JButton("Actualizar"), BorderLayout.SOUTH);
+        return panel;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new SistemaTutoriasGUI().setVisible(true));
     }
