@@ -8,8 +8,10 @@ public class SistemaTutoriasGUI extends JFrame {
     private JPanel panelDerecho;
     private JLabel lblEstado;
 
+    private JComboBox<String> comboEstudiantes = new JComboBox<>();
     private JComboBox<String> comboMaterias = new JComboBox<>();
     private JComboBox<String> comboTutores = new JComboBox<>();
+    private JComboBox<String> comboHorarios = new JComboBox<>();
 
     public SistemaTutoriasGUI() {
         setTitle("Sistema de Gestión de Tutorías - Panel de Administrador");
@@ -33,7 +35,7 @@ public class SistemaTutoriasGUI extends JFrame {
         btnEstudiantes.addActionListener(e -> cardLayout.show(panelDerecho, "ESTUDIANTES"));
         btnAgendar.addActionListener(e -> cardLayout.show(panelDerecho, "AGENDAR"));
         btnCalendario.addActionListener(e -> cardLayout.show(panelDerecho, "CALENDARIO"));
-        
+
         panelMenu.add(btnTutores);
         panelMenu.add(btnEstudiantes);
         panelMenu.add(btnAgendar);
@@ -83,10 +85,16 @@ public class SistemaTutoriasGUI extends JFrame {
 
     private JPanel crearPanelAgendar() {
         JPanel panel = new JPanel(new GridBagLayout());
-        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
+        JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
+
+        form.add(new JLabel("Estudiante:")); form.add(comboEstudiantes);
         form.add(new JLabel("Materia:")); form.add(comboMaterias);
         form.add(new JLabel("Tutor:")); form.add(comboTutores);
+        form.add(new JLabel("Horario:")); form.add(comboHorarios);
+
+        form.add(new JLabel(""));
         form.add(new JButton("Confirmar Reserva"));
+
         panel.add(form);
         return panel;
     }
