@@ -3,18 +3,15 @@ package sistema.reserva.clases.logica;
 
 public class Tutor {
     private String nombre;
-    private String apellidos;
-    private String email;
+
     private String materia;
+
     private List<String> horariosDisp;
     private int tarifa;
     private int maxAlum;
 
-    public Tutor(String nombre, String apellidos, String email, String materia){
-
+    public Tutor(String nombre, String materia){
         this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.email = email;
         this.materia = materia;
     }
 
@@ -33,14 +30,6 @@ public class Tutor {
 
     public String getNombre(){
         return this.nombre;
-    }
-
-    public String getApellidos(){
-        return this.apellidos;
-    }
-
-    public String getEmail(){
-        return this.email;
     }
 
     public String getMateria(){
