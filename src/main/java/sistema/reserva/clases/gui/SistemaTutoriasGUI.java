@@ -65,9 +65,23 @@ public class SistemaTutoriasGUI extends JFrame {
     private JPanel crearPanelEstudiantes() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel form = new JPanel(new GridLayout(4, 2, 10, 20));
-        form.add(new JLabel("Nombre:")); form.add(new JTextField(15));
-        form.add(new JLabel("Matrícula:")); form.add(new JTextField(15));
-        form.add(new JButton("Registrar Estudiante"));
+
+        //componentes en variables
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtMatricula = new JTextField(15);
+        JButton btnGuardar = new JButton("Registrar Estudiante");
+
+        //boton configurado para usarse
+        btnGuardar.addActionListener(e -> {
+            String nombre = txtNombre.getText();
+            String matricula = txtMatricula.getText();
+            // aqui se espera la llamada a admin.registrarEstudiante(nombre, matricula)
+        });
+
+        form.add(new JLabel("Nombre:")); form.add(txtNombre);
+        form.add(new JLabel("Matrícula:")); form.add(txtMatricula);
+        form.add(new JLabel("")); form.add(btnGuardar); //el espacio vacio alinea el boton a la derecha
+
         panel.add(form);
         return panel;
     }
