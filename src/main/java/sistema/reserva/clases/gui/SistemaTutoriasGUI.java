@@ -8,6 +8,9 @@ public class SistemaTutoriasGUI extends JFrame {
     private JPanel panelDerecho;
     private JLabel lblEstado;
 
+    private JComboBox<String> comboMaterias = new JComboBox<>();
+    private JComboBox<String> comboTutores = new JComboBox<>();
+
     public SistemaTutoriasGUI() {
         setTitle("Sistema de Gestión de Tutorías - Panel de Administrador");
         setSize(850, 550);
@@ -59,6 +62,16 @@ public class SistemaTutoriasGUI extends JFrame {
         return panel;
     }
 
+    private JPanel crearPanelAgendar() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
+        form.add(new JLabel("Materia:")); form.add(comboMaterias);
+        form.add(new JLabel("Tutor:")); form.add(comboTutores);
+        form.add(new JButton("Confirmar Reserva"));
+        panel.add(form);
+        return panel;
+    }
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new SistemaTutoriasGUI().setVisible(true));
     }
