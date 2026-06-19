@@ -27,6 +27,7 @@ public class SistemaTutoriasGUI extends JFrame {
         cardLayout = new CardLayout();
         panelDerecho = new JPanel(cardLayout);
         panelDerecho.add(crearPanelEstudiantes(), "ESTUDIANTES");
+        panelDerecho.add(crearPanelTutores(), "TUTORES");
         lblEstado = new JLabel("  Estado: Iniciado");
         add(panelMenu, BorderLayout.WEST);
         add(panelDerecho, BorderLayout.CENTER);
@@ -43,6 +44,17 @@ public class SistemaTutoriasGUI extends JFrame {
         form.add(new JLabel("Nombre:")); form.add(new JTextField(15));
         form.add(new JLabel("Matrícula:")); form.add(new JTextField(15));
         form.add(new JButton("Registrar Estudiante"));
+        panel.add(form);
+        return panel;
+    }
+
+    private JPanel crearPanelTutores() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
+        form.add(new JLabel("Nombre:")); form.add(new JTextField(15));
+        form.add(new JLabel("Materia:")); form.add(new JTextField(15));
+        form.add(new JLabel("Cupos:")); form.add(new JTextField(15));
+        form.add(new JButton("Registrar Tutor"));
         panel.add(form);
         return panel;
     }
