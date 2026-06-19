@@ -12,4 +12,12 @@ public class Reserva {
         this.materia = materia;
         this.horario = horario;
     }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public Tutor getTutor() {
+        return tutor;
+    }
 }
