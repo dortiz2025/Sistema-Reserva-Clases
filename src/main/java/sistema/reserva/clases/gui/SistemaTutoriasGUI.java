@@ -15,7 +15,7 @@ public class SistemaTutoriasGUI extends JFrame {
 
     public SistemaTutoriasGUI() {
         setTitle("Sistema de Gestión de Tutorías - Panel de Administrador");
-        setSize(850, 550);
+        setSize(950, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -41,7 +41,6 @@ public class SistemaTutoriasGUI extends JFrame {
         panelMenu.add(btnAgendar);
         panelMenu.add(btnCalendario);
 
-
         cardLayout = new CardLayout();
         panelDerecho = new JPanel(cardLayout);
 
@@ -63,16 +62,19 @@ public class SistemaTutoriasGUI extends JFrame {
     }
 
     private JPanel crearPanelEstudiantes() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        //registro
+        JPanel panelRegistro = new JPanel(new GridBagLayout());
+        panelRegistro.setBorder(BorderFactory.createTitledBorder("Registrar Estudiante"));
         JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
 
-        //componentes en variables
         JTextField txtNombre = new JTextField(15);
         JTextField txtMatricula = new JTextField(15);
         JTextField txtPresupuesto = new JTextField(15);
-        JButton btnGuardar = new JButton("Registrar Estudiante");
+        JButton btnGuardar = new JButton("Registrar");
 
-        //boton configurado para usarse
         btnGuardar.addActionListener(e -> {
             String nombre = txtNombre.getText();
             String matricula = txtMatricula.getText();
@@ -83,22 +85,55 @@ public class SistemaTutoriasGUI extends JFrame {
         form.add(new JLabel("Nombre:")); form.add(txtNombre);
         form.add(new JLabel("Matrícula:")); form.add(txtMatricula);
         form.add(new JLabel("Presupuesto ($):")); form.add(txtPresupuesto);
-        form.add(new JLabel("")); form.add(btnGuardar); //el espacio vacio alinea el boton a la derecha
+        form.add(new JLabel("")); form.add(btnGuardar);
+        panelRegistro.add(form);
 
-        panel.add(form);
-        return panel;
+        //visualizacion
+        JPanel panelLista = new JPanel(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createTitledBorder("Estudiantes Registrados"));
+        JTextArea txtAreaEstudiantes = new JTextArea();
+        txtAreaEstudiantes.setEditable(false);
+        JButton btnActualizarLista = new JButton("Actualizar Lista");
+        btnActualizarLista.addActionListener(e -> {
+            //aqui se espera que se consulte la lista de estudiantes al admin y se muestre
+        });
+        panelLista.add(new JScrollPane(txtAreaEstudiantes), BorderLayout.CENTER);
+        panelLista.add(btnActualizarLista, BorderLayout.SOUTH);
+
+        //eliminación
+        JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
+        JTextField txtMatriculaEliminar = new JTextField(15);
+        JButton btnEliminar = new JButton("Eliminar por Matrícula");
+        btnEliminar.addActionListener(e -> {
+            String matricula = txtMatriculaEliminar.getText();
+            //aqui se espera la llamada a admin.eliminarEstudiante(matricula)
+        });
+        panelEliminar.add(new JLabel("Matrícula:"));
+        panelEliminar.add(txtMatriculaEliminar);
+        panelEliminar.add(btnEliminar);
+
+        panelPrincipal.add(panelRegistro, BorderLayout.WEST);
+        panelPrincipal.add(panelLista, BorderLayout.CENTER);
+        panelPrincipal.add(panelEliminar, BorderLayout.SOUTH);
+
+        return panelPrincipal;
     }
 
     private JPanel crearPanelTutores() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        //registro
+        JPanel panelRegistro = new JPanel(new GridBagLayout());
+        panelRegistro.setBorder(BorderFactory.createTitledBorder("Registrar Tutor"));
         JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
 
-        //componentes en variables
         JTextField txtNombre = new JTextField(15);
         JTextField txtMateria = new JTextField(15);
         JTextField txtTarifa = new JTextField(15);
         JTextField txtCupos = new JTextField(15);
-        JButton btnGuardar = new JButton("Registrar Tutor");
+        JButton btnGuardar = new JButton("Registrar");
 
         btnGuardar.addActionListener(e -> {
             String nombre = txtNombre.getText();
@@ -113,14 +148,44 @@ public class SistemaTutoriasGUI extends JFrame {
         form.add(new JLabel("Tarifa ($):")); form.add(txtTarifa);
         form.add(new JLabel("Cupos:")); form.add(txtCupos);
         form.add(new JLabel("")); form.add(btnGuardar);
+        panelRegistro.add(form);
 
-        panel.add(form);
-        return panel;
+        //visualizacion
+        JPanel panelLista = new JPanel(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createTitledBorder("Tutores Registrados"));
+        JTextArea txtAreaTutores = new JTextArea();
+        txtAreaTutores.setEditable(false);
+        JButton btnActualizarLista = new JButton("Actualizar Lista");
+        btnActualizarLista.addActionListener(e -> {
+            //aqui se espera que se consulte la lista de tutores al admin y se muestre
+        });
+        panelLista.add(new JScrollPane(txtAreaTutores), BorderLayout.CENTER);
+        panelLista.add(btnActualizarLista, BorderLayout.SOUTH);
+
+        //eliminación
+        JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
+        JTextField txtNombreEliminar = new JTextField(15);
+        JButton btnEliminar = new JButton("Eliminar por Nombre");
+        btnEliminar.addActionListener(e -> {
+            String nombre = txtNombreEliminar.getText();
+            //aqui se espera la llamada a admin.eliminarTutor(nombre)
+        });
+        panelEliminar.add(new JLabel("Nombre del Tutor:"));
+        panelEliminar.add(txtNombreEliminar);
+        panelEliminar.add(btnEliminar);
+
+        panelPrincipal.add(panelRegistro, BorderLayout.WEST);
+        panelPrincipal.add(panelLista, BorderLayout.CENTER);
+        panelPrincipal.add(panelEliminar, BorderLayout.SOUTH);
+
+        return panelPrincipal;
     }
 
     private JPanel crearPanelAgendar() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
+        form.setBorder(BorderFactory.createTitledBorder("Datos de Reserva"));
 
         JButton btnConfirmar = new JButton("Confirmar Reserva");
 
@@ -146,18 +211,41 @@ public class SistemaTutoriasGUI extends JFrame {
     }
 
     private JPanel crearPanelCalendario() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        //visualización del Calendario
+        JPanel panelLista = new JPanel(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createTitledBorder("Calendario de Reservas Activas"));
         JTextArea txtArea = new JTextArea();
-        JButton btnActualizar = new JButton("Actualizar");
+        txtArea.setEditable(false);
+        JButton btnActualizar = new JButton("Actualizar Calendario");
 
         btnActualizar.addActionListener(e -> {
             //aqui se espera que se consulte la lista de reservas al administrador y se muestre en txtArea
         });
 
-        panel.add(new JScrollPane(txtArea), BorderLayout.CENTER);
-        panel.add(btnActualizar, BorderLayout.SOUTH);
-        return panel;
+        panelLista.add(new JScrollPane(txtArea), BorderLayout.CENTER);
+        panelLista.add(btnActualizar, BorderLayout.SOUTH);
+
+        // 2. Cancelación de Reservas
+        JPanel panelCancelar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelCancelar.setBorder(BorderFactory.createTitledBorder("Modificar/Cancelar Reserva"));
+        JTextField txtIdentificador = new JTextField(20);
+        JButton btnCancelar = new JButton("Cancelar Reserva");
+        btnCancelar.addActionListener(e -> {
+            String idReserva = txtIdentificador.getText();
+            //aqui se espera la llamada a admin.cancelarReserva(idReserva)
+        });
+
+        panelCancelar.add(new JLabel("Datos de Reserva (Estudiante-Horario):"));
+        panelCancelar.add(txtIdentificador);
+        panelCancelar.add(btnCancelar);
+
+        panelPrincipal.add(panelLista, BorderLayout.CENTER);
+        panelPrincipal.add(panelCancelar, BorderLayout.SOUTH);
+
+        return panelPrincipal;
     }
 
     public static void main(String[] args) {
