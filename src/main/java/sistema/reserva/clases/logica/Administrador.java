@@ -1,4 +1,4 @@
 package sistema.reserva.clases.logica;
 
-public class Gestor {
+public class Administrador {
 }
