@@ -58,4 +58,28 @@ public class Reserva {
         return horario;
     }
 
+    /**
+     * Modifica el tutor asociado a la reserva.
+     * @param tutor Nuevo tutor.
+     */
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
+
+    /**
+     * Modifica la materia asociada a la reserva.
+     * @param materia Nueva materia.
+     */
+    public void setMateria(String materia) {
+        this.materia = materia;
+    }
+
+    /**
+     * Modifica el horario agendado.
+     * @param horario Nuevo Horario.
+     */
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
 }
