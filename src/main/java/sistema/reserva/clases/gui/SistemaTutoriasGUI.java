@@ -3,6 +3,13 @@ package sistema.reserva.clases.gui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Clase que representa la Interfaz Gráfica de Usuario (GUI) del Sistema de Gestión de Tutorías.
+ * * Actúa como la "Vista" del sistema, proporcionando los componentes visuales para
+ * la gestión de perfiles (estudiantes y tutores), el agendamiento de reservas y
+ * la visualización del calendario. No contiene lógica de negocio; los eventos de
+ * los botones están diseñados para ser conectados a un controlador externo (Administrador).
+ */
 public class SistemaTutoriasGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel panelDerecho;
@@ -13,6 +20,11 @@ public class SistemaTutoriasGUI extends JFrame {
     private JComboBox<String> comboTutores = new JComboBox<>();
     private JComboBox<String> comboHorarios = new JComboBox<>();
 
+    /**
+     * Constructor de SistemaTutoriasGUI.
+     * Inicializa la ventana principal, configura el menú lateral de navegación
+     * y prepara el contenedor principal usando un CardLayout para alternar entre pantallas.
+     */
     public SistemaTutoriasGUI() {
         setTitle("Sistema de Gestión de Tutorías - Panel de Administrador");
         setSize(950, 600);
@@ -57,10 +69,23 @@ public class SistemaTutoriasGUI extends JFrame {
         cardLayout.show(panelDerecho, "ESTUDIANTES");
     }
 
+    /**
+     * Crea un botón predeterminado para el menú lateral.
+     *
+     * @param texto El texto que se mostrará en el botón.
+     * @return Un objeto JButton configurado.
+     */
     private JButton crearBotonMenu(String texto) {
         return new JButton(texto);
     }
 
+    /**
+     * Construye el panel de gestión de estudiantes.
+     * Incluye secciones para registrar nuevos estudiantes, visualizar la lista actual
+     * y eliminar perfiles existentes mediante la matrícula.
+     *
+     * @return JPanel estructurado para la gestión de estudiantes.
+     */
     private JPanel crearPanelEstudiantes() {
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -120,6 +145,13 @@ public class SistemaTutoriasGUI extends JFrame {
         return panelPrincipal;
     }
 
+    /**
+     * Construye el panel de gestión de tutores.
+     * Provee componentes para registrar tutores con su respectiva tarifa y cupos,
+     * listar los tutores activos y eliminar perfiles por nombre.
+     *
+     * @return JPanel estructurado para la gestión de tutores.
+     */
     private JPanel crearPanelTutores() {
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -182,6 +214,13 @@ public class SistemaTutoriasGUI extends JFrame {
         return panelPrincipal;
     }
 
+    /**
+     * Construye el panel para agendar clases.
+     * Contiene selectores (ComboBox) para relacionar estudiantes, materias, tutores
+     * y horarios en una nueva reserva.
+     *
+     * @return JPanel estructurado para la creación de reservas.
+     */
     private JPanel crearPanelAgendar() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
@@ -210,6 +249,13 @@ public class SistemaTutoriasGUI extends JFrame {
         return panel;
     }
 
+    /**
+     * Construye el panel de calendario.
+     * Permite visualizar las reservas actualmente activas en el sistema y provee
+     * las herramientas para modificar o cancelar una reserva específica.
+     *
+     * @return JPanel estructurado para la visualización y control del calendario.
+     */
     private JPanel crearPanelCalendario() {
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -228,7 +274,7 @@ public class SistemaTutoriasGUI extends JFrame {
         panelLista.add(new JScrollPane(txtArea), BorderLayout.CENTER);
         panelLista.add(btnActualizar, BorderLayout.SOUTH);
 
-        // 2. Cancelación de Reservas
+        //cancelacion de reserva
         JPanel panelCancelar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelCancelar.setBorder(BorderFactory.createTitledBorder("Modificar/Cancelar Reserva"));
         JTextField txtIdentificador = new JTextField(20);
@@ -248,6 +294,12 @@ public class SistemaTutoriasGUI extends JFrame {
         return panelPrincipal;
     }
 
+    /**
+     * Punto de entrada principal para probar o iniciar la interfaz gráfica de manera aislada.
+     * Ejecuta la creación de la ventana dentro del Event Dispatch Thread (EDT) de Swing.
+     *
+     * @param args Argumentos de la línea de comandos (no utilizados).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new SistemaTutoriasGUI().setVisible(true));
     }
