@@ -11,7 +11,7 @@ public class Tutor {
     private String id;
     private String materia;
 
-    private List<String> horariosDisp;
+    private List<String> horariosDisponibles;
     private int tarifa;
     private int maxAlum;
 
@@ -56,11 +56,11 @@ public class Tutor {
     }
 
     /**
-     * Getter de horariosDisp.
+     * Getter de horariosDisponibles.
      * @return Horarios disponibles para reservar.
      */
-    public List<String> getHorariosDisp(){
-        return this.horariosDisp;
+    public List<String> getHorariosDisponibles(){
+        return this.horariosDisponibles;
     }
 
     /**
@@ -80,11 +80,11 @@ public class Tutor {
     }
 
     /**
-     * Adder de horariosDisp.
+     * Adder de horariosDisponibles.
      * @param horario Nuevo horario disponible para reservar.
      */
-    public void addHorariosDisp(String horario){
-        this.horariosDisp.add(horario);
+    public void addHorariosDisponibles(String horario){
+        this.horariosDisponibles.add(horario);
     }
 
     /**
@@ -101,5 +101,22 @@ public class Tutor {
      */
     public void setMaxAlum(int maxAlum){
         this.maxAlum = maxAlum;
+    }
+
+    /**
+     * ToString de la clase.
+     * Útil para imprimir datos del tutor en pantalla.
+     * @return Datos representativos de la clase.
+     */
+    @Override
+    public String toString() {
+        return "Tutor{" +
+                "nombre='" + nombre + '\'' +
+                ", id='" + id + '\'' +
+                ", materia='" + materia + '\'' +
+                ", horariosDisponibles=" + horariosDisponibles +
+                ", tarifa=" + tarifa +
+                ", maxAlum=" + maxAlum +
+                '}';
     }
 }
