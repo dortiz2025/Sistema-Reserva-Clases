@@ -1,5 +1,12 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.reserva;
 
+import sistema.reserva.clases.logica.Tutor;
+
+/**
+ * Clase que representa el estado de una reserva que no se ha completado.
+ * La reserva en este estado puede ser modificada,
+ * cancelada o completada.
+ */
 public class EstadoPendiente implements EstadoReserva {
 
     @Override

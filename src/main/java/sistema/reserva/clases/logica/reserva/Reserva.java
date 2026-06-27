@@ -1,4 +1,7 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.reserva;
+
+import sistema.reserva.clases.logica.Estudiante;
+import sistema.reserva.clases.logica.Tutor;
 
 /**
  * Clase que representa una reserva de una clase.
@@ -25,6 +28,7 @@ public class Reserva {
         this.tutor = tutor;
         this.materia = materia;
         this.horario = horario;
+        this.estado = new EstadoPendiente();
     }
 
     public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {

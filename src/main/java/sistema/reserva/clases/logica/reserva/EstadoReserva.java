@@ -1,4 +1,6 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.reserva;
+
+import sistema.reserva.clases.logica.Tutor;
 
 /**
  * Interfaz que implementa el Patrón State en Reserva.
