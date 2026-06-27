@@ -7,10 +7,11 @@ package sistema.reserva.clases.logica;
  * Puede ser modificada, cancelada o completada.
  */
 public class Reserva {
-    private Estudiante estudiante;
+    private final Estudiante estudiante;
     private Tutor tutor;
     private String materia;
     private String horario;
+    private EstadoReserva estado;
 
     /**
      * Crea una reserva asignando datos asociados.
@@ -24,6 +25,28 @@ public class Reserva {
         this.tutor = tutor;
         this.materia = materia;
         this.horario = horario;
+    }
+
+    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
+        // La reserva no decide si se puede modificar, le pregunta a su estado actual
+        this.estado.modificar(this, nuevoTutor, nuevaMateria, nuevoHorario);
+    }
+
+    public void cancelarReserva() {
+        this.estado.cancelar(this);
+    }
+
+    public void completarReserva() {
+        this.estado.completar(this);
+    }
+
+    // Setter protegido o de paquete para que solo los Estados puedan cambiar el estado
+    void setEstado(EstadoReserva nuevoEstado) {
+        this.estado = nuevoEstado;
+    }
+
+    public String getNombreEstadoActual() {
+        return this.estado.getNombreEstado();
     }
 
     /**
