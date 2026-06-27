@@ -4,10 +4,12 @@ public class EstadoPendiente implements EstadoReserva {
 
     @Override
     public void modificar(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
-        // Como está pendiente, sí podemos modificar los datos
-        if (nuevoTutor != null) reserva.setTutor(nuevoTutor);
-        if (nuevaMateria != null) reserva.setMateria(nuevaMateria);
-        if (nuevoHorario != null) reserva.setHorario(nuevoHorario);
+        if (nuevoTutor == null || nuevaMateria == null || nuevaMateria.trim().isEmpty() || nuevoHorario == null || nuevoHorario.trim().isEmpty()) {
+            throw new IllegalArgumentException("No se pueden dejar campos vacíos al modificar una reserva.");
+        }
+        reserva.setTutor(nuevoTutor);
+        reserva.setMateria(nuevaMateria);
+        reserva.setHorario(nuevoHorario);
     }
 
     @Override
