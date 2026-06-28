@@ -5,9 +5,9 @@ package sistema.reserva.clases.logica;
  * Este puede tomar clases reservando un horario.
  */
 public class Estudiante {
-    private final String nombre;
+    private String nombre;
     private final String matricula;
-    private final String email;
+    private String email;
 
     /**
      * Inicializa la clase con datos básicos del estudiante.
@@ -23,10 +23,18 @@ public class Estudiante {
 
     /**
      * Getter de nombre.
-     * @return nombre del estudiante.
+     * @return Nombre del estudiante.
      */
     public String getNombre() {
         return this.nombre;
+    }
+
+    /**
+     * Setter de nombre.
+     * @param nombre Nuevo nombre del estudiante.
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     /**
@@ -43,6 +51,14 @@ public class Estudiante {
      */
     public String getEmail() {
         return this.email;
+    }
+
+    /**
+     * Setter del email.
+     * @param email Nuevo correo del estudiante.
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

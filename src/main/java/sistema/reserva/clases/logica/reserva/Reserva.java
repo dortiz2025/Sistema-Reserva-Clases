@@ -33,23 +33,23 @@ public class Reserva {
 
     public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
-        this.estado.modificar(this, nuevoTutor, nuevaMateria, nuevoHorario);
+        this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario);
     }
 
     public void cancelarReserva() {
-        this.estado.cancelar(this);
+        this.estado.cancelarReserva(this);
     }
 
     public void completarReserva() {
-        this.estado.completar(this);
+        this.estado.completarReserva(this);
     }
 
-    // Setter protegido o de paquete para que solo los Estados puedan cambiar el estado
-    void setEstado(EstadoReserva nuevoEstado) {
+    // Setter protected para que solo los estados puedan cambiar el estado actual.
+    protected void setEstado(EstadoReserva nuevoEstado) {
         this.estado = nuevoEstado;
     }
 
-    public String getNombreEstadoActual() {
+    public String getNombreEstado() {
         return this.estado.getNombreEstado();
     }
 
@@ -89,7 +89,7 @@ public class Reserva {
      * Modifica el tutor asociado a la reserva.
      * @param tutor Nuevo tutor.
      */
-    public void setTutor(Tutor tutor) {
+    protected void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
 
@@ -97,7 +97,7 @@ public class Reserva {
      * Modifica la materia asociada a la reserva.
      * @param materia Nueva materia.
      */
-    public void setMateria(String materia) {
+    protected void setMateria(String materia) {
         this.materia = materia;
     }
 
@@ -105,7 +105,7 @@ public class Reserva {
      * Modifica el horario agendado.
      * @param horario Nuevo Horario.
      */
-    public void setHorario(String horario) {
+    protected void setHorario(String horario) {
         this.horario = horario;
     }
 
