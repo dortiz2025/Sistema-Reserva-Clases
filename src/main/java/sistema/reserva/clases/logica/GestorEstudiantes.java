@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class GestorEstudiantes {
 
-    private List<Estudiante> estudiantes;
+    private final List<Estudiante> estudiantes;
 
     /**
      * Inicializa la clase.
