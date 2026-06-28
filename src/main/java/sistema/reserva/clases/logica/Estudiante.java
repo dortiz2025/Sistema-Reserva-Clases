@@ -1,5 +1,7 @@
 package sistema.reserva.clases.logica;
 
+import java.util.UUID;
+
 /**
  * Clase que representa a un estudiante.
  * Este puede tomar clases reservando un horario.
@@ -12,12 +14,12 @@ public class Estudiante {
     /**
      * Inicializa la clase con datos básicos del estudiante.
      * @param nombre Asigna nombre.
-     * @param matricula Matrícula única (como un ID).
      * @param email Correo electrónico para recibir confirmaciones.
      */
-    public Estudiante(String nombre, String matricula, String email) {
+    public Estudiante(String nombre, String email) {
         this.nombre = nombre;
-        this.matricula = matricula;
+        //Se asigna una matrícula única de 6 dígitos.
+        this.matricula = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
         this.email = email;
     }
 
