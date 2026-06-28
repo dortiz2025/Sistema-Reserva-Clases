@@ -10,15 +10,32 @@ import sistema.reserva.clases.logica.Tutor;
  */
 public interface EstadoReserva {
 
-    // Permite modificar la reserva. Lanzará excepción si el estado no lo permite.
-    void modificar(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario);
+    /**
+     * Modifica la reserva.
+     * @param reserva Referencia de la reserva.
+     * @param nuevoTutor Referencia del tutor nuevo.
+     * @param nuevaMateria Nueva materia.
+     * @param nuevoHorario Nuevo horario.
+     */
+    void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario);
 
-    // Cancela la reserva.
-    void cancelar(Reserva reserva);
+    /**
+     * Cancela la reserva.
+     * @param reserva Referencia de la reserva.
+     */
+    void cancelarReserva(Reserva reserva);
 
-    // Marca la reserva como realizada/completada.
-    void completar(Reserva reserva);
+    /**
+     * Completa la reserva, es decir,
+     * confirma que la clase ya se realizó
+     * o que el plazo para modificarla o cancelarla terminó.
+     * @param reserva
+     */
+    void completarReserva(Reserva reserva);
 
-    // Retorna el nombre del estado.
+    /**
+     * Entrega el nombre del estado.
+     * @return String del nombre del estado.
+     */
     String getNombreEstado();
 }
