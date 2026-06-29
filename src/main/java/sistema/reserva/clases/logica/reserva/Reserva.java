@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica.reserva;
 
+import sistema.reserva.clases.logica.BloqueHorario;
 import sistema.reserva.clases.logica.Estudiante;
 import sistema.reserva.clases.logica.Tutor;
 
@@ -13,7 +14,7 @@ public class Reserva {
     private final Estudiante estudiante;
     private Tutor tutor;
     private String materia;
-    private String horario;
+    private BloqueHorario horario;
     private EstadoReserva estado;
 
     /**
@@ -23,7 +24,7 @@ public class Reserva {
      * @param materia Materia que imparte el tutor.
      * @param horario Horario agendado.
      */
-    public Reserva (Estudiante estudiante, Tutor tutor, String materia, String horario) {
+    public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario) {
         this.estudiante = estudiante;
         this.tutor = tutor;
         this.materia = materia;
@@ -31,7 +32,7 @@ public class Reserva {
         this.estado = new EstadoPendiente();
     }
 
-    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
+    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
         this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario);
     }
@@ -81,7 +82,7 @@ public class Reserva {
      * Getter de horario.
      * @return Horario agendado.
      */
-    public String getHorario(){
+    public BloqueHorario getHorario(){
         return horario;
     }
 
@@ -105,7 +106,7 @@ public class Reserva {
      * Modifica el horario agendado.
      * @param horario Nuevo Horario.
      */
-    protected void setHorario(String horario) {
+    protected void setHorario(BloqueHorario horario) {
         this.horario = horario;
     }
 

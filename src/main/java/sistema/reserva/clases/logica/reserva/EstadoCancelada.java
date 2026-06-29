@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica.reserva;
 
+import sistema.reserva.clases.logica.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
 
 /**
@@ -18,7 +19,7 @@ public class EstadoCancelada implements EstadoReserva {
      * @param nuevoHorario Nuevo horario.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
         throw new IllegalStateException("No se puede modificar una reserva que ya ha sido cancelada.");
     }
 

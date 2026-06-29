@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica.reserva;
 
+import sistema.reserva.clases.logica.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
 
 /**
@@ -17,7 +18,7 @@ public interface EstadoReserva {
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
      */
-    void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario);
+    void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario);
 
     /**
      * Cancela la reserva.
@@ -29,7 +30,7 @@ public interface EstadoReserva {
      * Completa la reserva, es decir,
      * confirma que la clase ya se realizó
      * o que el plazo para modificarla o cancelarla terminó.
-     * @param reserva
+     * @param reserva Referencia de la reserva.
      */
     void completarReserva(Reserva reserva);
 
