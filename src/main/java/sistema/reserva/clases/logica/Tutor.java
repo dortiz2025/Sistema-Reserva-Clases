@@ -1,4 +1,6 @@
 package sistema.reserva.clases.logica;
+
+ import sistema.reserva.clases.excepciones.CorreoInvalidoException;
  import java.util.List;
  import java.util.UUID;
 
@@ -21,7 +23,7 @@ public class Tutor extends Perfil{
      * @param tarifa Tarifa (única tarifa).
      * @param maxAlum Cantidad de alumnos máximos por clase.
      */
-    public Tutor(String nombre, String email, int tarifa, int maxAlum){
+    public Tutor(String nombre, String email, int tarifa, int maxAlum) throws CorreoInvalidoException {
         super(nombre, email);
         //Se asigna un ID único de 4 dígitos
         this.id = UUID.randomUUID().toString().substring(0,4).toUpperCase();

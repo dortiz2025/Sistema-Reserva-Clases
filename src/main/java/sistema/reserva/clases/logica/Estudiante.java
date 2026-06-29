@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
 import java.util.UUID;
 
 /**
@@ -14,7 +15,7 @@ public class Estudiante extends Perfil{
      * @param nombre Asigna nombre.
      * @param email Correo electrónico para recibir confirmaciones.
      */
-    public Estudiante(String nombre, String email) {
+    public Estudiante(String nombre, String email) throws CorreoInvalidoException {
         super(nombre, email);
         //Se asigna una matrícula única de 6 dígitos.
         this.matricula = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
