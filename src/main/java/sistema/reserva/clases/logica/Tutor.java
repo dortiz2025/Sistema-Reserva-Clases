@@ -1,13 +1,13 @@
 package sistema.reserva.clases.logica;
  import java.util.List;
+ import java.util.UUID;
 
 /**
  * Clase que representa un tutor.
  * Imparte una materia en un horario definido,
  * con cierta tarifa y límite de estudiantes por clase.
  */
-public class Tutor {
-    private String nombre;
+public class Tutor extends Perfil{
     private String id;
     private String materia;
 
@@ -23,20 +23,13 @@ public class Tutor {
      * @param tarifa Tarifa (única tarifa).
      * @param maxAlum Cantidad de alumnos máximos por clase.
      */
-    public Tutor(String nombre, String id, String materia, int tarifa, int maxAlum){
-        this.nombre = nombre;
-        this.id = id;
+    public Tutor(String nombre, String email, String id, String materia, int tarifa, int maxAlum){
+        super(nombre, email);
+        //Se asigna un ID único de 4 dígitos
+        this.id = UUID.randomUUID().toString().substring(0,4).toUpperCase();
         this.materia = materia;
         this.tarifa = tarifa;
         this.maxAlum = maxAlum;
-    }
-
-    /**
-     * Getter de nombre.
-     * @return nombre del tutor.
-     */
-    public String getNombre(){
-        return this.nombre;
     }
 
     /**
@@ -111,7 +104,8 @@ public class Tutor {
     @Override
     public String toString() {
         return "Tutor{" +
-                "nombre='" + nombre + '\'' +
+                "nombre='" + getNombre() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 ", id='" + id + '\'' +
                 ", materia='" + materia + '\'' +
                 ", horariosDisponibles=" + horariosDisponibles +
