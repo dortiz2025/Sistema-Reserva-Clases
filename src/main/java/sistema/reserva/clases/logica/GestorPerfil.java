@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 public abstract class GestorPerfil<T extends Perfil> {
     protected Map<String, T> perfiles = new HashMap<>();
 
+    /**
+     * Registra un perfil en el mapa.
+     * @param idKey Key que puede ser ID de tutor o matrícula de estudiante.
+     * @param perfil Referencia del perfil que se guarda.
+     */
     public void registrarPerfil(String idKey, T perfil) {
         if (perfiles.containsKey(idKey)) {
             throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra registrado.");
@@ -21,18 +26,36 @@ public abstract class GestorPerfil<T extends Perfil> {
         perfiles.put(idKey, perfil);
     }
 
+    /**
+     * Busca el perfil por la Key asociada.
+     * @param idKey Key: Id o matrícula.
+     * @return Devuelve la referencia del perfil.
+     */
     public T buscarPorId(String idKey) {
         return perfiles.get(idKey);
     }
 
+    /**
+     * Elimina el perfil.
+     * @param idKey Key asociada al perfil.
+     */
     public void eliminarPerfil(String idKey) {
         perfiles.remove(idKey);
     }
 
+    /**
+     * Devuelve la lista de perfiles.
+     * @return Lista de perfiles registrados.
+     */
     public List<T> obtenerPerfiles() {
         return new ArrayList<>(perfiles.values());
     }
 
+    /**
+     * Devuelve una lista de perfiles filtrada.
+     * @param estrategia Filtro entregado.
+     * @return Lista filtrada.
+     */
     public List<T> filtrar(FiltrarStrategy<T> estrategia) {
         return perfiles.values().stream()
                 .filter(estrategia::cumpleCondicion)
