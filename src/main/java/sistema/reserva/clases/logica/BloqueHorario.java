@@ -1,6 +1,11 @@
 package sistema.reserva.clases.logica;
 import java.util.Objects;
 
+/**
+ * Clase que representa un horario semanal.
+ * Tiene día de semana y bloque que corresponde
+ * a un intervalo de tiempo en el día.
+ */
 public class BloqueHorario {
     private DiaSemana dia;
     private int bloque;
