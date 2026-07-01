@@ -1,32 +1,24 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
+import java.util.UUID;
+
 /**
  * Clase que representa a un estudiante.
  * Este puede tomar clases reservando un horario.
  */
-public class Estudiante {
-    private final String nombre;
+public class Estudiante extends Perfil{
     private final String matricula;
-    private final String email;
 
     /**
      * Inicializa la clase con datos básicos del estudiante.
      * @param nombre Asigna nombre.
-     * @param matricula Matrícula única (como un ID).
      * @param email Correo electrónico para recibir confirmaciones.
      */
-    public Estudiante(String nombre, String matricula, String email) {
-        this.nombre = nombre;
-        this.matricula = matricula;
-        this.email = email;
-    }
-
-    /**
-     * Getter de nombre.
-     * @return nombre del estudiante.
-     */
-    public String getNombre() {
-        return this.nombre;
+    public Estudiante(String nombre, String email) throws CorreoInvalidoException {
+        super(nombre, email);
+        //Se asigna una matrícula única de 6 dígitos.
+        this.matricula = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
     /**
@@ -38,14 +30,6 @@ public class Estudiante {
     }
 
     /**
-     * Getter del email.
-     * @return Correo electrónico del estudiante.
-     */
-    public String getEmail() {
-        return this.email;
-    }
-
-    /**
      * ToString de la clase.
      * Útil para imprimir datos del estudiante en pantalla.
      * @return Datos representativos de la clase.
@@ -53,9 +37,9 @@ public class Estudiante {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "nombre='" + nombre + '\'' +
-                ", matricula='" + matricula + '\'' +
-                ", email='" + email + '\'' +
+                "nombre='" + getNombre() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", matricula='" + this.matricula + '\'' +
                 '}';
     }
 }

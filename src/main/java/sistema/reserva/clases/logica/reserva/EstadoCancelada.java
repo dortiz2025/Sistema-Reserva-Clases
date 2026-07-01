@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica.reserva;
 
+import sistema.reserva.clases.logica.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
 
 /**
@@ -8,21 +9,46 @@ import sistema.reserva.clases.logica.Tutor;
  */
 public class EstadoCancelada implements EstadoReserva {
 
+    /**
+     * Intenta modificar la reserva.
+     * En este caso se lanza excepción porque
+     * la reserva ya fue cancelada.
+     * @param reserva Referencia de la reserva.
+     * @param nuevoTutor Referencia del tutor nuevo.
+     * @param nuevaMateria Nueva materia.
+     * @param nuevoHorario Nuevo horario.
+     */
     @Override
-    public void modificar(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, String nuevoHorario) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
         throw new IllegalStateException("No se puede modificar una reserva que ya ha sido cancelada.");
     }
 
+    /**
+     * Se intenta cancelar la reserva.
+     * En este caso se lanza excepción porque
+     * la reserva ya fue cancelada.
+     * @param reserva Referencia de la reserva.
+     */
     @Override
-    public void cancelar(Reserva reserva) {
+    public void cancelarReserva(Reserva reserva) {
         throw new IllegalStateException("La reserva ya se encuentra cancelada, no es necesario cancelarla de nuevo.");
     }
 
+    /**
+     * Se intenta completar la reserva.
+     * En este caso se lanza excepción porque
+     * la reserva ya fue cancelada.
+     * @param reserva Referencia de la reserva.
+     */
     @Override
-    public void completar(Reserva reserva) {
+    public void completarReserva(Reserva reserva) {
         throw new IllegalStateException("La reserva se ha cancelado, no puede completarse.");
     }
 
+    /**
+     * Devuelve el nombre de este estado.
+     * @return String con el nombre de este estado.
+     */
     @Override
     public String getNombreEstado() {
         return "Cancelada";

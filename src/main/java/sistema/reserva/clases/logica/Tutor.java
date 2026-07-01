@@ -1,42 +1,34 @@
 package sistema.reserva.clases.logica;
+
+ import sistema.reserva.clases.excepciones.CorreoInvalidoException;
  import java.util.List;
+ import java.util.UUID;
 
 /**
  * Clase que representa un tutor.
  * Imparte una materia en un horario definido,
  * con cierta tarifa y límite de estudiantes por clase.
  */
-public class Tutor {
-    private String nombre;
-    private String id;
-    private String materia;
-
-    private List<String> horariosDisponibles;
+public class Tutor extends Perfil{
+    private final String id;
     private int tarifa;
     private int maxAlum;
+    private List<String> materias;
+    private List<BloqueHorario> horariosDisponibles;
 
     /**
      * Inicializa un tutor con sus datos básicos.
      * @param nombre Nombre del tutor.
-     * @param id Identificador único.
-     * @param materia Materia que imparte.
+     * @param email Correo Electrónico del tutor.
      * @param tarifa Tarifa (única tarifa).
      * @param maxAlum Cantidad de alumnos máximos por clase.
      */
-    public Tutor(String nombre, String id, String materia, int tarifa, int maxAlum){
-        this.nombre = nombre;
-        this.id = id;
-        this.materia = materia;
+    public Tutor(String nombre, String email, int tarifa, int maxAlum) throws CorreoInvalidoException {
+        super(nombre, email);
+        //Se asigna un ID único de 4 dígitos
+        this.id = UUID.randomUUID().toString().substring(0,4).toUpperCase();
         this.tarifa = tarifa;
         this.maxAlum = maxAlum;
-    }
-
-    /**
-     * Getter de nombre.
-     * @return nombre del tutor.
-     */
-    public String getNombre(){
-        return this.nombre;
     }
 
     /**
@@ -48,43 +40,11 @@ public class Tutor {
     }
 
     /**
-     * Getter de materia.
-     * @return Materia que imparte el profesor.
-     */
-    public String getMateria(){
-        return this.materia;
-    }
-
-    /**
-     * Getter de horariosDisponibles.
-     * @return Horarios disponibles para reservar.
-     */
-    public List<String> getHorariosDisponibles(){
-        return this.horariosDisponibles;
-    }
-
-    /**
-     * Getter de maxAlum.
-     * @return Cupos máximos por clase.
-     */
-    public int getMaxAlum() {
-        return maxAlum;
-    }
-
-    /**
      * Getter de tarifa.
      * @return Tarifa única.
      */
     public int getTarifa() {
         return tarifa;
-    }
-
-    /**
-     * Adder de horariosDisponibles.
-     * @param horario Nuevo horario disponible para reservar.
-     */
-    public void addHorariosDisponibles(String horario){
-        this.horariosDisponibles.add(horario);
     }
 
     /**
@@ -96,11 +56,67 @@ public class Tutor {
     }
 
     /**
+     * Getter de maxAlum.
+     * @return Cupos máximos por clase.
+     */
+    public int getMaxAlum() {
+        return maxAlum;
+    }
+
+    /**
      * Setter de maxAlum.
      * @param maxAlum Cupos máximos por clase.
      */
     public void setMaxAlum(int maxAlum){
         this.maxAlum = maxAlum;
+    }
+
+    /**
+     * Getter de materias.
+     * @return Materias que imparte el profesor.
+     */
+    public List<String> getMaterias(){
+        return this.materias;
+    }
+
+    /**
+     * Adder de materias.
+     * @param materia Nueva materia que imparte el tutor.
+     */
+    public void addMateria(String materia){
+        this.materias.add(materia);
+    }
+
+    /**
+     * Remover de materia.
+     * @param materia Materia a eliminar.
+     */
+    public void removeMateria(String materia){
+        this.materias.remove(materia);
+    }
+
+    /**
+     * Getter de horariosDisponibles.
+     * @return Horarios disponibles para reservar.
+     */
+    public List<BloqueHorario> getHorariosDisponibles(){
+        return this.horariosDisponibles;
+    }
+
+    /**
+     * Adder de horariosDisponibles.
+     * @param horario Nuevo horario disponible para reservar.
+     */
+    public void addHorariosDisponibles(BloqueHorario horario){
+        this.horariosDisponibles.add(horario);
+    }
+
+    /**
+     * Remover de horariosDisponibles.
+     * @param horario Horario a eliminar.
+     */
+    public void removeHorariosDisponibles(BloqueHorario horario){
+        this.horariosDisponibles.remove(horario);
     }
 
     /**
@@ -111,9 +127,10 @@ public class Tutor {
     @Override
     public String toString() {
         return "Tutor{" +
-                "nombre='" + nombre + '\'' +
+                "nombre='" + getNombre() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 ", id='" + id + '\'' +
-                ", materia='" + materia + '\'' +
+                ", materia='" + materias + '\'' +
                 ", horariosDisponibles=" + horariosDisponibles +
                 ", tarifa=" + tarifa +
                 ", maxAlum=" + maxAlum +
