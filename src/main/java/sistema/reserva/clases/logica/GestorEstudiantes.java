@@ -1,44 +1,17 @@
 package sistema.reserva.clases.logica;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Clase que se encarga de gestionar los perfiles de los estudiantes.
- * Puede crear, modificar o eliminar un perfil.
+ * Clase que gestiona los perfiles de los estudiantes en el sistema.
+ * Hereda de GestorPerfil.
  */
-public class GestorEstudiantes {
-
-    private final List<Estudiante> estudiantes;
+public class GestorEstudiantes extends GestorPerfil<Estudiante> {
 
     /**
-     * Inicializa la clase.
-     */
-    public GestorEstudiantes(){
-        this.estudiantes = new ArrayList<>();
-    }
-
-    /**
-     * Getter de estudiantes.
-     * @return Entrega la lista de estudiantes registrados.
-     */
-    public List<Estudiante> getEstudiantes(){
-        return this.estudiantes;
-    }
-
-    /**
-     * Adder de estudiante.
+     * Registra un estudiante en el sistema.
      * @param estudiante Nuevo estudiante a registrar.
      */
-    public void addEstudiante(Estudiante estudiante){
-        this.estudiantes.add(estudiante);
-    }
-
-    /**
-     * Remover de estudiante.
-     * @param estudiante Estudiante a eliminar.
-     */
-    public void removeEstudiante(Estudiante estudiante){
-        this.estudiantes.remove(estudiante);
+    public void registrarEstudiante(Estudiante estudiante){
+        // Usa la matrícula como llave para el mapa heredado de GestorPerfil.
+        super.registrarPerfil(estudiante.getMatricula(), estudiante);
     }
 }

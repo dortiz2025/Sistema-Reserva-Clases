@@ -1,44 +1,32 @@
 package sistema.reserva.clases.logica;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Clase que se encarga de gestionar los perfiles de los tutores.
- * Puede crear, modificar o eliminar un perfil.
+ * Clase que gestiona los perfiles de los tutores en el sistema.
+ * Hereda de GestorPerfil.
  */
-public class GestorTutores {
-
-    private final List<Tutor> tutores;
+public class GestorTutores extends GestorPerfil<Tutor> {
 
     /**
-     * Inicializa la clase.
+     * Registra un tutor en el sistema.
+     * @param tutor Nuevo tutor a inscribir.
      */
-    public GestorTutores() {
-        this.tutores = new ArrayList<>();
+    public void registrarTutor(Tutor tutor){
+        // Usa el ID de 4 dígitos como llave
+        super.registrarPerfil(tutor.getId(), tutor);
     }
 
     /**
-     * Getter de tutores.
-     * @return Entrega la lista de tutores inscritos.
+     * Agrega un nuevo bloque de disponibilidad al tutor.
+     * @param idTutor El identificador del tutor.
+     * @param horario El bloque horario disponible.
      */
-    public List<Tutor> getTutores(){
-        return this.tutores;
-    }
-
-    /**
-     * Adder de tutores.
-     * @param tutor Nuevo tutor a inscribir en el sistema.
-     */
-    public void addTutor(Tutor tutor){
-        this.tutores.add(tutor);
-    }
-
-    /**
-     * Remover de tutores.
-     * @param tutor Tutor a eliminar.
-     */
-    public void removeTutor(Tutor tutor){
-        this.tutores.remove(tutor);
+    public void agregarHorarioDisponibilidad(String idTutor, BloqueHorario horario) {
+        // Utilizamos buscarPorId.
+        Tutor tutor = super.buscarPorId(idTutor);
+        if (tutor != null) {
+            tutor.addHorariosDisponibles(horario);
+        } else {
+            throw new IllegalArgumentException("No se encontró ningún tutor con el ID: " + idTutor);
+        }
     }
 }
