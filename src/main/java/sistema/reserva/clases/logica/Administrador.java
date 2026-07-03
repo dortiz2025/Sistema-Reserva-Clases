@@ -43,4 +43,12 @@ public class Administrador extends Perfil {
         }
         return resultado;
     }
+    @Override
+    public String toString() {
+        return "Administrador{" +
+                "nombre='" + getNombre() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", idAdministrador='" + this.idAdministrador + '\'' +
+                '}';
+    }
 }
