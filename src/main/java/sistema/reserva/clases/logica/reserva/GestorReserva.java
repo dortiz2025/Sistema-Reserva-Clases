@@ -10,5 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorReserva{
+public class GestorReserva {
+    private List<Reserva> listaReservas;
+
+    public GestorReserva() {
+        this.listaReservas = new ArrayList<>();
+    }
 
 }
