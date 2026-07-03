@@ -23,7 +23,24 @@ public class Administrador extends Perfil {
         super(nombre, email);
         this.idAdministrador = "ADM-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
     }
+
     public String getIdAdministrador() {
         return this.idAdministrador;
+    }
+
+    /**
+    * Permite al administrador filtrar reservas de todo el sistema usando el patrón Strategy que ya creaste.
+    * @param gestorReserva El gestor que contiene los datos.
+    * @param criterio El algoritmo de filtrado (Strategy).
+    * @return Lista de reservas que cumplen la condición.
+    */
+    public List<Reserva> filtrarTodasLasReservas(GestorReserva gestorReserva, FiltrarStrategy<Reserva> criterio) {
+        List<Reserva> resultado = new ArrayList<>();
+        for (Reserva r : gestorReserva.obtenerTodasLasReservas()) {
+            if (criterio.cumpleCondicion(r)) {
+                resultado.add(r);
+            }
+        }
+        return resultado;
     }
 }
