@@ -15,6 +15,7 @@ public class GestorReserva {
     public GestorReserva() {
         this.listaReservas = new ArrayList<>();
     }
+
     /**
      * Intenta registrar una nueva reserva validando las reglas de negocio.
      */
@@ -51,4 +52,10 @@ public class GestorReserva {
         listaReservas.add(nuevaReserva);
     }
 
+    /**
+     * Devuelve todas las reservas para mostrarlas en el calendario de la GUI.
+     */
+    public List<Reserva> obtenerTodasLasReservas() {
+        return new ArrayList<>(listaReservas); // Devolvemos una copia por seguridad
+    }
 }
