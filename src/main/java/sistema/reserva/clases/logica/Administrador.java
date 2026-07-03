@@ -1,6 +1,5 @@
 package sistema.reserva.clases.logica;
 
-public class Administrador {
 import sistema.reserva.clases.excepciones.CorreoInvalidoException;
 import sistema.reserva.clases.logica.reserva.GestorReserva;
 import sistema.reserva.clases.logica.reserva.Reserva;
@@ -23,5 +22,8 @@ public class Administrador extends Perfil {
     public Administrador(String nombre, String email) throws CorreoInvalidoException {
         super(nombre, email);
         this.idAdministrador = "ADM-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+    }
+    public String getIdAdministrador() {
+        return this.idAdministrador;
     }
 }
