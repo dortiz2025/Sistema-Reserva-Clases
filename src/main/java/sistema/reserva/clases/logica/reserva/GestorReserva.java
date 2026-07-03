@@ -58,4 +58,8 @@ public class GestorReserva {
     public List<Reserva> obtenerTodasLasReservas() {
         return new ArrayList<>(listaReservas); // Devolvemos una copia por seguridad
     }
+
+    public void cancelarReservaDeLista(Reserva reserva) {
+        reserva.cancelarReserva();
+    }
 }
