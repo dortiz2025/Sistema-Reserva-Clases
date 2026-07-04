@@ -20,11 +20,11 @@ public class GestorTutores extends GestorPerfil<Tutor> {
      * @param idTutor El identificador del tutor.
      * @param horario El bloque horario disponible.
      */
-    public void agregarHorarioDisponibilidad(String idTutor, BloqueHorario horario) {
+    public void agregarHorarioDisponible(String idTutor, BloqueHorario horario) {
         // Utilizamos buscarPorId.
         Tutor tutor = super.buscarPorId(idTutor);
         if (tutor != null) {
-            tutor.addHorariosDisponibles(horario);
+            tutor.addHorarioDisponible(horario);
         } else {
             throw new IllegalArgumentException("No se encontró ningún tutor con el ID: " + idTutor);
         }

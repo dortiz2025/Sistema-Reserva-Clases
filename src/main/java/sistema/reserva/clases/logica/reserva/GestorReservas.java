@@ -44,9 +44,9 @@ public class GestorReservas {
                 alumnosInscritosEnBloque++;
             }
         }
-        if (alumnosInscritosEnBloque >= tutor.getMaxAlum()) {
+        if (alumnosInscritosEnBloque >= tutor.getCupoMaximo()) {
             throw new CupoExcedidoException("El tutor " + tutor.getNombre() +
-                    " ya alcanzó su límite máximo de " + tutor.getMaxAlum() + " alumnos en ese horario.");
+                    " ya alcanzó su límite máximo de " + tutor.getCupoMaximo() + " alumnos en ese horario.");
         }
         Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario);
         reservas.add(nuevaReserva);
