@@ -32,24 +32,43 @@ public class Reserva {
         this.estado = new EstadoPendiente();
     }
 
+    /**
+     * Modifica la reserva.
+     * @param nuevoTutor Nuevo tutor.
+     * @param nuevaMateria Nueva materia.
+     * @param nuevoHorario Nuevo Horario.
+     */
     public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
         this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario);
     }
 
+    /**
+     * Cancela la reserva.
+     */
     public void cancelarReserva() {
         this.estado.cancelarReserva(this);
     }
 
+    /**
+     * Marca la reserva como completada.
+     */
     public void completarReserva() {
         this.estado.completarReserva(this);
     }
 
-    // Setter protected para que solo los estados puedan cambiar el estado actual.
+    /**
+     * Cambia el estado de la reserva.
+     * @param nuevoEstado Nuevo estado de la reserva.
+     */
     protected void setEstado(EstadoReserva nuevoEstado) {
         this.estado = nuevoEstado;
     }
 
+    /**
+     * Entrega el nombre del estado actual de la reserva.
+     * @return String del nombre del estado.
+     */
     public String getNombreEstado() {
         return this.estado.getNombreEstado();
     }

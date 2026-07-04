@@ -1,7 +1,7 @@
 package sistema.reserva.clases.logica;
 
 import sistema.reserva.clases.excepciones.CorreoInvalidoException;
-import sistema.reserva.clases.logica.reserva.GestorReserva;
+import sistema.reserva.clases.logica.reserva.GestorReservas;
 import sistema.reserva.clases.logica.reserva.Reserva;
 import java.util.UUID;
 import java.util.List;
@@ -30,13 +30,13 @@ public class Administrador extends Perfil {
 
     /**
     * Permite al administrador filtrar reservas de todo el sistema usando el patrón Strategy que ya creaste.
-    * @param gestorReserva El gestor que contiene los datos.
+    * @param gestorReservas El gestor que contiene los datos.
     * @param criterio El algoritmo de filtrado (Strategy).
     * @return Lista de reservas que cumplen la condición.
     */
-    public List<Reserva> filtrarTodasLasReservas(GestorReserva gestorReserva, FiltrarStrategy<Reserva> criterio) {
+    public List<Reserva> filtrarTodasLasReservas(GestorReservas gestorReservas, FiltrarStrategy<Reserva> criterio) {
         List<Reserva> resultado = new ArrayList<>();
-        for (Reserva r : gestorReserva.obtenerTodasLasReservas()) {
+        for (Reserva r : gestorReservas.obtenerTodasLasReservas()) {
             if (criterio.cumpleCondicion(r)) {
                 resultado.add(r);
             }
