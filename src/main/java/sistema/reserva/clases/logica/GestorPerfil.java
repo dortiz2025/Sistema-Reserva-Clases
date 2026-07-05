@@ -18,7 +18,14 @@ public abstract class GestorPerfil<T extends Perfil> {
      */
     public void registrarPerfil(String idKey, T perfil) {
         if (perfiles.containsKey(idKey)) {
-            throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra registrado.");
+            throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra asociado a un perfil.");
+        }
+        //Validación para que no se repitan personas.
+        boolean correoYaExiste = perfiles.values().stream()
+                .anyMatch(p -> p.getEmail().equalsIgnoreCase(perfil.getEmail()));
+
+        if (correoYaExiste) {
+            throw new IllegalArgumentException("Ya existe un usuario registrado con el correo: " + perfil.getEmail());
         }
         perfiles.put(idKey, perfil);
     }
