@@ -28,47 +28,31 @@ public class GestorReservas {
     public void registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
-        //Verifica si el tutor imparte la materia.
-        if (!tutor.getMaterias().contains(materia)) {
-            throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
-        }
-
-        //Verifica si el tutor tiene disponibilidad en el horario requerido.
-        if (!tutor.getHorariosDisponibles().contains(horario)) {
-            throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
-        }
-
-        //Verifica si el estudiante tiene una reserva pendiente en ese mismo horario.
-        for (Reserva r : this.reservas){
-            boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
-            boolean esMismoHorario = r.getHorario().equals(horario);
-
-            if (esMismoEstudiante && esMismoHorario && r.ocupaCupo()) {
-                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en el horario: " + horario);
-            }
-        }
-
-        //Verifica si el cupo por clase del tutor ya fue alcanzado.
-        int alumnosInscritosEnBloque = 0;
-        for (Reserva r : this.reservas) {
-            boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
-            boolean esMismoHorario = r.getHorario().equals(horario);
-
-            if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {
-                if (!r.getMateria().equals(materia)) {
-                    throw new ConflictoMateriaException("El tutor tiene una clase de " + r.getMateria() + " en ese horario.");
-                }
-                alumnosInscritosEnBloque++;
-            }
-        }
-        if (alumnosInscritosEnBloque >= tutor.getCupoMaximo()) {
-            throw new CupoExcedidoException("El tutor " + tutor.getNombre() +
-                    " ya alcanzó su límite máximo de " + tutor.getCupoMaximo() + " alumnos en ese horario.");
-        }
+        //Se valida con lógica auxiliar.
+        validarReglasDeNegocio(estudiante, tutor, materia, horario, null);
 
         //Si se pasaron exitosamente todas las verificaciones, la reserva se agenda.
         Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario);
         this.reservas.add(nuevaReserva);
+    }
+
+    /**
+     * Intenta modificar una reserva validando las reglas del negocio.
+     * @param nuevoTutor Nuevo tutor que imparte una clase.
+     * @param nuevaMateria Nueva materia que imparte el tutor.
+     * @param nuevoHorario Nuevo horario de la clase.
+     * @param reserva Referencia de la reserva.
+     * @throws EstudianteYaRegistradoException Si es que el estudiante ya tiene una reserva en el nuevo horario.
+     * @throws CupoExcedidoException Si es que el cupo de la clase alcanzó su máximo.
+     * @throws ConflictoMateriaException Si el tutor tiene una clase de otra materia en ese horario.
+     */
+    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, Reserva reserva)
+            throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
+
+        //Se valida con lógica auxiliar.
+        validarReglasDeNegocio(reserva.getEstudiante(), nuevoTutor, nuevaMateria, nuevoHorario, reserva);
+        //Si se pasaron exitosamente todas las verificaciones, la reserva se modifica.
+        reserva.modificarReserva(nuevoTutor, nuevaMateria, nuevoHorario);
     }
 
     /**
@@ -98,4 +82,46 @@ public class GestorReservas {
                 .collect(Collectors.toList());
     }
 
+    //Lógica de validación auxiliar para registrarReserva() y modificarReserva().
+    //Aquí se implementa la "Resolución de Conflictos" expuesta en el enunciado.
+    private void validarReglasDeNegocio(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, Reserva reservaAModificar)
+            throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
+
+        if (!tutor.getMaterias().contains(materia)) {
+            throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
+        }
+
+        if (!tutor.getHorariosDisponibles().contains(horario)) {
+            throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
+        }
+
+        //Se verifica si el estudiante tiene una reserva en el mismo horario solicitado
+        //o si ya no quedan cupos en el horario deseado.
+        int alumnosInscritosEnBloque = 0;
+        for (Reserva r : this.reservas) {
+            if (r.equals(reservaAModificar)) {
+                continue;//Se ignora a si misma para poder ejecutar correctamente modificarReserva()
+            }
+
+            boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
+            boolean esMismoHorario = r.getHorario().equals(horario);
+            boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
+
+            if (esMismoEstudiante && esMismoHorario && r.ocupaCupo()) { //Verifica si hay reservas propias en el mismo horario.
+                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en el horario: " + horario);
+            }
+
+            if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {//Suma las reservas en ese horario para comprobar disponibilidad de cupo.
+                if (!r.getMateria().equals(materia)) {
+                    throw new ConflictoMateriaException("El tutor tiene una clase de " + r.getMateria() + " en ese horario.");
+                }
+                alumnosInscritosEnBloque++;
+            }
+        }
+
+        if (alumnosInscritosEnBloque >= tutor.getCupoMaximo()) { //Verifica el cupo con la suma anterior.
+            throw new CupoExcedidoException("El tutor " + tutor.getNombre() +
+                    " ya alcanzó su límite máximo de " + tutor.getCupoMaximo() + " alumnos en ese horario.");
+        }
+    }
 }
