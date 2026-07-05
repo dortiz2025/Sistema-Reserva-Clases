@@ -5,6 +5,7 @@ import sistema.reserva.clases.logica.bloquehorario.*;
 import sistema.reserva.clases.logica.reserva.*;
 import sistema.reserva.clases.logica.estrategias.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -142,11 +143,12 @@ public class Sistema {
      * @param idTutor Id del tutor que imparte la clase.
      * @param materia Materia de la clase.
      * @param horario Horario de la clase.
+     * @param fecha Fecha de la clase.
      * @throws EstudianteYaRegistradoException Si el estudiante ya tiene una reserva asociada.
      * @throws CupoExcedidoException Si no quedan cupos en el horario.
      * @throws ConflictoMateriaException Si la materia no se imparte en ese horario.
      */
-    public void agendarClase(String matricula, String idTutor, String materia, BloqueHorario horario)
+    public void agendarClase(String matricula, String idTutor, String materia, BloqueHorario horario, LocalDate fecha)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         // El sistema busca los perfiles asociados a la matrícula e Id.
@@ -154,7 +156,7 @@ public class Sistema {
         Tutor tutor = gestorTutores.buscarPorId(idTutor);
 
         //Se intenta reservar la clase.
-        gestorReservas.registrarReserva(estudiante, tutor, materia, horario);
+        gestorReservas.registrarReserva(estudiante, tutor, materia, horario, fecha);
     }
 
     /**
@@ -163,14 +165,6 @@ public class Sistema {
      */
     public void cancelarReserva(Reserva reserva) {
         gestorReservas.cancelarReserva(reserva);
-    }
-
-    /**
-     * Devuelve una lista de las reservas para mostrarlas en un calendario.
-     * @return Lista de las reservas.
-     */
-    public List<Reserva> obtenerCalendarioCompleto() {
-        return gestorReservas.obtenerReservas();
     }
 
     /**
@@ -191,5 +185,41 @@ public class Sistema {
 
         //Devuelve la lista filtrada.
         return gestorTutores.filtrar(filtroAvanzado);
+    }
+
+    /**
+     * Devuelve una lista de todas las reservas para un calendario completo.
+     * @return Lista de las reservas.
+     */
+    public List<Reserva> obtenerCalendarioCompleto() {
+        return gestorReservas.obtenerReservas();
+    }
+
+    /**
+     * Devuelve una lista de reservas de un Estudiante específico para un calendario.
+     * @param matricula Matrícula del estudiante.
+     */
+    public List<Reserva> obtenerCalendarioEstudiante(String matricula) {
+        // Validamos que el estudiante exista.
+        gestorEstudiantes.buscarPorId(matricula);
+
+        // Usamos FiltrarStrategy para filtrar.
+        return gestorReservas.filtrarReservas(
+                r -> r.getEstudiante()
+                        .getMatricula().equals(matricula));
+    }
+
+    /**
+     * Devuelve una lista de reservas de un Tutor específico para un calendario.
+     * @param idTutor Id del tutor.
+     */
+    public List<Reserva> obtenerCalendarioTutor(String idTutor) {
+        // Validamos que el tutor exista.
+        gestorTutores.buscarPorId(idTutor);
+
+        // Usamos FiltrarStrategy para filtrar.
+        return gestorReservas.filtrarReservas(
+                r -> r.getTutor()
+                        .getId().equals(idTutor));
     }
 }
