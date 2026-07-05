@@ -39,9 +39,10 @@ public abstract class GestorPerfil<T extends Perfil> {
     /**
      * Elimina el perfil.
      * @param idKey Key asociada al perfil.
+     * @return Boolean dependiendo si la eliminación fue exitosa o no.
      */
-    public void eliminarPerfil(String idKey) {
-        perfiles.remove(idKey);
+    public boolean eliminarPerfil(String idKey) {
+        return perfiles.remove(idKey) != null;
     }
 
     /**

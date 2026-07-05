@@ -29,8 +29,8 @@ public class GestorTutores extends GestorPerfil<Tutor> {
      * @param idTutor Identificador (key) asociado al tutor.
      * @param horario Horario que se quiere eliminar.
      */
-    public void eliminarHorarioDisponible(String idTutor, BloqueHorario horario) {
-        obtenerTutorValidado(idTutor).removeHorarioDisponible(horario);
+    public boolean eliminarHorarioDisponible(String idTutor, BloqueHorario horario) {
+        return obtenerTutorValidado(idTutor).removeHorarioDisponible(horario);
     }
 
     /**
@@ -46,9 +46,10 @@ public class GestorTutores extends GestorPerfil<Tutor> {
      * Elimina un materia asociada al perfil del tutor.
      * @param idTutor Key del perfil del tutor.
      * @param materia Materia que se desea eliminar.
+     * @return Boolean dependiendo de si la eliminación fue exitosa o no.
      */
-    public void eliminarMateria(String idTutor, String materia){
-        obtenerTutorValidado(idTutor).removeMateria(materia);
+    public boolean eliminarMateria(String idTutor, String materia){
+        return obtenerTutorValidado(idTutor).removeMateria(materia);
     }
 
     //Lógica auxiliar para verificar referencias nulas de Tutor.
