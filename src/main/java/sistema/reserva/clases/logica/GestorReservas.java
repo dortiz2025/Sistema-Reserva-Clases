@@ -3,12 +3,16 @@ package sistema.reserva.clases.logica;
 import sistema.reserva.clases.excepciones.*;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
+import sistema.reserva.clases.logica.reserva.NombreEstado;
 import sistema.reserva.clases.logica.reserva.Reserva;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que se encarga de gestionar las reservas
+ * y resolver los conflictos asociados.
+ */
 public class GestorReservas {
     private final List<Reserva> reservas;
 
@@ -52,6 +56,11 @@ public class GestorReservas {
     public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario,LocalDate nuevaFecha, Reserva reserva)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
+        //Verifica que la reserva se pueda modificar antes de resolver conflictos.
+        if (!reserva.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+            throw new IllegalStateException("Operación rechazada: No se puede modificar una reserva que se encuentra " + reserva.getNombreEstado() + ".");
+        }
+
         //Se valida con lógica auxiliar.
         validarReglasDeNegocio(reserva.getEstudiante(), nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha, reserva);
         //Si se pasaron exitosamente todas las verificaciones, la reserva se modifica.
@@ -72,6 +81,18 @@ public class GestorReservas {
      */
     public List<Reserva> obtenerReservas() {
         return Collections.unmodifiableList(this.reservas); // Devolvemos una copia por seguridad.
+    }
+
+    /**
+     * Busca una reserva específica utilizando su identificador único.
+     * @param idReserva El identificador generado.
+     * @return La referencia de la reserva.
+     */
+    public Reserva buscarReservaPorId(String idReserva) {
+        return this.reservas.stream()
+                .filter(r -> r.getIdReserva().equalsIgnoreCase(idReserva))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("No se encontró ninguna reserva con el ID: " + idReserva));
     }
 
     /**
@@ -111,7 +132,7 @@ public class GestorReservas {
             boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
 
             if (esMismoEstudiante && esMismoHorario && r.ocupaCupo()) { //Verifica si hay reservas propias en el mismo horario.
-                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en la fecha: " + fecha + "y horario: " + horario);
+                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en la fecha: " + fecha + " y horario: " + horario);
             }
 
             if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {//Suma las reservas en ese horario para comprobar disponibilidad de cupo.
