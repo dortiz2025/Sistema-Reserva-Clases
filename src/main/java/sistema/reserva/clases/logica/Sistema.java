@@ -109,9 +109,10 @@ public class Sistema {
      * @return Boolean si la eliminación fue exitosa.
      */
     public boolean eliminarEstudiante(String matricula) {
-        //Primero se cancelan las reservas asociadas al estudiante.
+        // Se cancelan las reservas pendientes asociadas al perfil del estudiante.
         for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getEstudiante().getMatricula().equals(matricula) && r.ocupaCupo()) {
+            if (r.getEstudiante().getMatricula().equals(matricula) &&
+                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
                 gestorReservas.cancelarReserva(r);
             }
         }
@@ -125,9 +126,10 @@ public class Sistema {
      * @return Boolean si la eliminación fue exitosa.
      */
     public boolean eliminarTutor(String idTutor) {
-        //Se cancelan las reservas asociadas al tutor.
+        //Las reservas pendientes asociadas al tutor se cancelan.
         for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getTutor().getId().equals(idTutor) && r.ocupaCupo()) {
+            if (r.getTutor().getId().equals(idTutor) &&
+                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
                 gestorReservas.cancelarReserva(r);
             }
         }
