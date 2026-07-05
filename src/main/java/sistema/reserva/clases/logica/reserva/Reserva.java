@@ -4,6 +4,8 @@ import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Estudiante;
 import sistema.reserva.clases.logica.Tutor;
 import java.time.LocalDate;
+import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Clase que representa una reserva de una clase.
@@ -12,6 +14,7 @@ import java.time.LocalDate;
  * Puede ser modificada, cancelada o completada.
  */
 public class Reserva {
+    private final String idReserva;
     private final Estudiante estudiante;
     private Tutor tutor;
     private String materia;
@@ -28,6 +31,8 @@ public class Reserva {
      * @param fecha Fecha de la clase.
      */
     public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha) {
+        //Asigna un id para la reserva.
+        this.idReserva = "RES-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
         this.estudiante = estudiante;
         this.tutor = tutor;
         this.materia = materia;
@@ -156,6 +161,27 @@ public class Reserva {
      */
     protected void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * Getter de idReserva.
+     * @return String del id.
+     */
+    public String getIdReserva() {
+        return this.idReserva;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reserva reserva = (Reserva) o;
+        return Objects.equals(idReserva, reserva.idReserva);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idReserva);
     }
 
 }
