@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoYaRegistradoException;
 import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public abstract class GestorPerfil<T extends Perfil> {
      * @param idKey Key que puede ser ID de tutor o matrícula de estudiante.
      * @param perfil Referencia del perfil que se guarda.
      */
-    public void registrarPerfil(String idKey, T perfil) {
+    public void registrarPerfil(String idKey, T perfil) throws CorreoYaRegistradoException {
         if (perfiles.containsKey(idKey)) {
             throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra asociado a un perfil.");
         }
@@ -27,7 +28,7 @@ public abstract class GestorPerfil<T extends Perfil> {
                 .anyMatch(p -> p.getEmail().equalsIgnoreCase(perfil.getEmail()));
 
         if (correoYaExiste) {
-            throw new IllegalArgumentException("Ya existe un usuario registrado con el correo: " + perfil.getEmail());
+            throw new CorreoYaRegistradoException("Ya existe un usuario registrado con el correo: " + perfil.getEmail());
         }
         perfiles.put(idKey, perfil);
     }

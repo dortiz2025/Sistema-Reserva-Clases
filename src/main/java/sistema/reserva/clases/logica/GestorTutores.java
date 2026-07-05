@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoYaRegistradoException;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 
 /**
@@ -12,7 +13,7 @@ public class GestorTutores extends GestorPerfil<Tutor> {
      * Registra un tutor en el sistema.
      * @param tutor Nuevo tutor a inscribir.
      */
-    public void registrarTutor(Tutor tutor){
+    public void registrarTutor(Tutor tutor) throws CorreoYaRegistradoException {
         // Usa el ID de 4 dígitos como llave
         super.registrarPerfil(tutor.getId(), tutor);
     }
