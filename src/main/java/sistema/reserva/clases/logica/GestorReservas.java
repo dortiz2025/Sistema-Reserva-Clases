@@ -76,6 +76,14 @@ public class GestorReservas {
     }
 
     /**
+     * Completa una reserva.
+     * @param reserva Referencia de la reserva.
+     */
+    public void completarReserva(Reserva reserva) {
+        reserva.completarReserva();
+    }
+
+    /**
      * Devuelve una lista de todas las reservas.
      * @return Lista de reservas.
      */
@@ -121,9 +129,22 @@ public class GestorReservas {
             throw new IllegalArgumentException("No se pueden agendar o modificar reservas en fechas pasadas.");
         }
 
-        //Verifica que el tutor imparte la materia solicitada.
-        if (!tutor.getMaterias().contains(materia)) {
+        //Verifica que la fecha sea coherente con el día de bloqueHorario.
+        int diaFechaInt = fecha.getDayOfWeek().getValue();
+        int diaBloqueInt = horario.getDia().ordinal() + 1;
+        if (diaFechaInt != diaBloqueInt) {
+            throw new IllegalArgumentException("Inconsistencia: La fecha " + fecha + " no corresponde a un día " + horario.getDia().toString());
+        }
+
+        //Verifica que el tutor imparta la materia (ignora mayúsculas y minúsculas).
+        boolean imparteMateria = tutor.getMaterias().stream()
+                .anyMatch(m -> m.equalsIgnoreCase(materia));
+        if (!imparteMateria) {
             throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
+        }
+
+        if (!tutor.getHorariosDisponibles().contains(horario)) {
+            throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
         }
 
         //Verifica que el tutor tiene horarios disponibles.
