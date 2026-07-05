@@ -17,16 +17,47 @@ public class GestorTutores extends GestorPerfil<Tutor> {
 
     /**
      * Agrega un nuevo bloque de disponibilidad al tutor.
-     * @param idTutor El identificador del tutor.
-     * @param horario El bloque horario disponible.
+     * @param idTutor Key asociada al tutor.
+     * @param horario Nuevo bloque horario disponible.
      */
     public void agregarHorarioDisponible(String idTutor, BloqueHorario horario) {
-        // Utilizamos buscarPorId.
+        obtenerTutorValidado(idTutor).addHorarioDisponible(horario);
+    }
+
+    /**
+     * Elimina un horario de disponibilidad del tutor.
+     * @param idTutor Identificador (key) asociado al tutor.
+     * @param horario Horario que se quiere eliminar.
+     */
+    public void eliminarHorarioDisponible(String idTutor, BloqueHorario horario) {
+        obtenerTutorValidado(idTutor).removeHorarioDisponible(horario);
+    }
+
+    /**
+     * Agrega una nueva materia al perfil del tutor.
+     * @param idTutor Key asociada al tutor.
+     * @param materia Nueva materia que imparte el tutor.
+     */
+    public void addMateria(String idTutor, String materia){
+        obtenerTutorValidado(idTutor).addMateria(materia);
+    }
+
+    /**
+     * Elimina un materia asociada al perfil del tutor.
+     * @param idTutor Key del perfil del tutor.
+     * @param materia Materia que se desea eliminar.
+     */
+    public void eliminarMateria(String idTutor, String materia){
+        obtenerTutorValidado(idTutor).removeMateria(materia);
+    }
+
+    //Lógica auxiliar para verificar referencias nulas de Tutor.
+    private Tutor obtenerTutorValidado(String idTutor) {
         Tutor tutor = super.buscarPorId(idTutor);
-        if (tutor != null) {
-            tutor.addHorarioDisponible(horario);
-        } else {
+        if (tutor == null) {
             throw new IllegalArgumentException("No se encontró ningún tutor con el ID: " + idTutor);
         }
+        return tutor;
     }
+
 }

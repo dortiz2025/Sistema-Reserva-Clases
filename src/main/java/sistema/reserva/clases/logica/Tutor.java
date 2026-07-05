@@ -1,10 +1,7 @@
 package sistema.reserva.clases.logica;
 
- import sistema.reserva.clases.excepciones.CorreoInvalidoException;
-
- import java.util.ArrayList;
- import java.util.List;
- import java.util.UUID;
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
+import java.util.*;
 
 /**
  * Clase que representa un tutor.
@@ -29,7 +26,9 @@ public class Tutor extends Perfil{
         super(nombre, email);
         //Se asigna un ID único de 4 dígitos
         this.id = UUID.randomUUID().toString().substring(0,4).toUpperCase();
+        validarEnteroPositivo(tarifa);
         this.tarifa = tarifa;
+        validarEnteroPositivo(cupoMaximo);
         this.cupoMaximo = cupoMaximo;
         this.materias = new ArrayList<>();
         this.horariosDisponibles = new ArrayList<>();
@@ -56,11 +55,8 @@ public class Tutor extends Perfil{
      * @param tarifa Tarifa única.
      */
     public void setTarifa(int tarifa){
-        if (tarifa > 0) {
-            this.tarifa = tarifa;
-        } else {
-            throw new IllegalArgumentException("La tarifa del tutor debe ser mayor a 0.");
-        }
+        validarEnteroPositivo(tarifa);
+        this.tarifa = tarifa;
     }
 
     /**
@@ -76,11 +72,8 @@ public class Tutor extends Perfil{
      * @param cupoMaximo Cupos máximos por clase.
      */
     public void setCupoMaximo(int cupoMaximo){
-        if (cupoMaximo > 0) {
-            this.cupoMaximo = cupoMaximo;
-        } else {
-            throw new IllegalArgumentException("El cupo máximo de una clase debe ser mayor a 0.");
-        }
+        validarEnteroPositivo(cupoMaximo);
+        this.cupoMaximo = cupoMaximo;
     }
 
     /**
@@ -109,7 +102,7 @@ public class Tutor extends Perfil{
      */
     public void removeMateria(String materia) {
         if (!materias.contains(materia)) {
-            throw new IllegalStateException("La materia ingresada no se encuentra registrada.");
+            throw new NoSuchElementException("La materia ingresada no se encuentra registrada.");
         } else {
             this.materias.remove(materia);
         }
@@ -144,11 +137,16 @@ public class Tutor extends Perfil{
     public void removeHorarioDisponible(BloqueHorario horario){
         if (horario == null) {
             throw new IllegalArgumentException("No se puede quitar un horario nulo.");
-        } else if (this.horariosDisponibles.contains(horario)) {
-            throw new IllegalStateException("El bloque de horario ingresado no se encuentra registrado.");
+        } else if (!this.horariosDisponibles.contains(horario)) {
+            throw new NoSuchElementException("El bloque de horario ingresado no se encuentra registrado.");
         } else {
             this.horariosDisponibles.remove(horario);
         }
+    }
+
+    //Lógica auxiliar para poder verificar que un número es entero.
+    private void validarEnteroPositivo(int entero){
+        if (entero <= 0) throw new IllegalArgumentException("El número ingresado debe ser mayor a 0");
     }
 
     /**

@@ -1,9 +1,6 @@
 package sistema.reserva.clases.logica;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +29,11 @@ public abstract class GestorPerfil<T extends Perfil> {
      * @return Devuelve la referencia del perfil.
      */
     public T buscarPorId(String idKey) {
-        return perfiles.get(idKey);
+        T perfil = perfiles.get(idKey);
+        if (perfil == null) {
+            throw new NoSuchElementException("No se encontró ningún perfil asociado a la key: " + idKey);
+        }
+        return perfil;
     }
 
     /**
