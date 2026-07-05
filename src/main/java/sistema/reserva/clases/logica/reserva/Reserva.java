@@ -74,6 +74,14 @@ public class Reserva {
     }
 
     /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return Depende del estado de la reserva.
+     */
+    public boolean ocupaCupo(){
+        return this.estado.ocupaCupo();
+    }
+
+    /**
      * Getter de estudiante.
      * @return Referencia del estudiante.
      */

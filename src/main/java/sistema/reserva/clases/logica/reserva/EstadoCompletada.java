@@ -52,6 +52,15 @@ public class EstadoCompletada implements EstadoReserva {
      */
     @Override
     public String getNombreEstado() {
-        return "Completada";
+        return NombreEstado.COMPLETADA.toString();
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return True porque la reserva se completó.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return true;
     }
 }

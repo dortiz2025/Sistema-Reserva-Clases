@@ -39,4 +39,9 @@ public interface EstadoReserva {
      * @return String del nombre del estado.
      */
     String getNombreEstado();
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     */
+    boolean ocupaCupo();
 }

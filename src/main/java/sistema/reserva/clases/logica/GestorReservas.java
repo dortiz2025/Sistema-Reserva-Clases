@@ -42,11 +42,9 @@ public class GestorReservas {
         for (Reserva r : this.reservas){
             boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
             boolean esMismoHorario = r.getHorario().equals(horario);
-            boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada"); // Asumiendo que getNombreEstado() devuelve "Cancelada"
 
-            if (esMismoEstudiante && esMismoHorario && noEstaCancelada) {
-                throw new EstudianteYaRegistradoException("El estudiante " + estudiante.getNombre() +
-                        " ya tiene una reserva en el horario: " + horario);
+            if (esMismoEstudiante && esMismoHorario && r.ocupaCupo()) {
+                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en el horario: " + horario);
             }
         }
 
@@ -55,11 +53,10 @@ public class GestorReservas {
         for (Reserva r : this.reservas) {
             boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
             boolean esMismoHorario = r.getHorario().equals(horario);
-            boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada");
 
-            if (esMismoTutor && esMismoHorario && noEstaCancelada) {
+            if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {
                 if (!r.getMateria().equals(materia)) {
-                    throw new ConflictoMateriaException("El tutor tiene una clase de" + r.getMateria() + "en ese horario.");
+                    throw new ConflictoMateriaException("El tutor tiene una clase de " + r.getMateria() + " en ese horario.");
                 }
                 alumnosInscritosEnBloque++;
             }

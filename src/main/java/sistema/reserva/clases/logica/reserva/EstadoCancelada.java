@@ -51,6 +51,15 @@ public class EstadoCancelada implements EstadoReserva {
      */
     @Override
     public String getNombreEstado() {
-        return "Cancelada";
+        return NombreEstado.CANCELADA.toString();
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return False porque la reserva se canceló.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return false;
     }
 }

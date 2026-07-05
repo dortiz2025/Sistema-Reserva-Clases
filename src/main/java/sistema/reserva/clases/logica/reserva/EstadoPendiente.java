@@ -55,6 +55,15 @@ public class EstadoPendiente implements EstadoReserva {
      */
     @Override
     public String getNombreEstado() {
-        return "Pendiente";
+        return NombreEstado.PENDIENTE.toString();
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return True porque la reserva aún está pendiente o activa.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return true;
     }
 }
