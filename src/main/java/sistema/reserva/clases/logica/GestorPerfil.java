@@ -1,5 +1,7 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

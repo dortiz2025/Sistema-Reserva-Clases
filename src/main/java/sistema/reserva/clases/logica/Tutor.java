@@ -1,6 +1,8 @@
 package sistema.reserva.clases.logica;
 
 import sistema.reserva.clases.excepciones.CorreoInvalidoException;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
+
 import java.util.*;
 
 /**

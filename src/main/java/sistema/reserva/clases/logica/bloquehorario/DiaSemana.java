@@ -1,4 +1,4 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.bloquehorario;
 
 /**
  * Enum que representa al día de semana.

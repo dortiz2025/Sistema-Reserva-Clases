@@ -1,6 +1,6 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.BloqueHorario;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Estudiante;
 import sistema.reserva.clases.logica.Tutor;
 

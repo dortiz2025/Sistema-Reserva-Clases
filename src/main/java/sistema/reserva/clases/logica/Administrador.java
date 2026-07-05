@@ -1,7 +1,7 @@
 package sistema.reserva.clases.logica;
 
 import sistema.reserva.clases.excepciones.CorreoInvalidoException;
-import sistema.reserva.clases.logica.reserva.GestorReservas;
+import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
 import sistema.reserva.clases.logica.reserva.Reserva;
 import java.util.UUID;
 import java.util.List;

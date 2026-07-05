@@ -1,4 +1,4 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.bloquehorario;
 import java.util.Objects;
 
 /**

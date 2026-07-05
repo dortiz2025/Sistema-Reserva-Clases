@@ -1,7 +1,10 @@
-package sistema.reserva.clases.logica.reserva;
+package sistema.reserva.clases.logica;
 
 import sistema.reserva.clases.excepciones.*;
-import sistema.reserva.clases.logica.*;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
+import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
+import sistema.reserva.clases.logica.reserva.Reserva;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

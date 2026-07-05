@@ -1,5 +1,7 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
+
 /**
  * Clase que gestiona los perfiles de los tutores en el sistema.
  * Hereda de GestorPerfil.

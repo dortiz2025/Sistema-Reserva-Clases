@@ -1,6 +1,5 @@
 package sistema.reserva.clases.logica.estrategias;
 import sistema.reserva.clases.logica.Perfil;
-import sistema.reserva.clases.logica.FiltrarStrategy;
 
 public class FiltroPorNombre<T extends Perfil> implements FiltrarStrategy<T> {
     private final String nombreBuscado;
