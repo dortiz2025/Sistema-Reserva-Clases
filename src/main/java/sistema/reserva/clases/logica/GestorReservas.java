@@ -59,7 +59,7 @@ public class GestorReservas {
      * Se cancela una reserva.
      * @param reserva Reserva que se quiere cancelar.
      */
-    public void cancelarReservaDeLista(Reserva reserva) {
+    public void cancelarReserva(Reserva reserva) {
         reserva.cancelarReserva();
     }
 
@@ -67,7 +67,7 @@ public class GestorReservas {
      * Devuelve una lista de todas las reservas.
      * @return Lista de reservas.
      */
-    public List<Reserva> obtenerTodasLasReservas() {
+    public List<Reserva> obtenerReservas() {
         return Collections.unmodifiableList(this.reservas); // Devolvemos una copia por seguridad.
     }
 
