@@ -1,8 +1,8 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
-import sistema.reserva.clases.logica.Estudiante;
-import sistema.reserva.clases.logica.Tutor;
+import sistema.reserva.clases.logica.bloquehorario.*;
+import sistema.reserva.clases.logica.*;
+
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.Objects;
@@ -38,6 +38,7 @@ public class Reserva {
         this.materia = materia;
         this.horario = horario;
         this.fecha = fecha;
+        validarConsistenciaFecha(fecha, horario.getDia());
         this.estado = new EstadoPendiente();
     }
 
@@ -182,6 +183,17 @@ public class Reserva {
     @Override
     public int hashCode() {
         return Objects.hash(idReserva);
+    }
+
+    //Verifica que la fecha elegida caiga en el mismo día de la semana que indica el bloque.
+    private void validarConsistenciaFecha(LocalDate fecha, DiaSemana diaBloque) {
+        //Comparamos días de semana del bloquehorario y de la fecha escogida.
+        int diaFechaInt = fecha.getDayOfWeek().getValue();
+        int diaBloqueInt = diaBloque.ordinal() + 1;
+
+        if (diaFechaInt != diaBloqueInt) {
+            throw new IllegalArgumentException("La fecha " + fecha + " no corresponde a un día " + diaBloque.toString());
+        }
     }
 
 }

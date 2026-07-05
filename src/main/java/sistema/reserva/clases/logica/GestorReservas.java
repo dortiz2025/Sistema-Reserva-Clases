@@ -111,10 +111,22 @@ public class GestorReservas {
     private void validarReglasDeNegocio(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha, Reserva reservaAModificar)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
+        //Evita que se ingresen campos nulos.
+        if (estudiante == null || tutor == null || materia == null || horario == null || fecha == null) {
+            throw new IllegalArgumentException("Todos los campos son obligatorios para gestionar la reserva.");
+        }
+
+        //Evita que se agenden reservas en el pasado.
+        if (fecha.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("No se pueden agendar o modificar reservas en fechas pasadas.");
+        }
+
+        //Verifica que el tutor imparte la materia solicitada.
         if (!tutor.getMaterias().contains(materia)) {
             throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
         }
 
+        //Verifica que el tutor tiene horarios disponibles.
         if (!tutor.getHorariosDisponibles().contains(horario)) {
             throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
         }
