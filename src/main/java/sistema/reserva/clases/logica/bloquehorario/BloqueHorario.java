@@ -7,10 +7,10 @@ import java.util.Objects;
  * a un intervalo de tiempo en el día.
  */
 public class BloqueHorario {
-    private DiaSemana dia;
-    private int bloque;
+    private final DiaSemana dia;
+    private final Bloque bloque;
 
-    public BloqueHorario(DiaSemana dia, int bloque) {
+    public BloqueHorario(DiaSemana dia, Bloque bloque) {
         this.dia = dia;
         this.bloque = bloque;
     }
@@ -19,7 +19,7 @@ public class BloqueHorario {
         return dia;
     }
 
-    public int getBloque() {
+    public Bloque getBloque() {
         return bloque;
     }
 
