@@ -3,6 +3,8 @@ package sistema.reserva.clases.logica.reserva;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
 
+import java.time.LocalDate;
+
 /**
  * Clase que representa el estado de una reserva que ha sido completada.
  * Esta no puede ser modificada, ni cancelada, ni completada otra vez.
@@ -18,9 +20,10 @@ public class EstadoCompletada implements EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         throw new IllegalStateException("La clase ya se realizó, la reserva no puede ser modificada.");
     }
 

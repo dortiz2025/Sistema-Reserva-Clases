@@ -2,6 +2,7 @@ package sistema.reserva.clases.logica.reserva;
 
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
+import java.time.LocalDate;
 
 /**
  * Clase que representa el estado de una reserva que no se ha completado.
@@ -16,15 +17,17 @@ public class EstadoPendiente implements EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
-        if (nuevoTutor == null || nuevaMateria == null || nuevaMateria.trim().isEmpty() || nuevoHorario == null) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
+        if (nuevoTutor == null || nuevaMateria == null || nuevaMateria.trim().isEmpty() || nuevoHorario == null || nuevaFecha == null) {
             throw new IllegalArgumentException("No se pueden dejar campos vacíos al modificar una reserva.");
         }
         reserva.setTutor(nuevoTutor);
         reserva.setMateria(nuevaMateria);
         reserva.setHorario(nuevoHorario);
+        reserva.setFecha(nuevaFecha);
     }
 
     /**

@@ -5,6 +5,7 @@ import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
 import sistema.reserva.clases.logica.reserva.Reserva;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,18 +22,19 @@ public class GestorReservas {
      * @param tutor Tutor que imparte la clase.
      * @param materia Materia que imparte el tutor.
      * @param horario Horario de la clase.
+     * @param fecha Fecha de la clase.
      * @throws EstudianteYaRegistradoException Si es que el estudiante ya tiene una reserva en el horario.
      * @throws CupoExcedidoException Si es que el cupo de la clase alcanzó su máximo.
      * @throws ConflictoMateriaException Si el tutor tiene una clase de otra materia en ese horario.
      */
-    public void registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario)
+    public void registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         //Se valida con lógica auxiliar.
-        validarReglasDeNegocio(estudiante, tutor, materia, horario, null);
+        validarReglasDeNegocio(estudiante, tutor, materia, horario, fecha,null);
 
         //Si se pasaron exitosamente todas las verificaciones, la reserva se agenda.
-        Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario);
+        Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario, fecha);
         this.reservas.add(nuevaReserva);
     }
 
@@ -41,18 +43,19 @@ public class GestorReservas {
      * @param nuevoTutor Nuevo tutor que imparte una clase.
      * @param nuevaMateria Nueva materia que imparte el tutor.
      * @param nuevoHorario Nuevo horario de la clase.
+     * @param nuevaFecha Nueva fecha de la clase.
      * @param reserva Referencia de la reserva.
      * @throws EstudianteYaRegistradoException Si es que el estudiante ya tiene una reserva en el nuevo horario.
      * @throws CupoExcedidoException Si es que el cupo de la clase alcanzó su máximo.
      * @throws ConflictoMateriaException Si el tutor tiene una clase de otra materia en ese horario.
      */
-    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, Reserva reserva)
+    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario,LocalDate nuevaFecha, Reserva reserva)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         //Se valida con lógica auxiliar.
-        validarReglasDeNegocio(reserva.getEstudiante(), nuevoTutor, nuevaMateria, nuevoHorario, reserva);
+        validarReglasDeNegocio(reserva.getEstudiante(), nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha, reserva);
         //Si se pasaron exitosamente todas las verificaciones, la reserva se modifica.
-        reserva.modificarReserva(nuevoTutor, nuevaMateria, nuevoHorario);
+        reserva.modificarReserva(nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha);
     }
 
     /**
@@ -84,7 +87,7 @@ public class GestorReservas {
 
     //Lógica de validación auxiliar para registrarReserva() y modificarReserva().
     //Aquí se implementa la "Resolución de Conflictos" expuesta en el enunciado.
-    private void validarReglasDeNegocio(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, Reserva reservaAModificar)
+    private void validarReglasDeNegocio(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha, Reserva reservaAModificar)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         if (!tutor.getMaterias().contains(materia)) {
@@ -104,11 +107,11 @@ public class GestorReservas {
             }
 
             boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
-            boolean esMismoHorario = r.getHorario().equals(horario);
+            boolean esMismoHorario = r.getHorario().equals(horario) && r.getFecha().equals(fecha);
             boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
 
             if (esMismoEstudiante && esMismoHorario && r.ocupaCupo()) { //Verifica si hay reservas propias en el mismo horario.
-                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en el horario: " + horario);
+                throw new EstudianteYaRegistradoException("El estudiante ya tiene una reserva en la fecha: " + fecha + "y horario: " + horario);
             }
 
             if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {//Suma las reservas en ese horario para comprobar disponibilidad de cupo.

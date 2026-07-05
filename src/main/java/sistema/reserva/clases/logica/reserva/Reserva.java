@@ -3,6 +3,7 @@ package sistema.reserva.clases.logica.reserva;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Estudiante;
 import sistema.reserva.clases.logica.Tutor;
+import java.time.LocalDate;
 
 /**
  * Clase que representa una reserva de una clase.
@@ -15,6 +16,7 @@ public class Reserva {
     private Tutor tutor;
     private String materia;
     private BloqueHorario horario;
+    private LocalDate fecha;
     private EstadoReserva estado;
 
     /**
@@ -23,12 +25,14 @@ public class Reserva {
      * @param tutor Tutor que imparte la clase.
      * @param materia Materia que imparte el tutor.
      * @param horario Horario agendado.
+     * @param fecha Fecha de la clase.
      */
-    public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario) {
+    public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha) {
         this.estudiante = estudiante;
         this.tutor = tutor;
         this.materia = materia;
         this.horario = horario;
+        this.fecha = fecha;
         this.estado = new EstadoPendiente();
     }
 
@@ -37,10 +41,11 @@ public class Reserva {
      * @param nuevoTutor Nuevo tutor.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo Horario.
+     * @param nuevaFecha Nueva fecha.
      */
-    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
+    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
-        this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario);
+        this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha);
     }
 
     /**
@@ -98,27 +103,19 @@ public class Reserva {
     }
 
     /**
-     * Getter de materia.
-     * @return Materia que se imparte.
-     */
-    public String getMateria(){
-        return materia;
-    }
-
-    /**
-     * Getter de horario.
-     * @return Horario agendado.
-     */
-    public BloqueHorario getHorario(){
-        return horario;
-    }
-
-    /**
      * Modifica el tutor asociado a la reserva.
      * @param tutor Nuevo tutor.
      */
     protected void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    /**
+     * Getter de materia.
+     * @return Materia que se imparte.
+     */
+    public String getMateria(){
+        return materia;
     }
 
     /**
@@ -130,11 +127,35 @@ public class Reserva {
     }
 
     /**
+     * Getter de horario.
+     * @return Horario agendado.
+     */
+    public BloqueHorario getHorario(){
+        return horario;
+    }
+
+    /**
      * Modifica el horario agendado.
      * @param horario Nuevo Horario.
      */
     protected void setHorario(BloqueHorario horario) {
         this.horario = horario;
+    }
+
+    /**
+     * Getter de fecha.
+     * @return Fecha de la clase.
+     */
+    public LocalDate getFecha() {
+        return this.fecha;
+    }
+
+    /**
+     * Modifica la fecha de la clase.
+     * @param fecha Nueva fecha.
+     */
+    protected void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
 }

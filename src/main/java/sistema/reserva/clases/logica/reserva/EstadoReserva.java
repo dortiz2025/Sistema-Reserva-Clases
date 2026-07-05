@@ -3,6 +3,8 @@ package sistema.reserva.clases.logica.reserva;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
 
+import java.time.LocalDate;
+
 /**
  * Interfaz que implementa el Patrón State en Reserva.
  * Dependiendo de los estados de la reserva, la lógica cambiará.
@@ -17,8 +19,9 @@ public interface EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
-    void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario);
+    void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha);
 
     /**
      * Cancela la reserva.
