@@ -104,6 +104,42 @@ public class Sistema {
     }
 
     /**
+     * Elimina una materia asociada a un tutor.
+     * @param idTutor Id del tutor.
+     * @param materia Materia a eliminar.
+     */
+    public void eliminarMateriaTutor(String idTutor, String materia) {
+        //Se cancelan clases pendientes de esa materia específica.
+        for (Reserva r : gestorReservas.obtenerReservas()) {
+            if (r.getTutor().getId().equals(idTutor) &&
+                    r.getMateria().equalsIgnoreCase(materia) &&
+                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                gestorReservas.cancelarReserva(r);
+            }
+        }
+        //Se elimina la materia del perfil.
+        gestorTutores.eliminarMateria(idTutor, materia);
+    }
+
+    /**
+     * Elimina un horario de disponibilidad de un tutor.
+     * @param idTutor Id del tutor.
+     * @param horario Horario a eliminar.
+     */
+    public void eliminarHorarioTutor(String idTutor, BloqueHorario horario) {
+        //Se cancelan clases pendientes en ese bloque específico.
+        for (Reserva r : gestorReservas.obtenerReservas()) {
+            if (r.getTutor().getId().equals(idTutor) &&
+                    r.getHorario().equals(horario) &&
+                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                gestorReservas.cancelarReserva(r);
+            }
+        }
+        //Se elimina el bloque del perfil.
+        gestorTutores.eliminarHorarioDisponible(idTutor, horario);
+    }
+
+    /**
      * Elimina el perfil de un estudiante del sistema.
      * @param matricula Key asociada al estudiante.
      * @return Boolean si la eliminación fue exitosa.
@@ -167,6 +203,14 @@ public class Sistema {
      */
     public void cancelarReserva(Reserva reserva) {
         gestorReservas.cancelarReserva(reserva);
+    }
+
+    /**
+     * Completa una reserva.
+     * @param reserva Referencia de la reserva.
+     */
+    public void completarReserva(Reserva reserva) {
+        gestorReservas.completarReserva(reserva);
     }
 
     /**
