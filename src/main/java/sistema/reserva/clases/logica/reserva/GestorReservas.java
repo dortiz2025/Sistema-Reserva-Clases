@@ -1,13 +1,9 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.excepciones.CupoExcedidoException;
-import sistema.reserva.clases.excepciones.EstudianteYaInscritoException;
-import sistema.reserva.clases.logica.BloqueHorario;
-import sistema.reserva.clases.logica.Estudiante;
-import sistema.reserva.clases.logica.Tutor;
-
-import java.util.ArrayList;
-import java.util.List;
+import sistema.reserva.clases.excepciones.*;
+import sistema.reserva.clases.logica.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GestorReservas {
     private final List<Reserva> reservas;
@@ -18,29 +14,50 @@ public class GestorReservas {
 
     /**
      * Intenta registrar una nueva reserva validando las reglas de negocio.
+     * @param estudiante Estudiante que reserva la clase.
+     * @param tutor Tutor que imparte la clase.
+     * @param materia Materia que imparte el tutor.
+     * @param horario Horario de la clase.
+     * @throws EstudianteYaRegistradoException Si es que el estudiante ya tiene una reserva en el horario.
+     * @throws CupoExcedidoException Si es que el cupo de la clase alcanzó su máximo.
+     * @throws ConflictoMateriaException Si el tutor tiene una clase de otra materia en ese horario.
      */
     public void registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario)
-            throws EstudianteYaInscritoException, CupoExcedidoException {
+            throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
+        //Verifica si el tutor imparte la materia.
+        if (!tutor.getMaterias().contains(materia)) {
+            throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
+        }
+
+        //Verifica si el tutor tiene disponibilidad en el horario requerido.
+        if (!tutor.getHorariosDisponibles().contains(horario)) {
+            throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
+        }
+
+        //Verifica si el estudiante tiene una reserva pendiente en ese mismo horario.
         for (Reserva r : reservas){
             boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
             boolean esMismoHorario = r.getHorario().equals(horario);
             boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada"); // Asumiendo que getNombreEstado() devuelve "Cancelada"
 
             if (esMismoEstudiante && esMismoHorario && noEstaCancelada) {
-                throw new EstudianteYaInscritoException("El estudiante " + estudiante.getNombre() +
-                        " ya tiene una reserva en el " + horario.toString());
+                throw new EstudianteYaRegistradoException("El estudiante " + estudiante.getNombre() +
+                        " ya tiene una reserva en el horario: " + horario);
             }
         }
 
+        //Verifica si el cupo por clase del tutor ya fue alcanzado.
         int alumnosInscritosEnBloque = 0;
-
         for (Reserva r : reservas) {
             boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
             boolean esMismoHorario = r.getHorario().equals(horario);
             boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada");
 
             if (esMismoTutor && esMismoHorario && noEstaCancelada) {
+                if (!r.getMateria().equals(materia)) {
+                    throw new ConflictoMateriaException("El tutor tiene una clase de" + r.getMateria() + "en ese horario.");
+                }
                 alumnosInscritosEnBloque++;
             }
         }
@@ -48,18 +65,37 @@ public class GestorReservas {
             throw new CupoExcedidoException("El tutor " + tutor.getNombre() +
                     " ya alcanzó su límite máximo de " + tutor.getCupoMaximo() + " alumnos en ese horario.");
         }
+
+        //Si se pasaron exitosamente todas las verificaciones, la reserva se agenda.
         Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario);
         reservas.add(nuevaReserva);
     }
 
     /**
-     * Devuelve todas las reservas para mostrarlas en el calendario de la GUI.
+     * Se cancela una reserva.
+     * @param reserva Reserva que se quiere cancelar.
+     */
+    public void cancelarReservaDeLista(Reserva reserva) {
+        reserva.cancelarReserva();
+    }
+
+    /**
+     * Devuelve una lista de todas las reservas.
+     * @return Lista de reservas.
      */
     public List<Reserva> obtenerTodasLasReservas() {
         return new ArrayList<>(reservas); // Devolvemos una copia por seguridad
     }
 
-    public void cancelarReservaDeLista(Reserva reserva) {
-        reserva.cancelarReserva();
+    /**
+     * Devuelve una lista de reservas filtradas.
+     * @param estrategia Filtro entregado.
+     * @return Lista filtrada.
+     */
+    public List<Reserva> filtrarReservas(FiltrarStrategy<Reserva> estrategia) {
+        return reservas.stream()
+                .filter(estrategia::cumpleCondicion)
+                .collect(Collectors.toList());
     }
+
 }
