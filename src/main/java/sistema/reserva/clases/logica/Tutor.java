@@ -49,7 +49,7 @@ public class Tutor extends Perfil{
      * @return Tarifa única.
      */
     public int getTarifa() {
-        return tarifa;
+        return this.tarifa;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Tutor extends Perfil{
      * @return Materias que imparte el profesor.
      */
     public List<String> getMaterias(){
-        return this.materias;
+        return Collections.unmodifiableList(this.materias); //Protege la lista original.
     }
 
     /**
@@ -112,7 +112,7 @@ public class Tutor extends Perfil{
      * @return Horarios disponibles para reservar.
      */
     public List<BloqueHorario> getHorariosDisponibles(){
-        return this.horariosDisponibles;
+        return Collections.unmodifiableList(this.horariosDisponibles); //Protege la lista original.
     }
 
     /**
@@ -154,11 +154,11 @@ public class Tutor extends Perfil{
         return "Tutor{" +
                 "nombre='" + getNombre() + '\'' +
                 ", email='" + getEmail() + '\'' +
-                ", id='" + id + '\'' +
-                ", materias='" + materias + '\'' +
-                ", horariosDisponibles=" + horariosDisponibles +
-                ", tarifa=" + tarifa +
-                ", cupos=" + cupoMaximo +
+                ", id='" + this.id + '\'' +
+                ", materias='" + this.materias + '\'' +
+                ", horariosDisponibles=" + this.horariosDisponibles +
+                ", tarifa=" + this.tarifa +
+                ", cupos=" + this.cupoMaximo +
                 '}';
     }
 }

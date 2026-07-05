@@ -39,7 +39,7 @@ public class GestorReservas {
         }
 
         //Verifica si el estudiante tiene una reserva pendiente en ese mismo horario.
-        for (Reserva r : reservas){
+        for (Reserva r : this.reservas){
             boolean esMismoEstudiante = r.getEstudiante().getMatricula().equals(estudiante.getMatricula());
             boolean esMismoHorario = r.getHorario().equals(horario);
             boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada"); // Asumiendo que getNombreEstado() devuelve "Cancelada"
@@ -52,7 +52,7 @@ public class GestorReservas {
 
         //Verifica si el cupo por clase del tutor ya fue alcanzado.
         int alumnosInscritosEnBloque = 0;
-        for (Reserva r : reservas) {
+        for (Reserva r : this.reservas) {
             boolean esMismoTutor = r.getTutor().getId().equals(tutor.getId());
             boolean esMismoHorario = r.getHorario().equals(horario);
             boolean noEstaCancelada = !r.getNombreEstado().equals("Cancelada");
@@ -71,7 +71,7 @@ public class GestorReservas {
 
         //Si se pasaron exitosamente todas las verificaciones, la reserva se agenda.
         Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario);
-        reservas.add(nuevaReserva);
+        this.reservas.add(nuevaReserva);
     }
 
     /**
@@ -87,7 +87,7 @@ public class GestorReservas {
      * @return Lista de reservas.
      */
     public List<Reserva> obtenerTodasLasReservas() {
-        return new ArrayList<>(reservas); // Devolvemos una copia por seguridad
+        return Collections.unmodifiableList(this.reservas); // Devolvemos una copia por seguridad.
     }
 
     /**
@@ -96,7 +96,7 @@ public class GestorReservas {
      * @return Lista filtrada.
      */
     public List<Reserva> filtrarReservas(FiltrarStrategy<Reserva> estrategia) {
-        return reservas.stream()
+        return this.reservas.stream()
                 .filter(estrategia::cumpleCondicion)
                 .collect(Collectors.toList());
     }
