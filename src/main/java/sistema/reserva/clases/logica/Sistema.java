@@ -96,19 +96,19 @@ public class Sistema {
     public void modificarTutor(String idTutor, String nuevoNombre, String nuevoEmail, int nuevaTarifa, int nuevoCupoMaximo)
             throws CorreoInvalidoException, CorreoYaRegistradoException {
 
+        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo no puede estar vacío.");
+        }
+
         Tutor tutor = gestorTutores.buscarPorId(idTutor);
 
-        // Verifica si es posible reducir el cupo dependiendo de reservas pendientes.
+        //Verifica que no existan reservas pendientes que entren en conflicto.
         if (nuevoCupoMaximo < tutor.getCupoMaximo()) {
             validarReduccionDeCupos(idTutor, nuevoCupoMaximo);
         }
 
-        //Delega la modificación de datos básicos del perfil.
-        gestorTutores.modificarDatosBasicos(idTutor, nuevoNombre, nuevoEmail);
-
-        //Modifica datos específicos del tutor
-        tutor.setTarifa(nuevaTarifa);
-        tutor.setCupoMaximo(nuevoCupoMaximo);
+        //Delega la modificación al gestor correspondiente.
+        gestorTutores.modificarTutor(idTutor, nuevoNombre, nuevoEmail, nuevaTarifa, nuevoCupoMaximo);
     }
 
     /**

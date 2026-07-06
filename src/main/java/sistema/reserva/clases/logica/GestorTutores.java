@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
 import sistema.reserva.clases.excepciones.CorreoYaRegistradoException;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 
@@ -18,6 +19,21 @@ public class GestorTutores extends GestorPerfil<Tutor> {
     public void registrarTutor(Tutor tutor) throws CorreoYaRegistradoException {
         // Usa el ID de 4 dígitos como llave
         super.registrarPerfil(tutor.getId(), tutor);
+    }
+
+    public void modificarTutor(String idTutor, String nuevoNombre, String nuevoEmail, int nuevaTarifa, int nuevoCupoMaximo)
+            throws CorreoInvalidoException, CorreoYaRegistradoException {
+
+        //Validación de ints.
+        if (nuevaTarifa <= 0 || nuevoCupoMaximo <= 0) {
+            throw new IllegalArgumentException("La tarifa y el cupo deben ser mayores a 0.");
+        }
+
+        //Modifica el perfil.
+        super.modificarDatosBasicos(idTutor, nuevoNombre, nuevoEmail);
+        Tutor tutor = obtenerTutorValidado(idTutor);
+        tutor.setTarifa(nuevaTarifa);
+        tutor.setCupoMaximo(nuevoCupoMaximo);
     }
 
     /**

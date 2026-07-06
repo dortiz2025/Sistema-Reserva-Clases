@@ -58,7 +58,7 @@ public class EstadoPendiente implements EstadoReserva {
      */
     @Override
     public NombreEstado getEstado() {
-        return NombreEstado.PENDIENTE; // O COMPLETADA o CANCELADA según la clase
+        return NombreEstado.PENDIENTE;
     }
 
     /**
