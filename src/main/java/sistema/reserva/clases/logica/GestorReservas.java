@@ -143,10 +143,6 @@ public class GestorReservas {
             throw new IllegalArgumentException("El tutor " + tutor.getNombre() + " no imparte la materia: " + materia);
         }
 
-        if (!tutor.getHorariosDisponibles().contains(horario)) {
-            throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);
-        }
-
         //Verifica que el tutor tiene horarios disponibles.
         if (!tutor.getHorariosDisponibles().contains(horario)) {
             throw new IllegalArgumentException("El tutor no tiene disponibilidad en el horario: " + horario);

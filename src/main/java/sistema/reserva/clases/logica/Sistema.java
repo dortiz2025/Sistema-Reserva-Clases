@@ -7,6 +7,7 @@ import sistema.reserva.clases.logica.estrategias.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Clase que funciona como una única interfaz unificada (Patrón Singleton + Facade).
@@ -313,23 +314,17 @@ public class Sistema {
     //Verifica que al reducir el cupo máximo de un tutor,
     // no existan clases ya agendadas que superen el nuevo límite impuesto.
     private void validarReduccionDeCupos(String idTutor, int nuevoCupo) {
-        for (Reserva r1 : gestorReservas.obtenerReservas()) {
-            if (r1.getTutor().getId().equals(idTutor) && r1.ocupaCupo()) {
+        boolean excedeCupos = gestorReservas.obtenerReservas().stream()
+                .filter(r -> r.getTutor().getId().equals(idTutor) && r.ocupaCupo())
+                .collect(Collectors.groupingBy(
+                        r -> r.getFecha().toString() + "-" + r.getHorario().toString(),
+                        Collectors.counting()
+                ))
+                .values().stream()
+                .anyMatch(cantidadInscritos -> cantidadInscritos > nuevoCupo);
 
-                // Contamos cuántas reservas existen para ese mismo bloque exacto y esa fecha exacta
-                long alumnosEnEsaClase = gestorReservas.obtenerReservas().stream()
-                        .filter(r2 -> r2.getTutor().getId().equals(idTutor)
-                                && r2.getFecha().equals(r1.getFecha())
-                                && r2.getHorario().equals(r1.getHorario())
-                                && r2.ocupaCupo())
-                        .count();
-
-                if (alumnosEnEsaClase > nuevoCupo) {
-                    throw new IllegalStateException("Operación rechazada: No se puede reducir el cupo a " + nuevoCupo +
-                            ". El tutor ya tiene una clase agendada el " + r1.getFecha() +
-                            " (" + r1.getHorario() + ") con " + alumnosEnEsaClase + " alumnos inscritos.");
-                }
-            }
+        if (excedeCupos) {
+            throw new IllegalStateException("Operación rechazada: El tutor ya tiene clases agendadas que superan el nuevo límite de " + nuevoCupo + " alumnos.");
         }
     }
 }

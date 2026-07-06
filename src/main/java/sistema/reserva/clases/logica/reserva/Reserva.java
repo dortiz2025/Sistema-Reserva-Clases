@@ -32,7 +32,7 @@ public class Reserva {
      */
     public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha) {
         //Asigna un id para la reserva.
-        this.idReserva = "RES-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+        this.idReserva = "RES-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.estudiante = estudiante;
         this.tutor = tutor;
         this.materia = materia;
