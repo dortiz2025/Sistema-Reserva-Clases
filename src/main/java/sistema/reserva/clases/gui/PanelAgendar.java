@@ -10,7 +10,7 @@ public class PanelAgendar extends JPanel {
     private JComboBox<String> comboTutores;
     private JComboBox<String> comboHorarios;
 
-    public PanelAgendar(){
+    public PanelAgendar(sistema.reserva.clases.logica.Sistema sistema, javax.swing.JLabel lblEstado){
         setLayout(new GridBagLayout());
 
         comboEstudiantes = new JComboBox<>();

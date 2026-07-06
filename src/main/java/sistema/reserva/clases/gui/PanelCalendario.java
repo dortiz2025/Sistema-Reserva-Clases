@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class PanelCalendario extends JPanel{
 
-    public PanelCalendario() {
+    public PanelCalendario(sistema.reserva.clases.logica.Sistema sistema, javax.swing.JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

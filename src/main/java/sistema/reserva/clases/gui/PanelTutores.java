@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PanelTutores extends JPanel{
-    public PanelTutores() {
+    public PanelTutores(sistema.reserva.clases.logica.Sistema sistema, javax.swing.JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

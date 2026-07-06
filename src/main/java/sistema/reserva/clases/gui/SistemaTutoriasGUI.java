@@ -1,5 +1,6 @@
 package sistema.reserva.clases.gui;
 
+import sistema.reserva.clases.logica.Sistema;
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,6 +15,9 @@ public class SistemaTutoriasGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel panelDerecho;
     public JLabel lblEstado;
+
+    // se instancia el singleton de la logica
+    private Sistema sistema = Sistema.getInstancia();
 
     /**
      * Constructor de SistemaTutoriasGUI.
@@ -48,15 +52,17 @@ public class SistemaTutoriasGUI extends JFrame {
         panelMenu.add(btnAgendar);
         panelMenu.add(btnCalendario);
 
+        // se inicializa primero para poder pasarlo a los paneles
+        lblEstado = new JLabel("  Estado: Iniciado");
+
         cardLayout = new CardLayout();
         panelDerecho = new JPanel(cardLayout);
 
-        panelDerecho.add(new PanelEstudiantes(), "ESTUDIANTES");
-        panelDerecho.add(new PanelTutores(), "TUTORES");
-        panelDerecho.add(new PanelAgendar(), "AGENDAR");
-        panelDerecho.add(new PanelCalendario(), "CALENDARIO");
+        panelDerecho.add(new PanelEstudiantes(sistema, lblEstado), "ESTUDIANTES");
+        panelDerecho.add(new PanelTutores(sistema, lblEstado), "TUTORES");
+        panelDerecho.add(new PanelAgendar(sistema, lblEstado), "AGENDAR");
+        panelDerecho.add(new PanelCalendario(sistema, lblEstado), "CALENDARIO");
 
-        lblEstado = new JLabel("  Estado: Iniciado");
         add(panelMenu, BorderLayout.WEST);
         add(panelDerecho, BorderLayout.CENTER);
         add(lblEstado, BorderLayout.SOUTH);
