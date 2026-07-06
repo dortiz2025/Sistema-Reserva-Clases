@@ -21,13 +21,18 @@ public class GestorTutores extends GestorPerfil<Tutor> {
         super.registrarPerfil(tutor.getId(), tutor);
     }
 
+    /**
+     * Modifica el perfil de un tutor.
+     * @param idTutor Id del tutor.
+     * @param nuevoNombre Nuevo nombre.
+     * @param nuevoEmail Nuevo correo electrónico.
+     * @param nuevaTarifa Nueva tarifa.
+     * @param nuevoCupoMaximo Nuevo cupo máximo por clase.
+     * @throws CorreoInvalidoException Si el correo no es válido.
+     * @throws CorreoYaRegistradoException Si el correo ya está asociado a otro perfil.
+     */
     public void modificarTutor(String idTutor, String nuevoNombre, String nuevoEmail, int nuevaTarifa, int nuevoCupoMaximo)
             throws CorreoInvalidoException, CorreoYaRegistradoException {
-
-        //Validación de ints.
-        if (nuevaTarifa <= 0 || nuevoCupoMaximo <= 0) {
-            throw new IllegalArgumentException("La tarifa y el cupo deben ser mayores a 0.");
-        }
 
         //Modifica el perfil.
         super.modificarDatosBasicos(idTutor, nuevoNombre, nuevoEmail);

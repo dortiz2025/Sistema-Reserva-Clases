@@ -99,15 +99,18 @@ public class Sistema {
         if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("El correo no puede estar vacío.");
         }
+        if (nuevaTarifa <= 0 || nuevoCupoMaximo <= 0) {
+            throw new IllegalArgumentException("La tarifa y el cupo deben ser mayores a 0.");
+        }
 
         Tutor tutor = gestorTutores.buscarPorId(idTutor);
 
-        //Verifica que no existan reservas pendientes que entren en conflicto.
+        //Verifica conflictos con reservas asociadas al tutor.
         if (nuevoCupoMaximo < tutor.getCupoMaximo()) {
             validarReduccionDeCupos(idTutor, nuevoCupoMaximo);
         }
 
-        //Delega la modificación al gestor correspondiente.
+        //Delega la modificación.
         gestorTutores.modificarTutor(idTutor, nuevoNombre, nuevoEmail, nuevaTarifa, nuevoCupoMaximo);
     }
 
