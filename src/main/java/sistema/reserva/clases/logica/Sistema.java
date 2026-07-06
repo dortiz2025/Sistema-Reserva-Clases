@@ -218,6 +218,33 @@ public class Sistema {
     }
 
     /**
+     * Busca una reserva específica. Útil para cargar los datos en la GUI antes de modificar.
+     * @param idReserva Id de la reserva.
+     */
+    public Reserva obtenerReservaPorId(String idReserva) {
+        return gestorReservas.buscarReservaPorId(idReserva);
+    }
+
+    /**
+     * Modifica una reserva existente en el sistema.
+     * @param idReserva Identificador de la reserva a modificar.
+     * @param idNuevoTutor Id del tutor.
+     * @param nuevaMateria La materia de la clase.
+     * @param nuevoHorario El nuevo bloque de horario.
+     * @param nuevaFecha La nueva fecha agendada.
+     */
+    public void modificarReserva(String idReserva, String idNuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha)
+            throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
+
+        //Encuentra la reserva
+        Reserva reservaOriginal = gestorReservas.buscarReservaPorId(idReserva);
+        Tutor tutor = gestorTutores.buscarPorId(idNuevoTutor);
+
+        //Delega la modificación.
+        gestorReservas.modificarReserva(tutor, nuevaMateria, nuevoHorario, nuevaFecha, reservaOriginal);
+    }
+
+    /**
      * Cancela una reserva de una clase.
      * @param reserva Reserva de la clase.
      */

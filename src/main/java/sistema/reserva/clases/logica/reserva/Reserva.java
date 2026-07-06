@@ -196,7 +196,7 @@ public class Reserva {
         int diaBloqueInt = diaBloque.ordinal() + 1;
 
         if (diaFechaInt != diaBloqueInt) {
-            throw new IllegalArgumentException("La fecha " + fecha + " no corresponde a un día " + diaBloque.toString());
+            throw new IllegalArgumentException("La fecha " + fecha + " no corresponde a un día " + diaBloque);
         }
     }
 
