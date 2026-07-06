@@ -101,10 +101,9 @@ public class Tutor extends Perfil{
     /**
      * Remover de materias.
      * @param materia Materia a eliminar.
-     * @return Boolean que depende de si la eliminación fue exitosa o no.
      */
-    public boolean removeMateria(String materia) {
-        return this.materias.remove(materia);
+    public void removeMateria(String materia) {
+        this.materias.removeIf(m -> m.equalsIgnoreCase(materia));
     }
 
     /**
@@ -132,11 +131,10 @@ public class Tutor extends Perfil{
     /**
      * Remover de horariosDisponibles.
      * @param horario Horario a eliminar.
-     * @return Booleano dependiendo si la eliminación fue exitosa o no.
      */
-    public boolean removeHorarioDisponible(BloqueHorario horario){
+    public void removeHorarioDisponible(BloqueHorario horario){
         if (horario == null) throw new IllegalArgumentException("No se puede quitar un horario nulo.");
-        return this.horariosDisponibles.remove(horario);
+        this.horariosDisponibles.remove(horario);
     }
 
     //Lógica auxiliar para poder verificar que un número es entero.

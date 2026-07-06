@@ -151,7 +151,7 @@ public class Sistema {
      * @param materia Materia a eliminar.
      */
     public void eliminarMateriaTutor(String idTutor, String materia) {
-        //Cancela las reservas asociadas.
+        gestorTutores.buscarPorId(idTutor);
         gestorReservas.cancelarReservasPendientesMasivamente(r ->
                 r.getTutor().getId().equals(idTutor) && r.getMateria().equalsIgnoreCase(materia)
         );
@@ -164,7 +164,7 @@ public class Sistema {
      * @param horario Horario a eliminar.
      */
     public void eliminarHorarioTutor(String idTutor, BloqueHorario horario) {
-        //Cancela las reservas asociadas.
+        gestorTutores.buscarPorId(idTutor);
         gestorReservas.cancelarReservasPendientesMasivamente(r ->
                 r.getTutor().getId().equals(idTutor) && r.getHorario().equals(horario)
         );
@@ -174,23 +174,21 @@ public class Sistema {
     /**
      * Elimina el perfil de un estudiante del sistema.
      * @param matricula Key asociada al estudiante.
-     * @return Boolean si la eliminación fue exitosa.
      */
-    public boolean eliminarEstudiante(String matricula) {
-        //Cancela las reservas asociadas antes de eliminar el perfil.
+    public void eliminarEstudiante(String matricula) {
+        gestorEstudiantes.buscarPorId(matricula);
         gestorReservas.cancelarReservasPendientesMasivamente(r -> r.getEstudiante().getMatricula().equals(matricula));
-        return gestorEstudiantes.eliminarPerfil(matricula);
+        gestorEstudiantes.eliminarPerfil(matricula);
     }
 
     /**
      * Elimina el perfil de un tutor en el sistema.
      * @param idTutor Key asociada al tutor.
-     * @return Boolean si la eliminación fue exitosa.
      */
-    public boolean eliminarTutor(String idTutor) {
-        //Cancela las reservas asociadas antes de eliminar el perfil.
+    public void eliminarTutor(String idTutor) {
+        gestorTutores.buscarPorId(idTutor);
         gestorReservas.cancelarReservasPendientesMasivamente(r -> r.getTutor().getId().equals(idTutor));
-        return gestorTutores.eliminarPerfil(idTutor);
+        gestorTutores.eliminarPerfil(idTutor);
     }
 
     // ------------ GESTIÓN DE RESERVAS Y BÚSQUEDAS ------------ //
