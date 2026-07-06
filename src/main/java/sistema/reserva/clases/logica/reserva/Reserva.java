@@ -65,6 +65,10 @@ public class Reserva {
      * Marca la reserva como completada.
      */
     public void completarReserva() {
+        //No se puede completar una clase del futuro
+        if (this.fecha.isAfter(LocalDate.now())) {
+            throw new IllegalStateException("No se puede marcar como completada una clase programada para una fecha futura (" + this.fecha + ").");
+        }
         this.estado.completarReserva(this);
     }
 
