@@ -70,6 +70,79 @@ public class Sistema {
     }
 
     /**
+     * Modifica los datos de un estudiante existente.
+     * @param matricula Matrícula del estudiante a modificar.
+     * @param nuevoNombre Nuevo nombre.
+     * @param nuevoEmail Nuevo correo electrónico.
+     * @throws CorreoInvalidoException Si el formato del correo es inválido.
+     * @throws CorreoYaRegistradoException Si el nuevo correo ya pertenece a otro estudiante.
+     */
+    public void modificarEstudiante(String matricula, String nuevoNombre, String nuevoEmail)
+            throws CorreoInvalidoException, CorreoYaRegistradoException {
+
+        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo no puede estar vacío.");
+        }
+
+        Estudiante estudiante = gestorEstudiantes.buscarPorId(matricula);
+
+        // Verifica que no se repita un email asociado a otro estudiante.
+        if (!estudiante.getEmail().equalsIgnoreCase(nuevoEmail)) {
+            boolean correoEnUso = gestorEstudiantes.obtenerPerfiles().stream()
+                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
+
+            if (correoEnUso) {
+                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya está en uso por otro estudiante.");
+            }
+            estudiante.setEmail(nuevoEmail);
+        }
+
+        //Modifica el resto de atributos.
+        estudiante.setNombre(nuevoNombre);
+    }
+
+    /**
+     * Modifica los datos principales de un tutor existente.
+     * @param idTutor ID del tutor a modificar.
+     * @param nuevoNombre Nuevo nombre.
+     * @param nuevoEmail Nuevo correo electrónico.
+     * @param nuevaTarifa Nueva tarifa.
+     * @param nuevoCupoMaximo Nuevo límite de alumnos por clase.
+     * @throws CorreoInvalidoException Si el formato del correo es inválido.
+     * @throws CorreoYaRegistradoException Si el nuevo correo ya está asociado a otro tutor.
+     */
+    public void modificarTutor(String idTutor, String nuevoNombre, String nuevoEmail, int nuevaTarifa, int nuevoCupoMaximo)
+            throws CorreoInvalidoException, CorreoYaRegistradoException {
+
+        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo no puede estar vacío.");
+        }
+
+        Tutor tutor = gestorTutores.buscarPorId(idTutor);
+
+        //Verifica que no exista otro tutor con ese correo.
+        if (!tutor.getEmail().equalsIgnoreCase(nuevoEmail)) {
+            boolean correoEnUso = gestorTutores.obtenerPerfiles().stream()
+                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
+
+            if (correoEnUso) {
+                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya está en uso por otro tutor.");
+            }
+            tutor.setEmail(nuevoEmail);
+        }
+
+        //Verifica que no existan conflictos con el cambio de cupo.
+        if (nuevoCupoMaximo < tutor.getCupoMaximo()) {
+            validarReduccionDeCupos(idTutor, nuevoCupoMaximo);
+        }
+
+        //Aplica los cambios.
+        tutor.setNombre(nuevoNombre);
+        tutor.setTarifa(nuevaTarifa);
+        tutor.setCupoMaximo(nuevoCupoMaximo);
+    }
+
+    /**
      * Devuelve una lista de todos los estudiantes en el sistema.
      * @return Lista de estudiantes.
      */
@@ -267,5 +340,28 @@ public class Sistema {
         return gestorReservas.filtrarReservas(
                 r -> r.getTutor()
                         .getId().equals(idTutor));
+    }
+
+    //Verifica que al reducir el cupo máximo de un tutor,
+    // no existan clases ya agendadas que superen el nuevo límite impuesto.
+    private void validarReduccionDeCupos(String idTutor, int nuevoCupo) {
+        for (Reserva r1 : gestorReservas.obtenerReservas()) {
+            if (r1.getTutor().getId().equals(idTutor) && r1.ocupaCupo()) {
+
+                // Contamos cuántas reservas existen para ese mismo bloque exacto y esa fecha exacta
+                long alumnosEnEsaClase = gestorReservas.obtenerReservas().stream()
+                        .filter(r2 -> r2.getTutor().getId().equals(idTutor)
+                                && r2.getFecha().equals(r1.getFecha())
+                                && r2.getHorario().equals(r1.getHorario())
+                                && r2.ocupaCupo())
+                        .count();
+
+                if (alumnosEnEsaClase > nuevoCupo) {
+                    throw new IllegalStateException("Operación rechazada: No se puede reducir el cupo a " + nuevoCupo +
+                            ". El tutor ya tiene una clase agendada el " + r1.getFecha() +
+                            " (" + r1.getHorario() + ") con " + alumnosEnEsaClase + " alumnos inscritos.");
+                }
+            }
+        }
     }
 }
