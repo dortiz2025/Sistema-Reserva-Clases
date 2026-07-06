@@ -269,18 +269,20 @@ public class Sistema {
     }
 
     /**
-     * Cancela una reserva de una clase.
-     * @param reserva Reserva de la clase.
+     * Cancela una reserva de una clase mediante su ID.
+     * @param idReserva ID de la reserva.
      */
-    public void cancelarReserva(Reserva reserva) {
+    public void cancelarReserva(String idReserva) {
+        Reserva reserva = gestorReservas.buscarReservaPorId(idReserva);
         gestorReservas.cancelarReserva(reserva);
     }
 
     /**
-     * Completa una reserva.
-     * @param reserva Referencia de la reserva.
+     * Completa una reserva mediante su ID.
+     * @param idReserva ID de la reserva.
      */
-    public void completarReserva(Reserva reserva) {
+    public void completarReserva(String idReserva) {
+        Reserva reserva = gestorReservas.buscarReservaPorId(idReserva);
         gestorReservas.completarReserva(reserva);
     }
 

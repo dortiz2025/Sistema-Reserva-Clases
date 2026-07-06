@@ -91,6 +91,9 @@ public class Tutor extends Perfil{
      * @param materia Nueva materia que imparte el tutor.
      */
     public void addMateria(String materia) {
+        if (materia == null || materia.trim().isEmpty()) {
+            throw new IllegalArgumentException("La materia no puede estar vacía.");
+        }
         boolean yaExiste = materias.stream().anyMatch(m -> m.equalsIgnoreCase(materia));
         if (yaExiste) {
             throw new IllegalStateException("La materia ingresada ya se encuentra registrada.");
