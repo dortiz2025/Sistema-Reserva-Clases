@@ -24,7 +24,7 @@ public class Sistema {
     /**
      * Se inicializa el sistema.
      */
-    public  Sistema() {
+    private Sistema() {
         gestorTutores = new GestorTutores();
         gestorEstudiantes = new GestorEstudiantes();
         gestorReservas = new GestorReservas();
@@ -50,10 +50,12 @@ public class Sistema {
      * @param email Correo electrónico del estudiante.
      * @throws CorreoInvalidoException Si el correo no es válido.
      * @throws CorreoYaRegistradoException Si el correo ya está asociado a otro perfil.
+     * @return String con la matrícula del estudiante.
      */
-    public void registrarEstudiante(String nombre, String email) throws CorreoInvalidoException, CorreoYaRegistradoException {
+    public String registrarEstudiante(String nombre, String email) throws CorreoInvalidoException, CorreoYaRegistradoException {
         Estudiante nuevoEstudiante = new Estudiante(nombre, email);
         gestorEstudiantes.registrarEstudiante(nuevoEstudiante);
+        return nuevoEstudiante.getMatricula();
     }
 
     /**
@@ -64,10 +66,12 @@ public class Sistema {
      * @param cupoMaximo Cupo máximo por clase del tutor.
      * @throws CorreoInvalidoException Si el correo no es válido.
      * @throws CorreoYaRegistradoException Si el correo ya está asociado a otro perfil.
+     * @return String con el id del tutor.
      */
-    public void registrarTutor(String nombre, String email, int tarifa, int cupoMaximo) throws CorreoInvalidoException, CorreoYaRegistradoException {
+    public String registrarTutor(String nombre, String email, int tarifa, int cupoMaximo) throws CorreoInvalidoException, CorreoYaRegistradoException {
         Tutor nuevoTutor = new Tutor(nombre, email, tarifa, cupoMaximo);
         gestorTutores.registrarTutor(nuevoTutor);
+        return nuevoTutor.getId();
     }
 
     /**
@@ -128,6 +132,24 @@ public class Sistema {
      */
     public List<Tutor> obtenerTutores() {
         return gestorTutores.obtenerPerfiles();
+    }
+
+    /**
+     * Busca un estudiante específico.
+     * @param matricula Matrícula del estudiante.
+     * @return Referencia del estudiante.
+     */
+    public Estudiante obtenerEstudiantePorId(String matricula) {
+        return gestorEstudiantes.buscarPorId(matricula);
+    }
+
+    /**
+     * Busca un tutor específico.
+     * @param idTutor Id del tutor.
+     * @return Referencia del tutor.
+     */
+    public Tutor obtenerTutorPorId(String idTutor) {
+        return gestorTutores.buscarPorId(idTutor);
     }
 
     /**
@@ -206,8 +228,9 @@ public class Sistema {
      * @throws EstudianteYaRegistradoException Si el estudiante ya tiene una reserva asociada.
      * @throws CupoExcedidoException Si no quedan cupos en el horario.
      * @throws ConflictoMateriaException Si la materia no se imparte en ese horario.
+     * @return id de la reserva.
      */
-    public void agendarClase(String matricula, String idTutor, String materia, BloqueHorario horario, LocalDate fecha)
+    public String agendarClase(String matricula, String idTutor, String materia, BloqueHorario horario, LocalDate fecha)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         // El sistema busca los perfiles asociados a la matrícula e Id.
@@ -215,7 +238,7 @@ public class Sistema {
         Tutor tutor = gestorTutores.buscarPorId(idTutor);
 
         //Se intenta reservar la clase.
-        gestorReservas.registrarReserva(estudiante, tutor, materia, horario, fecha);
+        return gestorReservas.registrarReserva(estudiante, tutor, materia, horario, fecha);
     }
 
     /**

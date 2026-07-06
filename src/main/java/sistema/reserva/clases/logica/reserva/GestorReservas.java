@@ -31,8 +31,9 @@ public class GestorReservas {
      * @throws EstudianteYaRegistradoException Si es que el estudiante ya tiene una reserva en el horario.
      * @throws CupoExcedidoException Si es que el cupo de la clase alcanzó su máximo.
      * @throws ConflictoMateriaException Si el tutor tiene una clase de otra materia en ese horario.
+     * @return String del id de la reserva.
      */
-    public void registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha)
+    public String registrarReserva(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         //Se valida con lógica auxiliar.
@@ -41,6 +42,7 @@ public class GestorReservas {
         //Si se pasaron exitosamente todas las verificaciones, la reserva se agenda.
         Reserva nuevaReserva = new Reserva(estudiante, tutor, materia, horario, fecha);
         this.reservas.add(nuevaReserva);
+        return nuevaReserva.getIdReserva();
     }
 
     /**
