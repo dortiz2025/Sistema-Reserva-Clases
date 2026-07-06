@@ -76,6 +76,18 @@ public class GestorReservas {
     }
 
     /**
+     * Cancela masivamente todas las reservas pendientes que cumplan con un criterio específico.
+     * Útil para cancelar reservas asociadas a un perfil eliminado.
+     * @param filtro La estrategia de filtrado.
+     */
+    public void cancelarReservasPendientesMasivamente(FiltrarStrategy<Reserva> filtro) {
+        this.reservas.stream()
+                .filter(r -> r.getEstado() == NombreEstado.PENDIENTE)
+                .filter(filtro::cumpleCondicion)
+                .forEach(Reserva::cancelarReserva);
+    }
+
+    /**
      * Completa una reserva.
      * @param reserva Referencia de la reserva.
      */

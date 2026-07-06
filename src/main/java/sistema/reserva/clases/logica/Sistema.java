@@ -151,15 +151,10 @@ public class Sistema {
      * @param materia Materia a eliminar.
      */
     public void eliminarMateriaTutor(String idTutor, String materia) {
-        //Se cancelan clases pendientes de esa materia específica.
-        for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getTutor().getId().equals(idTutor) &&
-                    r.getMateria().equalsIgnoreCase(materia) &&
-                    r.getEstado() == NombreEstado.PENDIENTE) {
-                gestorReservas.cancelarReserva(r);
-            }
-        }
-        //Se elimina la materia del perfil.
+        //Cancela las reservas asociadas.
+        gestorReservas.cancelarReservasPendientesMasivamente(r ->
+                r.getTutor().getId().equals(idTutor) && r.getMateria().equalsIgnoreCase(materia)
+        );
         gestorTutores.eliminarMateria(idTutor, materia);
     }
 
@@ -169,15 +164,10 @@ public class Sistema {
      * @param horario Horario a eliminar.
      */
     public void eliminarHorarioTutor(String idTutor, BloqueHorario horario) {
-        //Se cancelan clases pendientes en ese bloque específico.
-        for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getTutor().getId().equals(idTutor) &&
-                    r.getHorario().equals(horario) &&
-                    r.getEstado() == NombreEstado.PENDIENTE) {
-                gestorReservas.cancelarReserva(r);
-            }
-        }
-        //Se elimina el bloque del perfil.
+        //Cancela las reservas asociadas.
+        gestorReservas.cancelarReservasPendientesMasivamente(r ->
+                r.getTutor().getId().equals(idTutor) && r.getHorario().equals(horario)
+        );
         gestorTutores.eliminarHorarioDisponible(idTutor, horario);
     }
 
@@ -187,14 +177,8 @@ public class Sistema {
      * @return Boolean si la eliminación fue exitosa.
      */
     public boolean eliminarEstudiante(String matricula) {
-        // Se cancelan las reservas pendientes asociadas al perfil del estudiante.
-        for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getEstudiante().getMatricula().equals(matricula) &&
-                    r.getEstado() == NombreEstado.PENDIENTE) {
-                gestorReservas.cancelarReserva(r);
-            }
-        }
-        //Finalmente se elimina el perfil.
+        //Cancela las reservas asociadas antes de eliminar el perfil.
+        gestorReservas.cancelarReservasPendientesMasivamente(r -> r.getEstudiante().getMatricula().equals(matricula));
         return gestorEstudiantes.eliminarPerfil(matricula);
     }
 
@@ -204,14 +188,8 @@ public class Sistema {
      * @return Boolean si la eliminación fue exitosa.
      */
     public boolean eliminarTutor(String idTutor) {
-        //Las reservas pendientes asociadas al tutor se cancelan.
-        for (Reserva r : gestorReservas.obtenerReservas()) {
-            if (r.getTutor().getId().equals(idTutor) &&
-                    r.getEstado() == NombreEstado.PENDIENTE) {
-                gestorReservas.cancelarReserva(r);
-            }
-        }
-        //Se elimina el perfil.
+        //Cancela las reservas asociadas antes de eliminar el perfil.
+        gestorReservas.cancelarReservasPendientesMasivamente(r -> r.getTutor().getId().equals(idTutor));
         return gestorTutores.eliminarPerfil(idTutor);
     }
 
