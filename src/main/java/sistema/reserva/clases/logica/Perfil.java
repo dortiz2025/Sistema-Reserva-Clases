@@ -34,7 +34,7 @@ public abstract class Perfil {
      * Setter de nombre.
      * @param nombre Nuevo nombre del perfil.
      */
-    public void setNombre(String nombre) {
+    protected void setNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío.");
         }
@@ -45,7 +45,7 @@ public abstract class Perfil {
      * Getter del email.
      * @return Nombre del perfil.
      */
-    public String getEmail() {
+    protected String getEmail() {
         return email;
     }
 

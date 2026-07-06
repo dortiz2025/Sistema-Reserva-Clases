@@ -60,9 +60,17 @@ public abstract class GestorPerfil<T extends Perfil> {
 
         T perfil = buscarPorId(idKey);
 
-        //Valida el nombre
+        //Valida el nombre.
         if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+
+        //Valida el email.
+        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo electrónico no puede estar vacío.");
+        }
+        if (!nuevoEmail.contains("@")) {
+            throw new CorreoInvalidoException("Email inválido");
         }
 
         //Verifica el correo

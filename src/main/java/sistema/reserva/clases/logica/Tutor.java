@@ -56,7 +56,7 @@ public class Tutor extends Perfil{
      * Setter de tarifa.
      * @param tarifa Tarifa única.
      */
-    public void setTarifa(int tarifa){
+    protected void setTarifa(int tarifa){
         validarEnteroPositivo(tarifa);
         this.tarifa = tarifa;
     }
@@ -73,7 +73,7 @@ public class Tutor extends Perfil{
      * Setter de cupoMaximo.
      * @param cupoMaximo Cupos máximos por clase.
      */
-    public void setCupoMaximo(int cupoMaximo){
+    protected void setCupoMaximo(int cupoMaximo){
         validarEnteroPositivo(cupoMaximo);
         this.cupoMaximo = cupoMaximo;
     }
@@ -90,7 +90,7 @@ public class Tutor extends Perfil{
      * Adder de materias.
      * @param materia Nueva materia que imparte el tutor.
      */
-    public void addMateria(String materia) {
+    protected void addMateria(String materia) {
         if (materia == null || materia.trim().isEmpty()) {
             throw new IllegalArgumentException("La materia no puede estar vacía.");
         }
@@ -106,7 +106,7 @@ public class Tutor extends Perfil{
      * Remover de materias.
      * @param materia Materia a eliminar.
      */
-    public void removeMateria(String materia) {
+    protected void removeMateria(String materia) {
         this.materias.removeIf(m -> m.equalsIgnoreCase(materia));
     }
 
@@ -122,7 +122,7 @@ public class Tutor extends Perfil{
      * Adder de horariosDisponibles.
      * @param horario Nuevo horario disponible para reservar.
      */
-    public void addHorarioDisponible(BloqueHorario horario){
+    protected void addHorarioDisponible(BloqueHorario horario){
         if (horario == null) {
             throw new IllegalArgumentException("No se puede agregar un bloque de horario nulo.");
         } else if (this.horariosDisponibles.contains(horario)) {
@@ -136,7 +136,7 @@ public class Tutor extends Perfil{
      * Remover de horariosDisponibles.
      * @param horario Horario a eliminar.
      */
-    public void removeHorarioDisponible(BloqueHorario horario){
+    protected void removeHorarioDisponible(BloqueHorario horario){
         if (horario == null) throw new IllegalArgumentException("No se puede quitar un horario nulo.");
         this.horariosDisponibles.remove(horario);
     }
