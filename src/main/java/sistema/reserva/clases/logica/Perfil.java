@@ -14,13 +14,12 @@ public abstract class Perfil {
      * Constructor de la clase.
      * @param nombre Nombre del perfil.
      * @param email Email del perfil.
-     * @throws CorreoInvalidoException Se lanza excepción si el correo es inválido,
-     * es decir, si no contiene un @.
+     * @throws CorreoInvalidoException Se lanza excepción si el correo es inválido.
      */
     public Perfil(String nombre, String email) throws CorreoInvalidoException {
+        validarDatos(nombre, email);
         this.nombre = nombre;
-        if (email.contains("@")) this.email = email;
-        else throw new CorreoInvalidoException("Email invalido");
+        this.email = email;
     }
 
     /**
@@ -36,6 +35,9 @@ public abstract class Perfil {
      * @param nombre Nuevo nombre del perfil.
      */
     public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
         this.nombre = nombre;
     }
 
@@ -50,11 +52,23 @@ public abstract class Perfil {
     /**
      * Setter del perfil.
      * @param email Nuevo email asociado.
-     * @throws CorreoInvalidoException Verificación de @ en el email. Si no lo contiene, se lanza excepción.
+     * @throws CorreoInvalidoException Verificación de @ en el email.
      */
     public void setEmail(String email) throws CorreoInvalidoException {
-        if (email.contains("@")) this.email = email;
-        else throw new CorreoInvalidoException("Email invalido");
+        validarDatos(this.nombre, email);
+        this.email = email;
+    }
 
+    // Lógica auxiliar para proteger la integridad de los datos base
+    private void validarDatos(String nombre, String email) throws CorreoInvalidoException {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("El correo electrónico no puede estar vacío.");
+        }
+        if (!email.contains("@")) {
+            throw new CorreoInvalidoException("Email inválido");
+        }
     }
 }

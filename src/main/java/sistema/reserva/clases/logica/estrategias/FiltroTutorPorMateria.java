@@ -10,6 +10,7 @@ public class FiltroTutorPorMateria implements FiltrarStrategy<Tutor> {
 
     @Override
     public boolean cumpleCondicion(Tutor tutor) {
-        return tutor.getMaterias().contains(materiaBuscada);
+        return tutor.getMaterias().stream()
+                .anyMatch(m -> m.equalsIgnoreCase(materiaBuscada));
     }
 }
