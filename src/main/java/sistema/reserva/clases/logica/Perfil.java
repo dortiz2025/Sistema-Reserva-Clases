@@ -45,7 +45,7 @@ public abstract class Perfil {
      * Getter del email.
      * @return Nombre del perfil.
      */
-    protected String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -54,7 +54,7 @@ public abstract class Perfil {
      * @param email Nuevo email asociado.
      * @throws CorreoInvalidoException Verificación de @ en el email.
      */
-    public void setEmail(String email) throws CorreoInvalidoException {
+    protected void setEmail(String email) throws CorreoInvalidoException {
         validarDatos(this.nombre, email);
         this.email = email;
     }
