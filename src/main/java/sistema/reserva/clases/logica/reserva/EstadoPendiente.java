@@ -1,7 +1,8 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.BloqueHorario;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
+import java.time.LocalDate;
 
 /**
  * Clase que representa el estado de una reserva que no se ha completado.
@@ -16,15 +17,17 @@ public class EstadoPendiente implements EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
-        if (nuevoTutor == null || nuevaMateria == null || nuevaMateria.trim().isEmpty() || nuevoHorario == null) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
+        if (nuevoTutor == null || nuevaMateria == null || nuevaMateria.trim().isEmpty() || nuevoHorario == null || nuevaFecha == null) {
             throw new IllegalArgumentException("No se pueden dejar campos vacíos al modificar una reserva.");
         }
         reserva.setTutor(nuevoTutor);
         reserva.setMateria(nuevaMateria);
         reserva.setHorario(nuevoHorario);
+        reserva.setFecha(nuevaFecha);
     }
 
     /**
@@ -50,11 +53,20 @@ public class EstadoPendiente implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre de este estado.
-     * @return String del nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return "Pendiente";
+    public NombreEstado getEstado() {
+        return NombreEstado.PENDIENTE;
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return True porque la reserva aún está pendiente o activa.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return true;
     }
 }

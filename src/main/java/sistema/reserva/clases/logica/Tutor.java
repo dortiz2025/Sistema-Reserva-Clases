@@ -1,8 +1,9 @@
 package sistema.reserva.clases.logica;
 
- import sistema.reserva.clases.excepciones.CorreoInvalidoException;
- import java.util.List;
- import java.util.UUID;
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
+
+import java.util.*;
 
 /**
  * Clase que representa un tutor.
@@ -12,23 +13,27 @@ package sistema.reserva.clases.logica;
 public class Tutor extends Perfil{
     private final String id;
     private int tarifa;
-    private int maxAlum;
-    private List<String> materias;
-    private List<BloqueHorario> horariosDisponibles;
+    private int cupoMaximo;
+    private final List<String> materias;
+    private final List<BloqueHorario> horariosDisponibles;
 
     /**
      * Inicializa un tutor con sus datos básicos.
      * @param nombre Nombre del tutor.
      * @param email Correo Electrónico del tutor.
      * @param tarifa Tarifa (única tarifa).
-     * @param maxAlum Cantidad de alumnos máximos por clase.
+     * @param cupoMaximo Cantidad de alumnos máximos por clase.
      */
-    public Tutor(String nombre, String email, int tarifa, int maxAlum) throws CorreoInvalidoException {
+    public Tutor(String nombre, String email, int tarifa, int cupoMaximo) throws CorreoInvalidoException {
         super(nombre, email);
         //Se asigna un ID único de 4 dígitos
         this.id = UUID.randomUUID().toString().substring(0,4).toUpperCase();
+        validarEnteroPositivo(tarifa);
         this.tarifa = tarifa;
-        this.maxAlum = maxAlum;
+        validarEnteroPositivo(cupoMaximo);
+        this.cupoMaximo = cupoMaximo;
+        this.materias = new ArrayList<>();
+        this.horariosDisponibles = new ArrayList<>();
     }
 
     /**
@@ -44,7 +49,7 @@ public class Tutor extends Perfil{
      * @return Tarifa única.
      */
     public int getTarifa() {
-        return tarifa;
+        return this.tarifa;
     }
 
     /**
@@ -52,23 +57,25 @@ public class Tutor extends Perfil{
      * @param tarifa Tarifa única.
      */
     public void setTarifa(int tarifa){
+        validarEnteroPositivo(tarifa);
         this.tarifa = tarifa;
     }
 
     /**
-     * Getter de maxAlum.
-     * @return Cupos máximos por clase.
+     * Getter de cupoMaximo.
+     * @return Cupo máximo por clase.
      */
-    public int getMaxAlum() {
-        return maxAlum;
+    public int getCupoMaximo() {
+        return cupoMaximo;
     }
 
     /**
-     * Setter de maxAlum.
-     * @param maxAlum Cupos máximos por clase.
+     * Setter de cupoMaximo.
+     * @param cupoMaximo Cupos máximos por clase.
      */
-    public void setMaxAlum(int maxAlum){
-        this.maxAlum = maxAlum;
+    public void setCupoMaximo(int cupoMaximo){
+        validarEnteroPositivo(cupoMaximo);
+        this.cupoMaximo = cupoMaximo;
     }
 
     /**
@@ -76,23 +83,28 @@ public class Tutor extends Perfil{
      * @return Materias que imparte el profesor.
      */
     public List<String> getMaterias(){
-        return this.materias;
+        return Collections.unmodifiableList(this.materias); //Protege la lista original.
     }
 
     /**
      * Adder de materias.
      * @param materia Nueva materia que imparte el tutor.
      */
-    public void addMateria(String materia){
-        this.materias.add(materia);
+    public void addMateria(String materia) {
+        boolean yaExiste = materias.stream().anyMatch(m -> m.equalsIgnoreCase(materia));
+        if (yaExiste) {
+            throw new IllegalStateException("La materia ingresada ya se encuentra registrada.");
+        } else {
+            this.materias.add(materia);
+        }
     }
 
     /**
-     * Remover de materia.
+     * Remover de materias.
      * @param materia Materia a eliminar.
      */
-    public void removeMateria(String materia){
-        this.materias.remove(materia);
+    public void removeMateria(String materia) {
+        this.materias.removeIf(m -> m.equalsIgnoreCase(materia));
     }
 
     /**
@@ -100,23 +112,35 @@ public class Tutor extends Perfil{
      * @return Horarios disponibles para reservar.
      */
     public List<BloqueHorario> getHorariosDisponibles(){
-        return this.horariosDisponibles;
+        return Collections.unmodifiableList(this.horariosDisponibles); //Protege la lista original.
     }
 
     /**
      * Adder de horariosDisponibles.
      * @param horario Nuevo horario disponible para reservar.
      */
-    public void addHorariosDisponibles(BloqueHorario horario){
-        this.horariosDisponibles.add(horario);
+    public void addHorarioDisponible(BloqueHorario horario){
+        if (horario == null) {
+            throw new IllegalArgumentException("No se puede agregar un bloque de horario nulo.");
+        } else if (this.horariosDisponibles.contains(horario)) {
+            throw new IllegalStateException("El bloque de horario ingresado ya está registrado.");
+        } else {
+            this.horariosDisponibles.add(horario);
+        }
     }
 
     /**
      * Remover de horariosDisponibles.
      * @param horario Horario a eliminar.
      */
-    public void removeHorariosDisponibles(BloqueHorario horario){
+    public void removeHorarioDisponible(BloqueHorario horario){
+        if (horario == null) throw new IllegalArgumentException("No se puede quitar un horario nulo.");
         this.horariosDisponibles.remove(horario);
+    }
+
+    //Lógica auxiliar para poder verificar que un número es entero.
+    private void validarEnteroPositivo(int entero){
+        if (entero <= 0) throw new IllegalArgumentException("El número ingresado debe ser mayor a 0");
     }
 
     /**
@@ -129,11 +153,11 @@ public class Tutor extends Perfil{
         return "Tutor{" +
                 "nombre='" + getNombre() + '\'' +
                 ", email='" + getEmail() + '\'' +
-                ", id='" + id + '\'' +
-                ", materia='" + materias + '\'' +
-                ", horariosDisponibles=" + horariosDisponibles +
-                ", tarifa=" + tarifa +
-                ", maxAlum=" + maxAlum +
+                ", id='" + this.id + '\'' +
+                ", materias='" + this.materias + '\'' +
+                ", horariosDisponibles=" + this.horariosDisponibles +
+                ", tarifa=" + this.tarifa +
+                ", cupos=" + this.cupoMaximo +
                 '}';
     }
 }

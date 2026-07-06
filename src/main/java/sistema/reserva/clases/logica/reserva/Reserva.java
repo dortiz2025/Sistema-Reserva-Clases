@@ -1,8 +1,11 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.BloqueHorario;
-import sistema.reserva.clases.logica.Estudiante;
-import sistema.reserva.clases.logica.Tutor;
+import sistema.reserva.clases.logica.bloquehorario.*;
+import sistema.reserva.clases.logica.*;
+
+import java.time.LocalDate;
+import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Clase que representa una reserva de una clase.
@@ -11,10 +14,12 @@ import sistema.reserva.clases.logica.Tutor;
  * Puede ser modificada, cancelada o completada.
  */
 public class Reserva {
+    private final String idReserva;
     private final Estudiante estudiante;
     private Tutor tutor;
     private String materia;
     private BloqueHorario horario;
+    private LocalDate fecha;
     private EstadoReserva estado;
 
     /**
@@ -23,35 +28,72 @@ public class Reserva {
      * @param tutor Tutor que imparte la clase.
      * @param materia Materia que imparte el tutor.
      * @param horario Horario agendado.
+     * @param fecha Fecha de la clase.
      */
-    public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario) {
+    public Reserva (Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha) {
+        //Asigna un id para la reserva.
+        this.idReserva = "RES-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.estudiante = estudiante;
         this.tutor = tutor;
         this.materia = materia;
         this.horario = horario;
+        this.fecha = fecha;
+        validarConsistenciaFecha(fecha, horario.getDia());
         this.estado = new EstadoPendiente();
     }
 
-    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
+    /**
+     * Modifica la reserva.
+     * @param nuevoTutor Nuevo tutor.
+     * @param nuevaMateria Nueva materia.
+     * @param nuevoHorario Nuevo Horario.
+     * @param nuevaFecha Nueva fecha.
+     */
+    protected void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
-        this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario);
+        this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha);
     }
 
-    public void cancelarReserva() {
+    /**
+     * Cancela la reserva.
+     */
+    protected void cancelarReserva() {
         this.estado.cancelarReserva(this);
     }
 
-    public void completarReserva() {
+    /**
+     * Marca la reserva como completada.
+     */
+    protected void completarReserva() {
+        //No se puede completar una clase del futuro
+        if (this.fecha.isAfter(LocalDate.now())) {
+            throw new IllegalStateException("No se puede marcar como completada una clase programada para una fecha futura (" + this.fecha + ").");
+        }
         this.estado.completarReserva(this);
     }
 
-    // Setter protected para que solo los estados puedan cambiar el estado actual.
+    /**
+     * Cambia el estado de la reserva.
+     * @param nuevoEstado Nuevo estado de la reserva.
+     */
     protected void setEstado(EstadoReserva nuevoEstado) {
         this.estado = nuevoEstado;
     }
 
-    public String getNombreEstado() {
-        return this.estado.getNombreEstado();
+    /**
+     * Entrega el estado actual de la reserva.
+     * @return Estado de la reserva.
+     */
+    public NombreEstado getEstado() {
+        return this.estado.getEstado();
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return Depende del estado de la reserva.
+     */
+    public boolean ocupaCupo(){
+        return this.estado.ocupaCupo();
     }
 
     /**
@@ -71,27 +113,19 @@ public class Reserva {
     }
 
     /**
-     * Getter de materia.
-     * @return Materia que se imparte.
-     */
-    public String getMateria(){
-        return materia;
-    }
-
-    /**
-     * Getter de horario.
-     * @return Horario agendado.
-     */
-    public BloqueHorario getHorario(){
-        return horario;
-    }
-
-    /**
      * Modifica el tutor asociado a la reserva.
      * @param tutor Nuevo tutor.
      */
     protected void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    /**
+     * Getter de materia.
+     * @return Materia que se imparte.
+     */
+    public String getMateria(){
+        return materia;
     }
 
     /**
@@ -103,11 +137,67 @@ public class Reserva {
     }
 
     /**
+     * Getter de horario.
+     * @return Horario agendado.
+     */
+    public BloqueHorario getHorario(){
+        return horario;
+    }
+
+    /**
      * Modifica el horario agendado.
      * @param horario Nuevo Horario.
      */
     protected void setHorario(BloqueHorario horario) {
         this.horario = horario;
+    }
+
+    /**
+     * Getter de fecha.
+     * @return Fecha de la clase.
+     */
+    public LocalDate getFecha() {
+        return this.fecha;
+    }
+
+    /**
+     * Modifica la fecha de la clase.
+     * @param fecha Nueva fecha.
+     */
+    protected void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * Getter de idReserva.
+     * @return String del id.
+     */
+    public String getIdReserva() {
+        return this.idReserva;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reserva reserva = (Reserva) o;
+        return Objects.equals(idReserva, reserva.idReserva);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idReserva);
+    }
+
+    //Verifica que la fecha elegida caiga en el mismo día de la semana que indica el bloque.
+    private void validarConsistenciaFecha(LocalDate fecha, DiaSemana diaBloque) {
+        //Comparamos días de semana del bloquehorario y de la fecha escogida.
+        int diaFechaInt = fecha.getDayOfWeek().getValue();
+        int diaBloqueInt = diaBloque.ordinal() + 1;
+
+        if (diaFechaInt != diaBloqueInt) {
+            throw new IllegalArgumentException("La fecha " + fecha + " no corresponde a un día " + diaBloque);
+        }
     }
 
 }

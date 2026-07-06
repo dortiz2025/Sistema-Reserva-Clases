@@ -1,7 +1,9 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.BloqueHorario;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
+
+import java.time.LocalDate;
 
 /**
  * Clase que representa el estado de una reserva que ha sido completada.
@@ -18,9 +20,10 @@ public class EstadoCompletada implements EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         throw new IllegalStateException("La clase ya se realizó, la reserva no puede ser modificada.");
     }
 
@@ -47,11 +50,20 @@ public class EstadoCompletada implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre del este estado.
-     * @return String del nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return "Completada";
+    public NombreEstado getEstado() {
+        return NombreEstado.COMPLETADA;
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return True porque la reserva se completó.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return true;
     }
 }

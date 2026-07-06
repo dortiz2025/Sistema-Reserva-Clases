@@ -1,7 +1,9 @@
 package sistema.reserva.clases.logica.reserva;
 
-import sistema.reserva.clases.logica.BloqueHorario;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.Tutor;
+
+import java.time.LocalDate;
 
 /**
  * Clase que representa el estado de una reserva cancelada.
@@ -17,9 +19,10 @@ public class EstadoCancelada implements EstadoReserva {
      * @param nuevoTutor Referencia del tutor nuevo.
      * @param nuevaMateria Nueva materia.
      * @param nuevoHorario Nuevo horario.
+     * @param nuevaFecha Nueva fecha.
      */
     @Override
-    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario) {
+    public void modificarReserva(Reserva reserva, Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         throw new IllegalStateException("No se puede modificar una reserva que ya ha sido cancelada.");
     }
 
@@ -46,11 +49,20 @@ public class EstadoCancelada implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre de este estado.
-     * @return String con el nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return "Cancelada";
+    public NombreEstado getEstado() {
+        return NombreEstado.CANCELADA;
+    }
+
+    /**
+     * Booleano que depende de si la reserva se debe contar o no.
+     * @return False porque la reserva se canceló.
+     */
+    @Override
+    public boolean ocupaCupo(){
+        return false;
     }
 }

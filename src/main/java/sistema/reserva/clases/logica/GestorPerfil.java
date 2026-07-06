@@ -1,9 +1,10 @@
 package sistema.reserva.clases.logica;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
+import sistema.reserva.clases.excepciones.CorreoYaRegistradoException;
+import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -19,9 +20,16 @@ public abstract class GestorPerfil<T extends Perfil> {
      * @param idKey Key que puede ser ID de tutor o matrícula de estudiante.
      * @param perfil Referencia del perfil que se guarda.
      */
-    public void registrarPerfil(String idKey, T perfil) {
+    public void registrarPerfil(String idKey, T perfil) throws CorreoYaRegistradoException {
         if (perfiles.containsKey(idKey)) {
-            throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra registrado.");
+            throw new IllegalArgumentException("El identificador " + idKey + " ya se encuentra asociado a un perfil.");
+        }
+        //Validación para que no se repitan personas.
+        boolean correoYaExiste = perfiles.values().stream()
+                .anyMatch(p -> p.getEmail().equalsIgnoreCase(perfil.getEmail()));
+
+        if (correoYaExiste) {
+            throw new CorreoYaRegistradoException("Ya existe un usuario registrado con el correo: " + perfil.getEmail());
         }
         perfiles.put(idKey, perfil);
     }
@@ -32,7 +40,39 @@ public abstract class GestorPerfil<T extends Perfil> {
      * @return Devuelve la referencia del perfil.
      */
     public T buscarPorId(String idKey) {
-        return perfiles.get(idKey);
+        T perfil = perfiles.get(idKey);
+        if (perfil == null) {
+            throw new NoSuchElementException("No se encontró ningún perfil asociado a la key: " + idKey);
+        }
+        return perfil;
+    }
+
+    /**
+     * Modifica los datos básicos de un perfil.
+     * @param idKey ID o Matrícula del perfil.
+     * @param nuevoNombre Nuevo nombre a asignar.
+     * @param nuevoEmail Nuevo correo a asignar.
+     * @throws CorreoInvalidoException Si el formato del correo es inválido.
+     * @throws CorreoYaRegistradoException Si el correo pertenece a otra persona.
+     */
+    public void modificarDatosBasicos(String idKey, String nuevoNombre, String nuevoEmail)
+            throws CorreoInvalidoException, CorreoYaRegistradoException {
+
+        T perfil = buscarPorId(idKey);
+
+        // Verifica que el correo no se encuentre asociado a otro perfil.
+        if (!perfil.getEmail().equalsIgnoreCase(nuevoEmail)) {
+            boolean correoEnUso = perfiles.values().stream()
+                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
+
+            if (correoEnUso) {
+                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya se encuentra registrado en el sistema.");
+            }
+            perfil.setEmail(nuevoEmail);
+        }
+
+        // Se actualiza el nombre
+        perfil.setNombre(nuevoNombre);
     }
 
     /**
@@ -40,6 +80,7 @@ public abstract class GestorPerfil<T extends Perfil> {
      * @param idKey Key asociada al perfil.
      */
     public void eliminarPerfil(String idKey) {
+        buscarPorId(idKey); // Falla rápido si el perfil no existe
         perfiles.remove(idKey);
     }
 
