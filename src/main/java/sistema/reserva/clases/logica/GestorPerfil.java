@@ -60,18 +60,25 @@ public abstract class GestorPerfil<T extends Perfil> {
 
         T perfil = buscarPorId(idKey);
 
-        // Verifica que el correo no se encuentre asociado a otro perfil.
-        if (!perfil.getEmail().equalsIgnoreCase(nuevoEmail)) {
+        //Valida el nombre
+        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+
+        //Verifica el correo
+        boolean correoCambiara = !perfil.getEmail().equalsIgnoreCase(nuevoEmail);
+        if (correoCambiara) {
             boolean correoEnUso = perfiles.values().stream()
                     .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
-
             if (correoEnUso) {
                 throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya se encuentra registrado en el sistema.");
             }
-            perfil.setEmail(nuevoEmail);
         }
 
-        // Se actualiza el nombre
+        //Se modifican los datos.
+        if (correoCambiara) {
+            perfil.setEmail(nuevoEmail);
+        }
         perfil.setNombre(nuevoNombre);
     }
 

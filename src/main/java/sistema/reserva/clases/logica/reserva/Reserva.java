@@ -65,10 +65,20 @@ public class Reserva {
      * Marca la reserva como completada.
      */
     protected void completarReserva() {
-        //No se puede completar una clase del futuro
+        //Verificar que no sea una reserva futura.
         if (this.fecha.isAfter(LocalDate.now())) {
             throw new IllegalStateException("No se puede marcar como completada una clase programada para una fecha futura (" + this.fecha + ").");
         }
+
+        //Verificar que la clase ya terminó si es hoy.
+        if (this.fecha.equals(LocalDate.now())) {
+            java.time.LocalTime horaFinBloque = java.time.LocalTime.parse(this.horario.getBloque().getHoraFin());
+            if (java.time.LocalTime.now().isBefore(horaFinBloque)) {
+                throw new IllegalStateException("La clase de hoy aún no ha terminado. Está programada hasta las " + horaFinBloque + ".");
+            }
+        }
+
+        //Cambia el estado si pasa las pruebas.
         this.estado.completarReserva(this);
     }
 

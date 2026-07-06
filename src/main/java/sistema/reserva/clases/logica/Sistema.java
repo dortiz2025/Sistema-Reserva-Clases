@@ -346,7 +346,7 @@ public class Sistema {
     // no existan clases ya agendadas que superen el nuevo límite impuesto.
     private void validarReduccionDeCupos(String idTutor, int nuevoCupo) {
         boolean excedeCupos = gestorReservas.obtenerReservas().stream()
-                .filter(r -> r.getTutor().getId().equals(idTutor) && r.ocupaCupo())
+                .filter(r -> r.getTutor().getId().equals(idTutor) && r.getEstado() == NombreEstado.PENDIENTE)
                 .collect(Collectors.groupingBy(
                         r -> r.getFecha().toString() + "-" + r.getHorario().toString(),
                         Collectors.counting()

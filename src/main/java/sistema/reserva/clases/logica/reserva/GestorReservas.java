@@ -144,6 +144,14 @@ public class GestorReservas {
             throw new IllegalArgumentException("No se pueden agendar o modificar reservas en fechas pasadas.");
         }
 
+        //Verifica que no se agende un bloque que ya pasó el mismo día.
+        if (fecha.equals(LocalDate.now())) {
+            java.time.LocalTime horaInicioBloque = java.time.LocalTime.parse(horario.getBloque().getHoraInicio());
+            if (java.time.LocalTime.now().isAfter(horaInicioBloque)) {
+                throw new IllegalArgumentException("No se puede agendar una reserva en un bloque que ya pasó el día de hoy.");
+            }
+        }
+
         //Verifica que la fecha sea coherente con el día de bloqueHorario.
         int diaFechaInt = fecha.getDayOfWeek().getValue();
         int diaBloqueInt = horario.getDia().ordinal() + 1;
