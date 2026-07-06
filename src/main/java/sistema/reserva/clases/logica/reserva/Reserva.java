@@ -81,11 +81,11 @@ public class Reserva {
     }
 
     /**
-     * Entrega el nombre del estado actual de la reserva.
-     * @return String del nombre del estado.
+     * Entrega el estado actual de la reserva.
+     * @return Estado de la reserva.
      */
-    public String getNombreEstado() {
-        return this.estado.getNombreEstado();
+    public NombreEstado getEstado() {
+        return this.estado.getEstado();
     }
 
     /**

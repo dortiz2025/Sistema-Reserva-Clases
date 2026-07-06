@@ -53,12 +53,12 @@ public class EstadoPendiente implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre de este estado.
-     * @return String del nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return NombreEstado.PENDIENTE.toString();
+    public NombreEstado getEstado() {
+        return NombreEstado.PENDIENTE; // O COMPLETADA o CANCELADA según la clase
     }
 
     /**

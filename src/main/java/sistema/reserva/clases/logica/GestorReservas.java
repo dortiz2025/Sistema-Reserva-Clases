@@ -57,8 +57,8 @@ public class GestorReservas {
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
         //Verifica que la reserva se pueda modificar antes de resolver conflictos.
-        if (!reserva.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
-            throw new IllegalStateException("Operación rechazada: No se puede modificar una reserva que se encuentra " + reserva.getNombreEstado() + ".");
+        if (reserva.getEstado() != NombreEstado.PENDIENTE) {
+            throw new IllegalStateException("Operación rechazada: No se puede modificar una reserva que se encuentra " + reserva.getEstado() + ".");
         }
 
         //Se valida con lógica auxiliar.

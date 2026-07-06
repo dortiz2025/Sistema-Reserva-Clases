@@ -49,12 +49,12 @@ public class EstadoCancelada implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre de este estado.
-     * @return String con el nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return NombreEstado.CANCELADA.toString();
+    public NombreEstado getEstado() {
+        return NombreEstado.PENDIENTE; // O COMPLETADA o CANCELADA según la clase
     }
 
     /**

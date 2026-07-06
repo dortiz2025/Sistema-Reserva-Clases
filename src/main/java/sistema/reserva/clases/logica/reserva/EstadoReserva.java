@@ -38,10 +38,10 @@ public interface EstadoReserva {
     void completarReserva(Reserva reserva);
 
     /**
-     * Entrega el nombre del estado.
-     * @return String del nombre del estado.
+     * Entrega el estado actual.
+     * @return Estado de la reserva..
      */
-    String getNombreEstado();
+    NombreEstado getEstado();
 
     /**
      * Booleano que depende de si la reserva se debe contar o no.

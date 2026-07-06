@@ -154,7 +154,7 @@ public class Sistema {
         for (Reserva r : gestorReservas.obtenerReservas()) {
             if (r.getTutor().getId().equals(idTutor) &&
                     r.getMateria().equalsIgnoreCase(materia) &&
-                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                    r.getEstado() == NombreEstado.PENDIENTE) {
                 gestorReservas.cancelarReserva(r);
             }
         }
@@ -172,7 +172,7 @@ public class Sistema {
         for (Reserva r : gestorReservas.obtenerReservas()) {
             if (r.getTutor().getId().equals(idTutor) &&
                     r.getHorario().equals(horario) &&
-                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                    r.getEstado() == NombreEstado.PENDIENTE) {
                 gestorReservas.cancelarReserva(r);
             }
         }
@@ -189,7 +189,7 @@ public class Sistema {
         // Se cancelan las reservas pendientes asociadas al perfil del estudiante.
         for (Reserva r : gestorReservas.obtenerReservas()) {
             if (r.getEstudiante().getMatricula().equals(matricula) &&
-                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                    r.getEstado() == NombreEstado.PENDIENTE) {
                 gestorReservas.cancelarReserva(r);
             }
         }
@@ -206,7 +206,7 @@ public class Sistema {
         //Las reservas pendientes asociadas al tutor se cancelan.
         for (Reserva r : gestorReservas.obtenerReservas()) {
             if (r.getTutor().getId().equals(idTutor) &&
-                    r.getNombreEstado().equals(NombreEstado.PENDIENTE.toString())) {
+                    r.getEstado() == NombreEstado.PENDIENTE) {
                 gestorReservas.cancelarReserva(r);
             }
         }

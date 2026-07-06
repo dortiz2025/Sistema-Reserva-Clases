@@ -50,12 +50,12 @@ public class EstadoCompletada implements EstadoReserva {
     }
 
     /**
-     * Devuelve el nombre del este estado.
-     * @return String del nombre de este estado.
+     * Devuelve el estado actual.
+     * @return Estado actual.
      */
     @Override
-    public String getNombreEstado() {
-        return NombreEstado.COMPLETADA.toString();
+    public NombreEstado getEstado() {
+        return NombreEstado.PENDIENTE; // O COMPLETADA o CANCELADA según la clase
     }
 
     /**
