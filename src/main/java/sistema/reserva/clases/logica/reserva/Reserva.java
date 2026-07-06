@@ -49,7 +49,7 @@ public class Reserva {
      * @param nuevoHorario Nuevo Horario.
      * @param nuevaFecha Nueva fecha.
      */
-    public void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
+    protected void modificarReserva(Tutor nuevoTutor, String nuevaMateria, BloqueHorario nuevoHorario, LocalDate nuevaFecha) {
         // La reserva no decide si se puede modificar, le pregunta a su estado actual
         this.estado.modificarReserva(this, nuevoTutor, nuevaMateria, nuevoHorario, nuevaFecha);
     }
@@ -57,14 +57,14 @@ public class Reserva {
     /**
      * Cancela la reserva.
      */
-    public void cancelarReserva() {
+    protected void cancelarReserva() {
         this.estado.cancelarReserva(this);
     }
 
     /**
      * Marca la reserva como completada.
      */
-    public void completarReserva() {
+    protected void completarReserva() {
         //No se puede completar una clase del futuro
         if (this.fecha.isAfter(LocalDate.now())) {
             throw new IllegalStateException("No se puede marcar como completada una clase programada para una fecha futura (" + this.fecha + ").");

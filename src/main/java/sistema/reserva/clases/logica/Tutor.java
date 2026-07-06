@@ -91,9 +91,10 @@ public class Tutor extends Perfil{
      * @param materia Nueva materia que imparte el tutor.
      */
     public void addMateria(String materia) {
-        if (materias.contains(materia)) {
+        boolean yaExiste = materias.stream().anyMatch(m -> m.equalsIgnoreCase(materia));
+        if (yaExiste) {
             throw new IllegalStateException("La materia ingresada ya se encuentra registrada.");
-        } else{
+        } else {
             this.materias.add(materia);
         }
     }

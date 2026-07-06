@@ -1,10 +1,11 @@
-package sistema.reserva.clases.logica;
+package sistema.reserva.clases.logica.reserva;
 
 import sistema.reserva.clases.excepciones.*;
+import sistema.reserva.clases.logica.Estudiante;
+import sistema.reserva.clases.logica.Tutor;
 import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
 import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
-import sistema.reserva.clases.logica.reserva.NombreEstado;
-import sistema.reserva.clases.logica.reserva.Reserva;
+
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -131,9 +132,9 @@ public class GestorReservas {
     private void validarReglasDeNegocio(Estudiante estudiante, Tutor tutor, String materia, BloqueHorario horario, LocalDate fecha, Reserva reservaAModificar)
             throws EstudianteYaRegistradoException, CupoExcedidoException, ConflictoMateriaException {
 
-        //Evita que se ingresen campos nulos.
-        if (estudiante == null || tutor == null || materia == null || horario == null || fecha == null) {
-            throw new IllegalArgumentException("Todos los campos son obligatorios para gestionar la reserva.");
+        // Evita campos nulos y strings vacíos.
+        if (estudiante == null || tutor == null || materia == null || materia.trim().isEmpty() || horario == null || fecha == null) {
+            throw new IllegalArgumentException("Todos los campos son obligatorios y válidos para gestionar la reserva.");
         }
 
         //Evita que se agenden reservas en el pasado.
@@ -177,7 +178,7 @@ public class GestorReservas {
             }
 
             if (esMismoTutor && esMismoHorario && r.ocupaCupo()) {//Suma las reservas en ese horario para comprobar disponibilidad de cupo.
-                if (!r.getMateria().equals(materia)) {
+                if (!r.getMateria().equalsIgnoreCase(materia)) {
                     throw new ConflictoMateriaException("El tutor tiene una clase de " + r.getMateria() + " en ese horario.");
                 }
                 alumnosInscritosEnBloque++;
