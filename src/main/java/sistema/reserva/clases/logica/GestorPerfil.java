@@ -1,5 +1,6 @@
 package sistema.reserva.clases.logica;
 
+import sistema.reserva.clases.excepciones.CorreoInvalidoException;
 import sistema.reserva.clases.excepciones.CorreoYaRegistradoException;
 import sistema.reserva.clases.logica.estrategias.FiltrarStrategy;
 
@@ -44,6 +45,34 @@ public abstract class GestorPerfil<T extends Perfil> {
             throw new NoSuchElementException("No se encontró ningún perfil asociado a la key: " + idKey);
         }
         return perfil;
+    }
+
+    /**
+     * Modifica los datos básicos de un perfil.
+     * @param idKey ID o Matrícula del perfil.
+     * @param nuevoNombre Nuevo nombre a asignar.
+     * @param nuevoEmail Nuevo correo a asignar.
+     * @throws CorreoInvalidoException Si el formato del correo es inválido.
+     * @throws CorreoYaRegistradoException Si el correo pertenece a otra persona.
+     */
+    public void modificarDatosBasicos(String idKey, String nuevoNombre, String nuevoEmail)
+            throws CorreoInvalidoException, CorreoYaRegistradoException {
+
+        T perfil = buscarPorId(idKey);
+
+        // Verifica que el correo no se encuentre asociado a otro perfil.
+        if (!perfil.getEmail().equalsIgnoreCase(nuevoEmail)) {
+            boolean correoEnUso = perfiles.values().stream()
+                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
+
+            if (correoEnUso) {
+                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya se encuentra registrado en el sistema.");
+            }
+            perfil.setEmail(nuevoEmail);
+        }
+
+        // Se actualiza el nombre
+        perfil.setNombre(nuevoNombre);
     }
 
     /**

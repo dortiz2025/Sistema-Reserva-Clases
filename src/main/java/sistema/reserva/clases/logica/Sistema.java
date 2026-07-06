@@ -79,26 +79,7 @@ public class Sistema {
      */
     public void modificarEstudiante(String matricula, String nuevoNombre, String nuevoEmail)
             throws CorreoInvalidoException, CorreoYaRegistradoException {
-
-        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
-            throw new IllegalArgumentException("El correo no puede estar vacío.");
-        }
-
-        Estudiante estudiante = gestorEstudiantes.buscarPorId(matricula);
-
-        // Verifica que no se repita un email asociado a otro estudiante.
-        if (!estudiante.getEmail().equalsIgnoreCase(nuevoEmail)) {
-            boolean correoEnUso = gestorEstudiantes.obtenerPerfiles().stream()
-                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
-
-            if (correoEnUso) {
-                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya está en uso por otro estudiante.");
-            }
-            estudiante.setEmail(nuevoEmail);
-        }
-
-        //Modifica el resto de atributos.
-        estudiante.setNombre(nuevoNombre);
+        gestorEstudiantes.modificarDatosBasicos(matricula, nuevoNombre, nuevoEmail);
     }
 
     /**
@@ -114,30 +95,17 @@ public class Sistema {
     public void modificarTutor(String idTutor, String nuevoNombre, String nuevoEmail, int nuevaTarifa, int nuevoCupoMaximo)
             throws CorreoInvalidoException, CorreoYaRegistradoException {
 
-        if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
-            throw new IllegalArgumentException("El correo no puede estar vacío.");
-        }
-
         Tutor tutor = gestorTutores.buscarPorId(idTutor);
 
-        //Verifica que no exista otro tutor con ese correo.
-        if (!tutor.getEmail().equalsIgnoreCase(nuevoEmail)) {
-            boolean correoEnUso = gestorTutores.obtenerPerfiles().stream()
-                    .anyMatch(p -> p.getEmail().equalsIgnoreCase(nuevoEmail));
-
-            if (correoEnUso) {
-                throw new CorreoYaRegistradoException("El correo " + nuevoEmail + " ya está en uso por otro tutor.");
-            }
-            tutor.setEmail(nuevoEmail);
-        }
-
-        //Verifica que no existan conflictos con el cambio de cupo.
+        // Verifica si es posible reducir el cupo dependiendo de reservas pendientes.
         if (nuevoCupoMaximo < tutor.getCupoMaximo()) {
             validarReduccionDeCupos(idTutor, nuevoCupoMaximo);
         }
 
-        //Aplica los cambios.
-        tutor.setNombre(nuevoNombre);
+        //Delega la modificación de datos básicos del perfil.
+        gestorTutores.modificarDatosBasicos(idTutor, nuevoNombre, nuevoEmail);
+
+        //Modifica datos específicos del tutor
         tutor.setTarifa(nuevaTarifa);
         tutor.setCupoMaximo(nuevoCupoMaximo);
     }
