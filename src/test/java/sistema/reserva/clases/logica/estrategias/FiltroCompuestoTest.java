@@ -73,4 +73,14 @@ public class FiltroCompuestoTest {
             }
         });
 
+        filtroCompuesto.agregarFiltro(new FiltrarStrategy<String>() {
+            @Override
+            public boolean cumpleCondicion(String item) {
+                return false;
+            }
+        });
+
+        assertFalse(filtroCompuesto.cumpleCondicion("ObjetoDePrueba"),
+                "El resultado final debe ser falso si al menos una estrategia interna retorna falso.");
+    }
 }
