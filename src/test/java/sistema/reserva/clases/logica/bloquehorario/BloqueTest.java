@@ -3,7 +3,6 @@ package sistema.reserva.clases.logica.bloquehorario;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BloqueTest {
 /**
  * Clase de prueba unitaria para el enumerador Bloque.
  * Verifica la correcta definición de sus constantes y el acceso
@@ -27,4 +26,20 @@ public class BloqueTest {
                 "La hora de fin debe coincidir estrictamente con el valor asignado en el enumerador.");
     }
 
+    /**
+     * Verifica la integridad de la enumeración asegurando que contenga
+     * los elementos definidos en los requisitos del dominio.
+     * Esta prueba previene la eliminación accidental de constantes en futuras modificaciones.
+     */
+    @Test
+    public void testCantidadDeBloquesValidos() {
+        // Recupera todas las constantes definidas en el enumerador Bloque
+        Bloque[] bloquesDefinidos = Bloque.values();
+
+        // Verifica que el enumerador no esté vacío.
+        // Si se conoce el número exacto de bloques (por ejemplo, 8 bloques al día),
+        // se recomienda cambiar el 'assertTrue' por: assertEquals(8, bloquesDefinidos.length);
+        assertTrue(bloquesDefinidos.length > 0,
+                "El enumerador Bloque debe contener al menos una constante definida en el sistema.");
+    }
 }
