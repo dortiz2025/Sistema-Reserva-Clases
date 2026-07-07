@@ -34,4 +34,29 @@ public class FiltroCompuestoTest {
                 "Si el FiltroCompuesto está vacío, la evaluación por defecto debe retornar verdadero.");
     }
 
+    /**
+     * Prueba el encadenamiento de filtros simulando el comportamiento del patrón Composite.
+     * Se inyectan estrategias anónimas (Stubs) que retornan siempre verdadero,
+     * verificando que el resultado final de la intersección lógica sea verdadero.
+     */
+    @Test
+    public void testCumpleCondicionMultiplesFiltrosVerdaderos() {
+        filtroCompuesto.agregarFiltro(new FiltrarStrategy<String>() {
+            @Override
+            public boolean cumpleCondicion(String item) {
+                return true;
+            }
+        });
+
+        filtroCompuesto.agregarFiltro(new FiltrarStrategy<String>() {
+            @Override
+            public boolean cumpleCondicion(String item) {
+                return true;
+            }
+        });
+
+        assertTrue(filtroCompuesto.cumpleCondicion("ObjetoDePrueba"),
+                "El resultado final debe ser verdadero si estrictamente todas las estrategias internas retornan verdadero.");
+    }
+
 }
