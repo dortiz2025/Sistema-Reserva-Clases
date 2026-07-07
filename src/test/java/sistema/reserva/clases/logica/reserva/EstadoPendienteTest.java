@@ -13,7 +13,6 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EstadoPendienteTest {
 /**
  * Clase de prueba unitaria para EstadoPendiente.
  * Verifica el comportamiento y las transiciones de estado de una reserva
@@ -38,6 +37,27 @@ public class EstadoPendienteTest {
         reserva = new Reserva(estudiante, tutor, "Matemáticas", bloqueHorario, LocalDate.parse("2026-05-04"));
 
         reserva.setEstado(estadoPendiente);
+    }
+
+    /**
+     * Prueba que verifica la correcta identificación del estado actual.
+     */
+    @Test
+    public void testGetNombreEstado() {
+        assertEquals(NombreEstado.PENDIENTE, estadoPendiente.getEstado(),
+                "La identificación del estado debe coincidir con PENDIENTE.");
+    }
+
+    /**
+     * Prueba la transición de estado al cancelar una reserva.
+     * Verifica que el estado de la reserva cambie correctamente a EstadoCancelada.
+     */
+    @Test
+    public void testCancelarReserva() {
+        reserva.cancelarReserva();
+
+        assertEquals(NombreEstado.CANCELADA, reserva.getEstado(),
+                "La reserva debe transicionar a CANCELADA tras ejecutar la cancelación.");
     }
 
 }
