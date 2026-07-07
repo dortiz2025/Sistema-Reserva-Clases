@@ -39,4 +39,17 @@ public class FiltroPorNombreTest {
         assertTrue(filtro.cumpleCondicion(perfilPrueba),
                 "El filtro debe retornar verdadero ante una coincidencia exacta de la cadena.");
     }
+
+    /**
+     * Prueba la evaluación cuando el criterio de búsqueda es solo una subcadena
+     * del nombre del perfil (coincidencia parcial).
+     */
+    @Test
+    public void testCumpleCondicionCoincidenciaParcial() {
+        FiltroPorNombre<Perfil> filtro = new FiltroPorNombre<>("cami");
+
+        assertTrue(filtro.cumpleCondicion(perfilPrueba),
+                "El filtro debe retornar verdadero si el nombre contiene la subcadena buscada.");
+    }
+
 }
