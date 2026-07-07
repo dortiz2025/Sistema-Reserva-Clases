@@ -13,7 +13,6 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EstadoCanceladaTest {
 /**
  * Pruebas unitarias para el comportamiento del estado Cancelada dentro del ciclo de vida de una Reserva.
  */
@@ -36,6 +35,17 @@ public class EstadoCanceladaTest {
 
         // Se asigna la instancia al atributo de la clase para evitar sombreado de variables (shadowing)
         this.reserva = new Reserva(estudiante, tutor, "Matemáticas", bloqueHorario, LocalDate.parse("2026-05-04"));
+    }
+
+    /**
+     * Comprueba que el sistema rechace cualquier intento de modificar una reserva que ya se encuentra cancelada,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testModificarReservaLanzaExcepcion() {
+        assertThrows(IllegalStateException.class, () -> {
+            estadoCancelada.modificarReserva(reserva, null, null, null, null);
+        }, "Debe lanzar IllegalStateException al intentar modificar una reserva en estado cancelada.");
     }
 
 }
