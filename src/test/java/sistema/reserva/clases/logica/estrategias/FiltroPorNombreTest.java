@@ -27,4 +27,16 @@ public class FiltroPorNombreTest {
         //Se utiliza {} para crear subclase anónima e instanciarla, ya que Perfil es una clase abstracta.
         perfilPrueba = new Perfil("Camilo", "camilo@udec.cl") {};
     }
+
+    /**
+     * Prueba la evaluación cuando el criterio de búsqueda coincide exactamente
+     * con el nombre del perfil (en minúsculas).
+     */
+    @Test
+    public void testCumpleCondicionCoincidenciaExacta() {
+        FiltroPorNombre<Perfil> filtro = new FiltroPorNombre<>("camilo");
+
+        assertTrue(filtro.cumpleCondicion(perfilPrueba),
+                "El filtro debe retornar verdadero ante una coincidencia exacta de la cadena.");
+    }
 }
