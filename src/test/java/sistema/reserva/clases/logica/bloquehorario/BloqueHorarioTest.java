@@ -28,6 +28,34 @@ public class BloqueHorarioTest {
         bloqueHorario = new BloqueHorario(DiaSemana.LUNES, bloqueMock);
     }
 
-class BloqueHorarioTest {
+    /**
+     * Verifica que el método de acceso para el día de la semana
+     * retorne el valor correcto asignado durante la instanciación.
+     */
+    @Test
+    public void testGetDiaSemana() {
+        assertEquals(DiaSemana.LUNES, bloqueHorario.getDia(),
+                "El método debe retornar DiaSemana.LUNES, que fue el valor inyectado en el constructor.");
+    }
 
+    /**
+     * Verifica que el método de acceso para el bloque de tiempo
+     * retorne exactamente la instancia esperada.
+     */
+    @Test
+    public void testGetBloque() {
+        assertEquals(bloqueMock, bloqueHorario.getBloque(),
+                "El bloque retornado debe coincidir con la instancia asignada al BloqueHorario.");
+    }
+
+    /**
+     * Verifica la comparación de igualdad entre dos bloques horarios idénticos.
+     */
+    @Test
+    public void testEquals() {
+        BloqueHorario otroBloqueHorario = new BloqueHorario(DiaSemana.LUNES, bloqueMock);
+
+        assertEquals(bloqueHorario, otroBloqueHorario,
+                "Dos BloqueHorario con el mismo día y bloque deben ser considerados iguales.");
+    }
 }
