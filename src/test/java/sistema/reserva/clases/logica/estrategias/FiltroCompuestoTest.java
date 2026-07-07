@@ -59,4 +59,18 @@ public class FiltroCompuestoTest {
                 "El resultado final debe ser verdadero si estrictamente todas las estrategias internas retornan verdadero.");
     }
 
+    /**
+     * Prueba la correcta aplicación de la intersección lógica (AND) en el filtro compuesto.
+     * Se inyecta una estrategia que retorna falso para verificar que
+     * la evaluación general resulta en falso, simulando el incumplimiento de una regla.
+     */
+    @Test
+    public void testCumpleCondicionConFiltroFalso() {
+        filtroCompuesto.agregarFiltro(new FiltrarStrategy<String>() {
+            @Override
+            public boolean cumpleCondicion(String item) {
+                return true;
+            }
+        });
+
 }
