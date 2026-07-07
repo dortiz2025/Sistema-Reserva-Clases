@@ -83,4 +83,16 @@ public class FiltroTutorPorMateriaTest {
         assertFalse(filtro.cumpleCondicion(tutorPrueba),
                 "El filtro debe retornar falso si la materia no se encuentra en la colección del tutor.");
     }
+
+    /**
+     * Prueba el caso borde en el que se evalúa a un tutor
+     * cuya lista de materias se encuentra completamente vacía.
+     */
+    @Test
+    public void testNoCumpleCondicionTutorSinMaterias() {
+        FiltroTutorPorMateria filtro = new FiltroTutorPorMateria("Cálculo");
+
+        assertFalse(filtro.cumpleCondicion(tutorSinMaterias),
+                "El filtro debe retornar falso si el tutor evaluado no posee ninguna materia asignada (lista vacía).");
+    }
 }
