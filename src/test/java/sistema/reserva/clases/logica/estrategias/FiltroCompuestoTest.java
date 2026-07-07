@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FiltroCompuestoTest {
 /**
  * Clase de prueba unitaria para FiltroCompuesto.
  * Verifica el comportamiento del patrón Composite al agrupar y ejecutar
@@ -24,5 +23,15 @@ public class FiltroCompuestoTest {
         filtroCompuesto = new FiltroCompuesto<>();
     }
 
+    /**
+     * Prueba el comportamiento del filtro compuesto cuando no se le ha agregado
+     * ninguna estrategia interna.
+     * Verifica que cualquier objeto evaluado cumpla la condición por defecto.
+     */
+    @Test
+    public void testCumpleCondicionSinFiltros() {
+        assertTrue(filtroCompuesto.cumpleCondicion("ObjetoDePrueba"),
+                "Si el FiltroCompuesto está vacío, la evaluación por defecto debe retornar verdadero.");
+    }
 
 }
