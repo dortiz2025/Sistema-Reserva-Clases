@@ -25,6 +25,9 @@ class GestorEstudiantesTest {
     /**
      * Valida que un estudiante válido se registre correctamente en el sistema.
      * La verificación se realiza consultando la colección interna del gestor.
+     * @throws CorreoInvalidoException si el formato de correo no cumple con el formato.
+     * @throws CorreoYaRegistradoException si el correo ya se había registrado previamente
+     * para evitar duplicados.
      */
     @Test
     void testRegistrarEstudianteExitoso() throws CorreoInvalidoException, CorreoYaRegistradoException {
@@ -41,7 +44,7 @@ class GestorEstudiantesTest {
 
     /**
      * Comprueba que el sistema rechace el registro de un estudiante nuevo
-     * que utilice un correo ya existente, lanzando la excepción correspondiente.
+     * que utilice un correo ya existente, lanzando las excepciones correspondientes.
      */
     @Test
     void testRegistrarEstudianteDuplicadoLanzaExcepcion() throws CorreoInvalidoException, CorreoYaRegistradoException {
