@@ -64,4 +64,15 @@ public class FiltroPorNombreTest {
                 "El filtro debe ignorar las mayúsculas del criterio al evaluar la condición.");
     }
 
+    /**
+     * Prueba la evaluación cuando el criterio de búsqueda no se encuentra
+     * en absoluto dentro del nombre del perfil.
+     */
+    @Test
+    public void testNoCumpleCondicion() {
+        FiltroPorNombre<Perfil> filtro = new FiltroPorNombre<>("Pedro");
+
+        assertFalse(filtro.cumpleCondicion(perfilPrueba),
+                "El filtro debe retornar falso si el criterio no forma parte del nombre del perfil.");
+    }
 }
