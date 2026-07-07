@@ -60,4 +60,15 @@ public class EstadoPendienteTest {
                 "La reserva debe transicionar a CANCELADA tras ejecutar la cancelación.");
     }
 
+    /**
+     * Prueba la transición de estado al completar una reserva.
+     * Verifica que el estado de la reserva cambie correctamente a EstadoCompletada.
+     */
+    @Test
+    public void testCompletarReserva() {
+        reserva.completarReserva();
+
+        assertEquals(NombreEstado.COMPLETADA, reserva.getEstado(),
+                "La reserva debe transicionar a COMPLETADA tras finalizar el proceso.");
+    }
 }
