@@ -71,4 +71,16 @@ public class FiltroTutorPorMateriaTest {
         assertTrue(filtro.cumpleCondicion(tutorPrueba),
                 "El filtro debe ignorar las mayúsculas y minúsculas al evaluar la coincidencia.");
     }
+
+    /**
+     * Prueba la evaluación cuando la materia buscada no existe
+     * dentro de la lista de materias del tutor.
+     */
+    @Test
+    public void testNoCumpleCondicionMateriaInexistente() {
+        FiltroTutorPorMateria filtro = new FiltroTutorPorMateria("Química");
+
+        assertFalse(filtro.cumpleCondicion(tutorPrueba),
+                "El filtro debe retornar falso si la materia no se encuentra en la colección del tutor.");
+    }
 }
