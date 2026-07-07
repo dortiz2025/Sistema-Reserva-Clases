@@ -52,4 +52,16 @@ public class FiltroPorNombreTest {
                 "El filtro debe retornar verdadero si el nombre contiene la subcadena buscada.");
     }
 
+    /**
+     * Prueba que la evaluación sea insensible a las diferencias entre
+     * mayúsculas y minúsculas (case-insensitive) ingresadas por el usuario.
+     */
+    @Test
+    public void testCumpleCondicionIgnoraMayusculasYMinusculas() {
+        FiltroPorNombre<Perfil> filtro = new FiltroPorNombre<>("CAMILO");
+
+        assertTrue(filtro.cumpleCondicion(perfilPrueba),
+                "El filtro debe ignorar las mayúsculas del criterio al evaluar la condición.");
+    }
+
 }
