@@ -128,4 +128,16 @@ public class GestorTutoresTest {
         assertFalse(tutor.getMaterias().contains("Física"));
     }
 
+    /**
+     * Comprueba que el sistema rechace el intento de eliminar una materia que no está registrada para el tutor,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testEliminarMateriaLanzaExcepcion() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+
+        assertThrows(NoSuchElementException.class, () -> {
+            gestor.eliminarMateria(tutor.getId(), "Materia Inexistente");
+        }, "Debe lanzar NoSuchElementException al intentar eliminar una materia no registrada en el tutor.");
+    }
 }
