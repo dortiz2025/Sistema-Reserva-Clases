@@ -10,14 +10,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PanelTutores extends JPanel{
+/**
+ * Clase que representa el panel de gestión de tutores en la interfaz gráfica.
+ * Permite registrar tutores, modificar sus datos, gestionar individualmente sus materias
+ * y horarios de disponibilidad, además de visualizar la lista completa y eliminar perfiles.
+ */
+public class PanelTutores extends JPanel {
+
+    /**
+     * Constructor del panel de tutores.
+     * Organiza los componentes en pestañas para separar lógicamente el registro,
+     * la modificación de atributos y la gestión de disponibilidad y áreas de enseñanza.
+     *
+     * @param sistema Referencia al facade principal de la lógica del sistema.
+     * @param lblEstado Etiqueta compartida para notificar resultados de operaciones al usuario.
+     */
     public PanelTutores(Sistema sistema, JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JTabbedPane pestanas = new JTabbedPane();
 
-        //registro
+        // registro
         JPanel panelRegistro = new JPanel(new GridLayout(6, 2, 5, 10));
         panelRegistro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtNombre = new JTextField(10);
@@ -40,7 +54,7 @@ public class PanelTutores extends JPanel{
         panelRegistro.add(new JLabel("Cupos:")); panelRegistro.add(txtCupos);
         panelRegistro.add(new JLabel("")); panelRegistro.add(btnGuardar);
 
-        //modificar
+        // modificar
         JPanel panelModificar = new JPanel(new GridLayout(6, 2, 5, 10));
         panelModificar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtIdMod = new JTextField(10);
@@ -64,7 +78,7 @@ public class PanelTutores extends JPanel{
         panelModificar.add(new JLabel("Nuevo Cupo:")); panelModificar.add(txtCupoMod);
         panelModificar.add(new JLabel("")); panelModificar.add(btnMod);
 
-        //materias y horarios
+        // materias y horarios
         JPanel panelMatHor = new JPanel(new GridLayout(6, 2, 2, 5));
         panelMatHor.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtIdMH = new JTextField(5);
@@ -107,13 +121,14 @@ public class PanelTutores extends JPanel{
         pestanas.addTab("Modificar", panelModificar);
         pestanas.addTab("Gestión Clases", panelMatHor);
 
-        //visualizacion
+        // visualizacion
         JPanel panelLista = new JPanel(new BorderLayout());
         panelLista.setBorder(BorderFactory.createTitledBorder("Tutores Registrados"));
         JTextArea txtAreaTutores = new JTextArea();
         txtAreaTutores.setEditable(false);
         txtAreaTutores.setLineWrap(true);
         txtAreaTutores.setWrapStyleWord(true);
+
         JButton btnActualizarLista = new JButton("Actualizar Lista");
         btnActualizarLista.addActionListener(e -> {
             try {
@@ -127,7 +142,7 @@ public class PanelTutores extends JPanel{
         panelLista.add(new JScrollPane(txtAreaTutores), BorderLayout.CENTER);
         panelLista.add(btnActualizarLista, BorderLayout.SOUTH);
 
-        //eliminación
+        // eliminacion
         JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
         JTextField txtIdEliminar = new JTextField(15);
