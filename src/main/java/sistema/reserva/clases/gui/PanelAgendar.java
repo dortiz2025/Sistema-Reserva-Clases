@@ -1,45 +1,149 @@
 package sistema.reserva.clases.gui;
 
+import sistema.reserva.clases.logica.Sistema;
+import sistema.reserva.clases.logica.Estudiante;
+import sistema.reserva.clases.logica.Tutor;
+import sistema.reserva.clases.logica.bloquehorario.BloqueHorario;
+import sistema.reserva.clases.logica.bloquehorario.Bloque;
+import sistema.reserva.clases.logica.bloquehorario.DiaSemana;
+
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 
 public class PanelAgendar extends JPanel {
 
-    private JComboBox<String> comboEstudiantes;
-    private JComboBox<String> comboMaterias ;
-    private JComboBox<String> comboTutores;
-    private JComboBox<String> comboHorarios;
+    public PanelAgendar(Sistema sistema, JLabel lblEstado){
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    public PanelAgendar(sistema.reserva.clases.logica.Sistema sistema, javax.swing.JLabel lblEstado){
-        setLayout(new GridBagLayout());
+        JTabbedPane pestanas = new JTabbedPane();
 
-        comboEstudiantes = new JComboBox<>();
-        comboMaterias = new JComboBox<>();
-        comboTutores = new JComboBox<>();
-        comboHorarios = new JComboBox<>();
+        //agendar
+        JPanel formAgendar = new JPanel(new GridLayout(7, 2, 5, 15));
+        formAgendar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JComboBox<String> comboEstudiantes = new JComboBox<>();
+        JComboBox<String> comboTutores = new JComboBox<>();
+        // se cambia a jcombobox
+        JComboBox<String> comboMateria = new JComboBox<>();
+        JComboBox<String> comboDia = new JComboBox<>();
+        JComboBox<String> comboBloque = new JComboBox<>();
+        JTextField txtFecha = new JTextField("2026-07-06", 15);
 
-        JPanel form = new JPanel(new GridLayout(6, 2, 10, 20));
-        form.setBorder(BorderFactory.createTitledBorder("Datos de Reserva"));
+        for (DiaSemana dia : DiaSemana.values()) comboDia.addItem(dia.name());
+        for (Bloque b : Bloque.values()) comboBloque.addItem(b.name());
 
+        JButton btnActualizar = new JButton("Cargar Listas");
         JButton btnConfirmar = new JButton("Confirmar Reserva");
 
-        btnConfirmar.addActionListener(e -> {
-            String estudiante = (String) comboEstudiantes.getSelectedItem();
-            String materia = (String) comboMaterias.getSelectedItem();
-            String tutor = (String) comboTutores.getSelectedItem();
-            String horario = (String) comboHorarios.getSelectedItem();
-            //aqui habria que realizar las validaciones de cupos cruzados,
-            // verificar si el presupuesto alcanza para la tarifa y registrar la reserva
+        // listener dinamico para que las materias cambien segun el tutor
+        comboTutores.addActionListener(e -> {
+            if (comboTutores.getSelectedItem() != null) {
+                comboMateria.removeAllItems();
+                try {
+                    Tutor tut = sistema.obtenerTutorPorId((String) comboTutores.getSelectedItem());
+                    for (String m : tut.getMaterias()) {
+                        comboMateria.addItem(m);
+                    }
+                } catch (Exception ex) {
+                    lblEstado.setText("  Error: " + ex.getMessage());
+                }
+            }
         });
 
-        form.add(new JLabel("Estudiante:")); form.add(comboEstudiantes);
-        form.add(new JLabel("Materia:")); form.add(comboMaterias);
-        form.add(new JLabel("Tutor:")); form.add(comboTutores);
-        form.add(new JLabel("Horario:")); form.add(comboHorarios);
+        btnActualizar.addActionListener(e -> {
+            try {
+                comboEstudiantes.removeAllItems();
+                comboTutores.removeAllItems();
+                comboMateria.removeAllItems();
 
-        form.add(new JLabel(""));
-        form.add(btnConfirmar);
-        add(form);
+                for(Estudiante est : sistema.obtenerEstudiantes()) comboEstudiantes.addItem(est.getMatricula());
+                for(Tutor tut : sistema.obtenerTutores()) comboTutores.addItem(tut.getId());
+                lblEstado.setText("  Estado: listas cargadas");
+            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+        });
+
+        btnConfirmar.addActionListener(e -> {
+            try {
+                if (comboMateria.getSelectedItem() == null) throw new Exception("el tutor seleccionado no tiene materias registradas");
+
+                BloqueHorario horario = new BloqueHorario(DiaSemana.valueOf((String)comboDia.getSelectedItem()), Bloque.valueOf((String)comboBloque.getSelectedItem()));
+                String idReserva = sistema.agendarClase((String)comboEstudiantes.getSelectedItem(), (String)comboTutores.getSelectedItem(),
+                        (String)comboMateria.getSelectedItem(), horario, LocalDate.parse(txtFecha.getText()));
+                lblEstado.setText("  Estado: reserva exitosa con id " + idReserva);
+            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+        });
+
+        formAgendar.add(new JLabel("Matricula Estudiante:")); formAgendar.add(comboEstudiantes);
+        formAgendar.add(new JLabel("ID Tutor:")); formAgendar.add(comboTutores);
+        formAgendar.add(new JLabel("Materia:")); formAgendar.add(comboMateria);
+        formAgendar.add(new JLabel("Día:")); formAgendar.add(comboDia);
+        formAgendar.add(new JLabel("Bloque:")); formAgendar.add(comboBloque);
+        formAgendar.add(new JLabel("Fecha (YYYY-MM-DD):")); formAgendar.add(txtFecha);
+        formAgendar.add(btnActualizar); formAgendar.add(btnConfirmar);
+
+        //modificar
+        JPanel formModificar = new JPanel(new GridLayout(7, 2, 5, 15));
+        formModificar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JTextField txtIdReservaMod = new JTextField(15);
+        // se cambian los campos a jcombobox tambien en modificar
+        JComboBox<String> comboTutorMod = new JComboBox<>();
+        JComboBox<String> comboMateriaMod = new JComboBox<>();
+        JComboBox<String> comboDiaMod = new JComboBox<>();
+        JComboBox<String> comboBloqueMod = new JComboBox<>();
+        JTextField txtFechaMod = new JTextField("2026-07-06", 15);
+
+        for (DiaSemana dia : DiaSemana.values()) comboDiaMod.addItem(dia.name());
+        for (Bloque b : Bloque.values()) comboBloqueMod.addItem(b.name());
+
+        JButton btnCargarMod = new JButton("Cargar Tutores");
+        JButton btnGuardarMod = new JButton("Guardar Cambios");
+
+        // listener dinamico para las materias en la pestana modificar
+        comboTutorMod.addActionListener(e -> {
+            if (comboTutorMod.getSelectedItem() != null) {
+                comboMateriaMod.removeAllItems();
+                try {
+                    Tutor tut = sistema.obtenerTutorPorId((String) comboTutorMod.getSelectedItem());
+                    for (String m : tut.getMaterias()) {
+                        comboMateriaMod.addItem(m);
+                    }
+                } catch (Exception ex) {
+                    lblEstado.setText("  Error: " + ex.getMessage());
+                }
+            }
+        });
+
+        btnCargarMod.addActionListener(e -> {
+            try {
+                comboTutorMod.removeAllItems();
+                comboMateriaMod.removeAllItems();
+                for(Tutor tut : sistema.obtenerTutores()) comboTutorMod.addItem(tut.getId());
+                lblEstado.setText("  Estado: tutores cargados para modificar");
+            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+        });
+
+        btnGuardarMod.addActionListener(e -> {
+            try {
+                if (comboMateriaMod.getSelectedItem() == null) throw new Exception("el tutor seleccionado no tiene materias registradas");
+
+                BloqueHorario nuevoHorario = new BloqueHorario(DiaSemana.valueOf((String)comboDiaMod.getSelectedItem()), Bloque.valueOf((String)comboBloqueMod.getSelectedItem()));
+                sistema.modificarReserva(txtIdReservaMod.getText(), (String)comboTutorMod.getSelectedItem(), (String)comboMateriaMod.getSelectedItem(), nuevoHorario, LocalDate.parse(txtFechaMod.getText()));
+                lblEstado.setText("  Estado: reserva modificada exitosamente");
+            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+        });
+
+        formModificar.add(new JLabel("ID Reserva:")); formModificar.add(txtIdReservaMod);
+        formModificar.add(new JLabel("Nuevo ID Tutor:")); formModificar.add(comboTutorMod);
+        formModificar.add(new JLabel("Nueva Materia:")); formModificar.add(comboMateriaMod);
+        formModificar.add(new JLabel("Nuevo Día:")); formModificar.add(comboDiaMod);
+        formModificar.add(new JLabel("Nuevo Bloque:")); formModificar.add(comboBloqueMod);
+        formModificar.add(new JLabel("Nueva Fecha (YYYY-MM-DD):")); formModificar.add(txtFechaMod);
+        formModificar.add(btnCargarMod); formModificar.add(btnGuardarMod);
+
+        pestanas.addTab("Agendar Clase", formAgendar);
+        pestanas.addTab("Modificar Reserva", formModificar);
+
+        add(pestanas, BorderLayout.CENTER);
     }
 }
-
