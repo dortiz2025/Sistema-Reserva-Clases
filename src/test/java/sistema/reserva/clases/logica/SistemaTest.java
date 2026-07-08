@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SistemaTest {
 /**
  * Pruebas unitarias para la clase Sistema.
  * Verifica la correcta integración (Facade) entre los distintos gestores del sistema y sus reglas transversales.
@@ -57,5 +56,28 @@ public class SistemaTest {
         fechaFuturaLunes = fechaFuturaLunes.plusWeeks(1);
     }
 
+    /**
+     * Comprueba que el sistema registre exitosamente un estudiante y devuelva su matrícula.
+     */
+    @Test
+    public void testRegistrarEstudianteExito() throws CorreoInvalidoException, CorreoYaRegistradoException {
+        String matricula = sistema.registrarEstudiante("Nuevo Alumno", "nuevo@udec.cl");
+
+        assertNotNull(matricula);
+        assertEquals(2, sistema.obtenerEstudiantes().size());
+        assertEquals("Nuevo Alumno", sistema.obtenerEstudiantePorId(matricula).getNombre());
+    }
+
+    /**
+     * Comprueba que el sistema modifique correctamente los datos de un estudiante.
+     */
+    @Test
+    public void testModificarEstudianteExito() throws CorreoInvalidoException, CorreoYaRegistradoException {
+        sistema.modificarEstudiante(matriculaBase, "Estudiante Modificado", "modificado@udec.cl");
+
+        Estudiante estudiante = sistema.obtenerEstudiantePorId(matriculaBase);
+        assertEquals("Estudiante Modificado", estudiante.getNombre());
+        assertEquals("modificado@udec.cl", estudiante.getEmail());
+    }
 
 }
