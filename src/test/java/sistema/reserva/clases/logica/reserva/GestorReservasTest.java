@@ -172,4 +172,41 @@ public class GestorReservasTest {
         });
     }
 
+    /**
+     * Comprueba que el sistema pueda cancelar masivamente reservas según un filtro establecido.
+     */
+    @Test
+    public void testCancelarReservasPendientesMasivamente() throws Exception {
+        gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        gestor.registrarReserva(estudiante2, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        FiltrarStrategy<Reserva> filtro = r -> r.getEstudiante().getMatricula().equals(estudiante1.getMatricula());
+        gestor.cancelarReservasPendientesMasivamente(filtro);
+
+        List<Reserva> canceladas = gestor.filtrarReservas(r -> r.getEstado() == NombreEstado.CANCELADA);
+        assertEquals(1, canceladas.size());
+        assertEquals(estudiante1.getMatricula(), canceladas.get(0).getEstudiante().getMatricula());
+    }
+
+    /**
+     * Comprueba que el sistema devuelva correctamente una reserva al buscar por su ID generado.
+     */
+    @Test
+    public void testBuscarReservaPorIdExito() throws Exception {
+        String id = gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        Reserva encontrada = gestor.buscarReservaPorId(id);
+
+        assertNotNull(encontrada);
+        assertEquals(id, encontrada.getIdReserva());
+    }
+    /**
+     * Comprueba que el sistema lance una excepción al buscar un ID de reserva que no existe.
+     */
+    @Test
+    public void testBuscarReservaPorIdLanzaExcepcion() {
+        assertThrows(NoSuchElementException.class, () -> {
+            gestor.buscarReservaPorId("ID_FALSO_123");
+        });
+    }
 }
