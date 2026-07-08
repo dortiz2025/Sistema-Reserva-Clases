@@ -147,6 +147,8 @@ public class PanelTutores extends JPanel {
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
         JTextField txtIdEliminar = new JTextField(15);
         JButton btnEliminar = new JButton("Eliminar por ID");
+        btnEliminar.setBackground(new Color(232, 48, 27));
+        btnEliminar.setForeground(Color.WHITE);
 
         btnEliminar.addActionListener(e -> {
             try {
