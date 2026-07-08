@@ -109,4 +109,31 @@ public class SistemaTest {
         assertEquals(NombreEstado.CANCELADA, reserva.getEstado());
     }
 
+    /**
+     * Comprueba que al eliminar un tutor del sistema, se cancelen también todas sus reservas pendientes.
+     */
+    @Test
+    public void testEliminarTutorCancelaReservasYRemuevePerfil() throws Exception {
+        String idReserva = sistema.agendarClase(matriculaBase, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        sistema.eliminarTutor(idTutorBase);
+
+        Reserva reserva = sistema.obtenerReservaPorId(idReserva);
+        assertEquals(NombreEstado.CANCELADA, reserva.getEstado());
+        assertThrows(NoSuchElementException.class, () -> sistema.obtenerTutorPorId(idTutorBase));
+    }
+
+    /**
+     * Comprueba que el sistema unificado agende correctamente una clase delegando al gestor de reservas.
+     */
+    @Test
+    public void testAgendarClaseExito() throws Exception {
+        String idReserva = sistema.agendarClase(matriculaBase, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertNotNull(idReserva);
+        Reserva reserva = sistema.obtenerReservaPorId(idReserva);
+        assertEquals(matriculaBase, reserva.getEstudiante().getMatricula());
+        assertEquals(idTutorBase, reserva.getTutor().getId());
+    }
+
 }
