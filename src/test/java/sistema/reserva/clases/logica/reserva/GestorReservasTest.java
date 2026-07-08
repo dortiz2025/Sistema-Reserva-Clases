@@ -142,4 +142,34 @@ public class GestorReservasTest {
             gestor.registrarReserva(estudiante3, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
         });
     }
+
+    /**
+     * Comprueba que se pueda modificar una reserva pendiente exitosamente.
+     */
+    @Test
+    public void testModificarReservaExito() throws Exception {
+        String idReserva = gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        Reserva reserva = gestor.buscarReservaPorId(idReserva);
+        LocalDate siguienteLunes = fechaFuturaLunes.plusWeeks(1);
+
+        gestor.modificarReserva(tutor, "Matemáticas", bloqueLunes, siguienteLunes, reserva);
+
+        assertEquals(siguienteLunes, reserva.getFecha());
+    }
+
+    /**
+     * Comprueba que el sistema rechace la modificación de una reserva que no está en estado pendiente,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testModificarReservaEstadoInvalidoLanzaExcepcion() throws Exception {
+        String idReserva = gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        Reserva reserva = gestor.buscarReservaPorId(idReserva);
+        gestor.cancelarReserva(reserva);
+
+        assertThrows(IllegalStateException.class, () -> {
+            gestor.modificarReserva(tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes.plusWeeks(1), reserva);
+        });
+    }
+
 }
