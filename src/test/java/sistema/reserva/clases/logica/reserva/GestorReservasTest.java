@@ -115,4 +115,31 @@ public class GestorReservasTest {
             gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
         });
     }
+
+    /**
+     * Comprueba que el sistema rechace la reserva si el tutor ya tiene una clase de otra materia en ese horario,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarReservaConflictoMateriaLanzaExcepcion() throws Exception {
+        gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertThrows(ConflictoMateriaException.class, () -> {
+            gestor.registrarReserva(estudiante2, tutor, "Física", bloqueLunes, fechaFuturaLunes);
+        });
+    }
+
+    /**
+     * Comprueba que el sistema rechace la reserva si se ha superado el cupo máximo definido para el tutor,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarReservaCupoExcedidoLanzaExcepcion() throws Exception {
+        gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        gestor.registrarReserva(estudiante2, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertThrows(CupoExcedidoException.class, () -> {
+            gestor.registrarReserva(estudiante3, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        });
+    }
 }
