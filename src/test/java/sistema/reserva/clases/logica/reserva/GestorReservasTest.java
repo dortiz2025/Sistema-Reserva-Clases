@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-class GestorReservasTest {
-  
 
 /**
  * Pruebas unitarias para la clase GestorReservas.
@@ -62,4 +60,30 @@ public class GestorReservasTest {
         fechaFuturaLunes = fechaFuturaLunes.plusWeeks(1);
     }
 
+    /**
+     * Comprueba que el sistema registre exitosamente una reserva cuando se cumplen todas las reglas de negocio.
+     */
+    @Test
+    public void testRegistrarReservaExito() throws Exception {
+        String idReserva = gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertNotNull(idReserva);
+        assertEquals(1, gestor.obtenerReservas().size());
+        assertEquals("Matemáticas", gestor.buscarReservaPorId(idReserva).getMateria());
+    }
+
+    /**
+     * Comprueba que el sistema rechace la reserva si hay inconsistencia entre la fecha ingresada y el día del bloque,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarReservaInconsistenciaDiaLanzaExcepcion() throws CorreoInvalidoException {
+        BloqueHorario bloqueMartes = new BloqueHorario(DiaSemana.MARTES, Bloque.BLOQUE_3);
+
+        Tutor tutorMartes = new Tutor("Tutor Martes", "tutormartes@udec.cl", 15000, 2) {
+            {
+                addMateria("Matemáticas");
+                addHorarioDisponible(bloqueMartes);
+            }
+        };
 }
