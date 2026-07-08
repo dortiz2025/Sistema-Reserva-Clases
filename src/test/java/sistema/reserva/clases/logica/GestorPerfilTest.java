@@ -11,7 +11,6 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GestorPerfilTest {
 /**
  * Pruebas unitarias para la clase GestorPerfil.
  * Al ser una clase abstracta, se utilizan implementaciones Dummy para verificar su comportamiento.
@@ -65,5 +64,32 @@ public class GestorPerfilTest {
         perfil1 = new PerfilDummy("Juan Díaz", "juan@udec.cl");
         perfil2 = new PerfilDummy("Martín Álvarez", "martin@udec.cl");
     }
+
+    /**
+     * Comprueba que el sistema registre exitosamente un perfil cuando los datos son válidos.
+     */
+    @Test
+    public void testRegistrarPerfilExito() throws CorreoYaRegistradoException {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        assertEquals(1, gestor.obtenerPerfiles().size());
+        assertEquals(perfil1, gestor.buscarPorId("ID01"));
+    }
+
+    /**
+     * Comprueba que el sistema rechace el registro de un perfil si se intenta utilizar una Key (ID) ya existente,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarPerfilIdDuplicadoLanzaExcepcion() throws CorreoYaRegistradoException, CorreoInvalidoException {
+        gestor.registrarPerfil("ID01", perfil1);
+        PerfilDummy perfilMismoId = new PerfilDummy("Carlos", "carlos@udec.cl");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            gestor.registrarPerfil("ID01", perfilMismoId);
+        });
+        assertTrue(exception.getMessage().contains("ya se encuentra asociado a un perfil"));
+    }
+
 
 }
