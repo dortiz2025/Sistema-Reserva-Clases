@@ -136,4 +136,34 @@ public class SistemaTest {
         assertEquals(idTutorBase, reserva.getTutor().getId());
     }
 
+    /**
+     * Comprueba que el sistema pueda buscar tutores dinámicamente utilizando el patrón Composite y Strategy.
+     */
+    @Test
+    public void testBuscarTutoresDinamicamenteExito() throws Exception {
+        String idTutor2 = sistema.registrarTutor("Tutor Física", "fisica@udec.cl", 12000, 3);
+        sistema.agregarMateriaTutor(idTutor2, "Física");
+
+        List<Tutor> resultadosMatematicas = sistema.buscarTutoresDinamicamente(null, "Matemáticas");
+        List<Tutor> resultadosPorNombre = sistema.buscarTutoresDinamicamente("Física", null);
+
+        assertEquals(1, resultadosMatematicas.size());
+        assertTrue(resultadosMatematicas.get(0).getMaterias().contains("Matemáticas"));
+
+        assertEquals(1, resultadosPorNombre.size());
+        assertEquals("Tutor Física", resultadosPorNombre.get(0).getNombre());
+    }
+
+    /**
+     * Comprueba que el sistema devuelva correctamente el calendario filtrado para un estudiante específico.
+     */
+    @Test
+    public void testObtenerCalendarioEstudianteExito() throws Exception {
+        sistema.agendarClase(matriculaBase, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        List<Reserva> calendario = sistema.obtenerCalendarioEstudiante(matriculaBase);
+
+        assertEquals(1, calendario.size());
+        assertEquals(matriculaBase, calendario.get(0).getEstudiante().getMatricula());
+    }
 }
