@@ -10,25 +10,40 @@ import sistema.reserva.clases.logica.bloquehorario.DiaSemana;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
+/**
+ * Clase que representa el panel para agendar y modificar reservas de clases.
+ * Conecta a estudiantes y tutores disponibles, permitiendo seleccionar materias
+ * dinámicamente según la carga del tutor y definiendo bloques de horario específicos.
+ */
 public class PanelAgendar extends JPanel {
 
+    /**
+     * Constructor del panel de agendamiento.
+     * Configura los selectores dinámicos y los formateadores de fecha para
+     * capturar la entrada del usuario de manera segura y sin errores de formato.
+     *
+     * @param sistema Referencia al facade principal de la lógica del sistema.
+     * @param lblEstado Etiqueta compartida para informar sobre el estado de la reserva.
+     */
     public PanelAgendar(Sistema sistema, JLabel lblEstado){
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JTabbedPane pestanas = new JTabbedPane();
 
-        //agendar
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // agendar
         JPanel formAgendar = new JPanel(new GridLayout(7, 2, 5, 15));
         formAgendar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JComboBox<String> comboEstudiantes = new JComboBox<>();
         JComboBox<String> comboTutores = new JComboBox<>();
-        // se cambia a jcombobox
         JComboBox<String> comboMateria = new JComboBox<>();
         JComboBox<String> comboDia = new JComboBox<>();
         JComboBox<String> comboBloque = new JComboBox<>();
-        JTextField txtFecha = new JTextField("2026-07-06", 15);
+        JTextField txtFecha = new JTextField("06/07/2026", 15);
 
         for (DiaSemana dia : DiaSemana.values()) comboDia.addItem(dia.name());
         for (Bloque b : Bloque.values()) comboBloque.addItem(b.name());
@@ -36,7 +51,6 @@ public class PanelAgendar extends JPanel {
         JButton btnActualizar = new JButton("Cargar Listas");
         JButton btnConfirmar = new JButton("Confirmar Reserva");
 
-        // listener dinamico para que las materias cambien segun el tutor
         comboTutores.addActionListener(e -> {
             if (comboTutores.getSelectedItem() != null) {
                 comboMateria.removeAllItems();
@@ -68,10 +82,12 @@ public class PanelAgendar extends JPanel {
                 if (comboMateria.getSelectedItem() == null) throw new Exception("el tutor seleccionado no tiene materias registradas");
 
                 BloqueHorario horario = new BloqueHorario(DiaSemana.valueOf((String)comboDia.getSelectedItem()), Bloque.valueOf((String)comboBloque.getSelectedItem()));
+                LocalDate fechaParseada = LocalDate.parse(txtFecha.getText(), formatoFecha);
+
                 String idReserva = sistema.agendarClase((String)comboEstudiantes.getSelectedItem(), (String)comboTutores.getSelectedItem(),
-                        (String)comboMateria.getSelectedItem(), horario, LocalDate.parse(txtFecha.getText()));
+                        (String)comboMateria.getSelectedItem(), horario, fechaParseada);
                 lblEstado.setText("  Estado: reserva exitosa con id " + idReserva);
-            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+            } catch (Exception ex) { lblEstado.setText("  Error: formato de fecha invalido u otro error " + ex.getMessage()); }
         });
 
         formAgendar.add(new JLabel("Matricula Estudiante:")); formAgendar.add(comboEstudiantes);
@@ -79,19 +95,18 @@ public class PanelAgendar extends JPanel {
         formAgendar.add(new JLabel("Materia:")); formAgendar.add(comboMateria);
         formAgendar.add(new JLabel("Día:")); formAgendar.add(comboDia);
         formAgendar.add(new JLabel("Bloque:")); formAgendar.add(comboBloque);
-        formAgendar.add(new JLabel("Fecha (YYYY-MM-DD):")); formAgendar.add(txtFecha);
+        formAgendar.add(new JLabel("Fecha (DD/MM/YYYY):")); formAgendar.add(txtFecha);
         formAgendar.add(btnActualizar); formAgendar.add(btnConfirmar);
 
-        //modificar
+        // modificar
         JPanel formModificar = new JPanel(new GridLayout(7, 2, 5, 15));
         formModificar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtIdReservaMod = new JTextField(15);
-        // se cambian los campos a jcombobox tambien en modificar
         JComboBox<String> comboTutorMod = new JComboBox<>();
         JComboBox<String> comboMateriaMod = new JComboBox<>();
         JComboBox<String> comboDiaMod = new JComboBox<>();
         JComboBox<String> comboBloqueMod = new JComboBox<>();
-        JTextField txtFechaMod = new JTextField("2026-07-06", 15);
+        JTextField txtFechaMod = new JTextField("06/07/2026", 15);
 
         for (DiaSemana dia : DiaSemana.values()) comboDiaMod.addItem(dia.name());
         for (Bloque b : Bloque.values()) comboBloqueMod.addItem(b.name());
@@ -99,7 +114,6 @@ public class PanelAgendar extends JPanel {
         JButton btnCargarMod = new JButton("Cargar Tutores");
         JButton btnGuardarMod = new JButton("Guardar Cambios");
 
-        // listener dinamico para las materias en la pestana modificar
         comboTutorMod.addActionListener(e -> {
             if (comboTutorMod.getSelectedItem() != null) {
                 comboMateriaMod.removeAllItems();
@@ -128,9 +142,11 @@ public class PanelAgendar extends JPanel {
                 if (comboMateriaMod.getSelectedItem() == null) throw new Exception("el tutor seleccionado no tiene materias registradas");
 
                 BloqueHorario nuevoHorario = new BloqueHorario(DiaSemana.valueOf((String)comboDiaMod.getSelectedItem()), Bloque.valueOf((String)comboBloqueMod.getSelectedItem()));
-                sistema.modificarReserva(txtIdReservaMod.getText(), (String)comboTutorMod.getSelectedItem(), (String)comboMateriaMod.getSelectedItem(), nuevoHorario, LocalDate.parse(txtFechaMod.getText()));
+                LocalDate fechaModParseada = LocalDate.parse(txtFechaMod.getText(), formatoFecha);
+
+                sistema.modificarReserva(txtIdReservaMod.getText(), (String)comboTutorMod.getSelectedItem(), (String)comboMateriaMod.getSelectedItem(), nuevoHorario, fechaModParseada);
                 lblEstado.setText("  Estado: reserva modificada exitosamente");
-            } catch (Exception ex) { lblEstado.setText("  Error: " + ex.getMessage()); }
+            } catch (Exception ex) { lblEstado.setText("  Error: formato de fecha invalido u otro error " + ex.getMessage()); }
         });
 
         formModificar.add(new JLabel("ID Reserva:")); formModificar.add(txtIdReservaMod);
@@ -138,7 +154,7 @@ public class PanelAgendar extends JPanel {
         formModificar.add(new JLabel("Nueva Materia:")); formModificar.add(comboMateriaMod);
         formModificar.add(new JLabel("Nuevo Día:")); formModificar.add(comboDiaMod);
         formModificar.add(new JLabel("Nuevo Bloque:")); formModificar.add(comboBloqueMod);
-        formModificar.add(new JLabel("Nueva Fecha (YYYY-MM-DD):")); formModificar.add(txtFechaMod);
+        formModificar.add(new JLabel("Nueva Fecha (DD/MM/YYYY):")); formModificar.add(txtFechaMod);
         formModificar.add(btnCargarMod); formModificar.add(btnGuardarMod);
 
         pestanas.addTab("Agendar Clase", formAgendar);
