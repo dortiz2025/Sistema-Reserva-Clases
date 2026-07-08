@@ -225,4 +225,33 @@ public class GestorPerfilTest {
         });
     }
 
+    /**
+     * Comprueba que el sistema devuelva correctamente la lista con todos los perfiles registrados.
+     */
+    @Test
+    public void testObtenerPerfilesExito() throws CorreoYaRegistradoException {
+        gestor.registrarPerfil("ID01", perfil1);
+        gestor.registrarPerfil("ID02", perfil2);
+
+        List<PerfilDummy> perfiles = gestor.obtenerPerfiles();
+
+        assertEquals(2, perfiles.size());
+        assertTrue(perfiles.contains(perfil1));
+        assertTrue(perfiles.contains(perfil2));
+    }
+
+    /**
+     * Comprueba que el método de filtrado devuelva una lista correcta de perfiles basándose en una estrategia dada.
+     */
+    @Test
+    public void testFiltrarExito() throws CorreoYaRegistradoException {
+        gestor.registrarPerfil("ID01", perfil1);
+        gestor.registrarPerfil("ID02", perfil2);
+
+        FiltrarStrategy<PerfilDummy> estrategia = perfil -> perfil.getNombre().startsWith("Martín");
+        List<PerfilDummy> filtrados = gestor.filtrar(estrategia);
+
+        assertEquals(1, filtrados.size());
+        assertEquals("Martín Álvarez", filtrados.get(0).getNombre());
+    }
 }
