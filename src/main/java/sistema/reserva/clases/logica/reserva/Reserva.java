@@ -210,4 +210,17 @@ public class Reserva {
         }
     }
 
+
+    //se sobreescribe el metodo tostring para que la interfaz pueda mostrar los datos reales
+    @Override
+    public String toString() {
+        return "Reserva [ID: " + idReserva +
+                " | Estudiante: " + estudiante.getNombre() +
+                " | Tutor: " + tutor.getNombre() +
+                " | Materia: " + materia +
+                " | Fecha: " + fecha +
+                " | Horario: " + horario +
+                " | Estado: " + estado.getEstado() + "]";
+    }
+
 }

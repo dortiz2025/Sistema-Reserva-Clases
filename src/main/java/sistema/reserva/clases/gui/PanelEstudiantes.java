@@ -1,63 +1,132 @@
 package sistema.reserva.clases.gui;
 
+import sistema.reserva.clases.logica.Sistema;
+import sistema.reserva.clases.logica.Estudiante;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
-public class PanelEstudiantes extends JPanel{
+/**
+ * Clase que representa el panel de gestión de estudiantes en la interfaz gráfica.
+ * Permite registrar nuevos estudiantes, modificar sus datos básicos,
+ * visualizar la lista actualizada y eliminar perfiles.
+ */
+public class PanelEstudiantes extends JPanel {
 
-    public PanelEstudiantes() {
+    /**
+     * Constructor del panel de estudiantes.
+     * Inicializa los componentes visuales organizados por pestañas y define
+     * los eventos de los botones para conectar con el facade del sistema.
+     *
+     * @param sistema Referencia al facade principal de la lógica del sistema.
+     * @param lblEstado Etiqueta compartida para mostrar el estado de las operaciones en la ventana principal.
+     */
+    public PanelEstudiantes(Sistema sistema, JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        //registro
-        JPanel panelRegistro = new JPanel(new GridBagLayout());
-        panelRegistro.setBorder(BorderFactory.createTitledBorder("Registrar Estudiante"));
-        JPanel form = new JPanel(new GridLayout(5, 2, 10, 20));
+        JTabbedPane pestanasHerramientas = new JTabbedPane();
 
+        // registro
+        JPanel panelRegistro = new JPanel(new GridLayout(5, 2, 10, 20));
+        panelRegistro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtNombre = new JTextField(15);
-        JTextField txtMatricula = new JTextField(15);
-        JTextField txtPresupuesto = new JTextField(15);
+        JTextField txtEmail = new JTextField(15);
         JButton btnGuardar = new JButton("Registrar");
 
         btnGuardar.addActionListener(e -> {
-            String nombre = txtNombre.getText();
-            String matricula = txtMatricula.getText();
-            String presupuesto = txtPresupuesto.getText();
-            //aqui se espera la llamada a admin.registrarEstudiante(nombre, matricula, presupuesto)
+            try {
+                String matriculaGen = sistema.registrarEstudiante(txtNombre.getText(), txtEmail.getText());
+                lblEstado.setText("  Estado: estudiante registrado exitosamente con matricula " + matriculaGen);
+                txtNombre.setText("");
+                txtEmail.setText("");
+            } catch (Exception ex) {
+                lblEstado.setText("  Error: " + ex.getMessage());
+            }
         });
 
-        form.add(new JLabel("Nombre:")); form.add(txtNombre);
-        form.add(new JLabel("Matrícula:")); form.add(txtMatricula);
-        form.add(new JLabel("Presupuesto ($):")); form.add(txtPresupuesto);
-        form.add(new JLabel("")); form.add(btnGuardar);
-        panelRegistro.add(form);
+        panelRegistro.add(new JLabel("Nombre:")); panelRegistro.add(txtNombre);
+        panelRegistro.add(new JLabel("Email:")); panelRegistro.add(txtEmail);
+        panelRegistro.add(new JLabel("")); panelRegistro.add(new JLabel(""));
+        panelRegistro.add(new JLabel("")); panelRegistro.add(btnGuardar);
 
-        //visualizacion
+        // modificar
+        JPanel panelModificar = new JPanel(new GridLayout(5, 2, 10, 20));
+        panelModificar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JTextField txtMatMod = new JTextField(15);
+        JTextField txtNomMod = new JTextField(15);
+        JTextField txtEmailMod = new JTextField(15);
+        JButton btnModificar = new JButton("Guardar Cambios");
+
+        btnModificar.addActionListener(e -> {
+            try {
+                sistema.modificarEstudiante(txtMatMod.getText(), txtNomMod.getText(), txtEmailMod.getText());
+                lblEstado.setText("  Estado: estudiante modificado exitosamente");
+            } catch (Exception ex) {
+                lblEstado.setText("  Error: " + ex.getMessage());
+            }
+        });
+
+        panelModificar.add(new JLabel("Matricula:")); panelModificar.add(txtMatMod);
+        panelModificar.add(new JLabel("Nuevo Nombre:")); panelModificar.add(txtNomMod);
+        panelModificar.add(new JLabel("Nuevo Email:")); panelModificar.add(txtEmailMod);
+        panelModificar.add(new JLabel("")); panelModificar.add(btnModificar);
+
+        pestanasHerramientas.addTab("Registrar", panelRegistro);
+        pestanasHerramientas.addTab("Modificar", panelModificar);
+
+        // visualizacion
         JPanel panelLista = new JPanel(new BorderLayout());
         panelLista.setBorder(BorderFactory.createTitledBorder("Estudiantes Registrados"));
         JTextArea txtAreaEstudiantes = new JTextArea();
         txtAreaEstudiantes.setEditable(false);
+        txtAreaEstudiantes.setLineWrap(true);
+        txtAreaEstudiantes.setWrapStyleWord(true);
+
         JButton btnActualizarLista = new JButton("Actualizar Lista");
+
         btnActualizarLista.addActionListener(e -> {
-            //aqui se espera que se consulte la lista de estudiantes al admin y se muestre
+            try {
+                List<Estudiante> lista = sistema.obtenerEstudiantes();
+                StringBuilder sb = new StringBuilder();
+                for (Estudiante est : lista) {
+                    sb.append(est.toString()).append("\n\n");
+                }
+                txtAreaEstudiantes.setText(sb.toString());
+                lblEstado.setText("  Estado: lista de estudiantes actualizada");
+            } catch (Exception ex) {
+                lblEstado.setText("  Error: " + ex.getMessage());
+            }
         });
+
         panelLista.add(new JScrollPane(txtAreaEstudiantes), BorderLayout.CENTER);
         panelLista.add(btnActualizarLista, BorderLayout.SOUTH);
 
-        //eliminación
+        // eliminacion
         JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
         JTextField txtMatriculaEliminar = new JTextField(15);
         JButton btnEliminar = new JButton("Eliminar por Matrícula");
+        btnEliminar.setBackground(new Color(232, 48, 27));
+        btnEliminar.setForeground(Color.WHITE);
+
         btnEliminar.addActionListener(e -> {
-            String matricula = txtMatriculaEliminar.getText();
-            //aqui se espera la llamada a admin.eliminarEstudiante(matricula)
+            try {
+                sistema.eliminarEstudiante(txtMatriculaEliminar.getText());
+                lblEstado.setText("  Estado: estudiante eliminado correctamente");
+                txtMatriculaEliminar.setText("");
+                btnActualizarLista.doClick();
+            } catch (Exception ex) {
+                lblEstado.setText("  Error: " + ex.getMessage());
+            }
         });
+
         panelEliminar.add(new JLabel("Matrícula:"));
         panelEliminar.add(txtMatriculaEliminar);
         panelEliminar.add(btnEliminar);
 
-        add(panelRegistro, BorderLayout.WEST);
+        add(pestanasHerramientas, BorderLayout.WEST);
         add(panelLista, BorderLayout.CENTER);
         add(panelEliminar, BorderLayout.SOUTH);
     }

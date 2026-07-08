@@ -153,14 +153,10 @@ public class Tutor extends Perfil{
      */
     @Override
     public String toString() {
-        return "Tutor{" +
-                "nombre='" + getNombre() + '\'' +
-                ", email='" + getEmail() + '\'' +
-                ", id='" + this.id + '\'' +
-                ", materias='" + this.materias + '\'' +
-                ", horariosDisponibles=" + this.horariosDisponibles +
-                ", tarifa=" + this.tarifa +
-                ", cupos=" + this.cupoMaximo +
-                '}';
+        return "ID: " + this.id + " | Tutor: " + getNombre() + "\n" +
+                "Email: " + getEmail() + "\n" +
+                "Tarifa: $" + this.tarifa + " | Cupo Máximo: " + this.cupoMaximo + " alumnos\n" +
+                "Materias: " + (this.materias.isEmpty() ? "Ninguna registrada" : this.materias) + "\n" +
+                "Horarios: " + (this.horariosDisponibles.isEmpty() ? "Ninguno registrado" : this.horariosDisponibles);
     }
 }
