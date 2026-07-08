@@ -7,13 +7,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Clase que representa el panel del calendario y el historial de reservas en la interfaz.
+ * Implementa vistas filtradas interconectadas mediante el patrón Strategy y permite
+ * interactuar de forma segura con el ciclo de vida de la reserva mediante el patrón State.
+ */
 public class PanelCalendario extends JPanel {
 
+    /**
+     * Constructor del panel de calendario.
+     * Inicializa la vista de solo lectura del historial y proporciona componentes
+     * para realizar búsquedas específicas y modificar el estado de clases agendadas.
+     *
+     * @param sistema Referencia al facade principal de la lógica del sistema.
+     * @param lblEstado Etiqueta compartida para mostrar el resultado de las actualizaciones de estado.
+     */
     public PanelCalendario(Sistema sistema, JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        //visualización del calendario y filtros
+        // visualizacion del calendario y filtros
         JPanel panelLista = new JPanel(new BorderLayout());
         panelLista.setBorder(BorderFactory.createTitledBorder("Calendario de Reservas Activas e Historial"));
 
@@ -61,7 +74,7 @@ public class PanelCalendario extends JPanel {
         panelLista.add(panelFiltros, BorderLayout.NORTH);
         panelLista.add(new JScrollPane(txtArea), BorderLayout.CENTER);
 
-        //gestion de reservas
+        // gestion de reservas
         JPanel panelGestion = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelGestion.setBorder(BorderFactory.createTitledBorder("Gestionar Reserva"));
         JTextField txtIdentificador = new JTextField(15);
