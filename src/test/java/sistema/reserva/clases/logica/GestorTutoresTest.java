@@ -101,4 +101,31 @@ public class GestorTutoresTest {
         }, "Debe lanzar NoSuchElementException al intentar eliminar un horario no registrado en el tutor.");
     }
 
+    /**
+     * Comprueba que el gestor agregue correctamente una nueva materia a la lista de materias del tutor.
+     */
+    @Test
+    public void testAddMateriaExito() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+        String id = tutor.getId();
+
+        gestor.addMateria(id, "Física");
+
+        assertTrue(tutor.getMaterias().contains("Física"));
+    }
+
+    /**
+     * Comprueba que el gestor elimine exitosamente una materia que previamente existía en el registro del tutor.
+     */
+    @Test
+    public void testEliminarMateriaExito() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+        String id = tutor.getId();
+        gestor.addMateria(id, "Física");
+
+        gestor.eliminarMateria(id, "Física");
+
+        assertFalse(tutor.getMaterias().contains("Física"));
+    }
+
 }
