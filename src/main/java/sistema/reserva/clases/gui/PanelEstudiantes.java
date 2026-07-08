@@ -108,6 +108,8 @@ public class PanelEstudiantes extends JPanel {
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
         JTextField txtMatriculaEliminar = new JTextField(15);
         JButton btnEliminar = new JButton("Eliminar por Matrícula");
+        btnEliminar.setBackground(new Color(232, 48, 27));
+        btnEliminar.setForeground(Color.WHITE);
 
         btnEliminar.addActionListener(e -> {
             try {
