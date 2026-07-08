@@ -179,4 +179,26 @@ public class GestorPerfilTest {
         assertThrows(IllegalArgumentException.class, () -> gestor.modificarDatosBasicos("ID01", "   ", "test@correo.com"));
     }
 
+    /**
+     * Comprueba que el sistema rechace la modificación si se entrega un correo nulo o vacío.
+     */
+    @Test
+    public void testModificarDatosBasicosCorreoVacioONuloLanzaExcepcion() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        assertThrows(IllegalArgumentException.class, () -> gestor.modificarDatosBasicos("ID01", "Juan", null));
+        assertThrows(IllegalArgumentException.class, () -> gestor.modificarDatosBasicos("ID01", "Juan", "   "));
+    }
+
+    /**
+     * Comprueba que el sistema valide el formato mínimo del correo (contener '@') durante la modificación.
+     */
+    @Test
+    public void testModificarDatosBasicosCorreoInvalidoFormatoLanzaExcepcion() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        assertThrows(CorreoInvalidoException.class, () -> {
+            gestor.modificarDatosBasicos("ID01", "Juan", "correosinarroba.com");
+        });
+    }
 }
