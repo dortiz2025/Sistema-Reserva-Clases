@@ -88,5 +88,17 @@ public class GestorTutoresTest {
         assertFalse(tutor.getHorariosDisponibles().contains(bloque));
     }
 
+    /**
+     * Comprueba que el sistema rechace el intento de eliminar un horario que no está registrado para el tutor,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testEliminarHorarioDisponibleLanzaExcepcion() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+
+        assertThrows(NoSuchElementException.class, () -> {
+            gestor.eliminarHorarioDisponible(tutor.getId(), bloque);
+        }, "Debe lanzar NoSuchElementException al intentar eliminar un horario no registrado en el tutor.");
+    }
 
 }
