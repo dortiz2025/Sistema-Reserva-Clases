@@ -80,4 +80,33 @@ public class SistemaTest {
         assertEquals("modificado@udec.cl", estudiante.getEmail());
     }
 
+    /**
+     * Comprueba que el sistema rechace la reducción de cupos de un tutor si este ya tiene clases agendadas
+     * que superan el nuevo límite impuesto, lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testModificarTutorReduccionCuposLanzaExcepcion() throws Exception {
+        String matricula2 = sistema.registrarEstudiante("Estudiante Dos", "dos@udec.cl");
+
+        sistema.agendarClase(matriculaBase, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        sistema.agendarClase(matricula2, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertThrows(IllegalStateException.class, () -> {
+            sistema.modificarTutor(idTutorBase, "Tutor Base", "tutorbase@udec.cl", 15000, 1);
+        }, "Debe lanzar IllegalStateException si se intenta reducir el cupo habiendo ya reservas que lo superen.");
+    }
+
+    /**
+     * Comprueba que al eliminar una materia de un tutor, el sistema cancele masivamente las reservas pendientes asociadas.
+     */
+    @Test
+    public void testEliminarMateriaTutorCancelaReservasAsociadas() throws Exception {
+        String idReserva = sistema.agendarClase(matriculaBase, idTutorBase, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        sistema.eliminarMateriaTutor(idTutorBase, "Matemáticas");
+
+        Reserva reserva = sistema.obtenerReservaPorId(idReserva);
+        assertEquals(NombreEstado.CANCELADA, reserva.getEstado());
+    }
+
 }
