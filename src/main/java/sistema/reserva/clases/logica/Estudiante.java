@@ -36,10 +36,7 @@ public class Estudiante extends Perfil{
      */
     @Override
     public String toString() {
-        return "Estudiante{" +
-                "nombre='" + getNombre() + '\'' +
-                ", email='" + getEmail() + '\'' +
-                ", matricula='" + this.matricula + '\'' +
-                '}';
+        return "Matrícula: " + this.matricula + " | Estudiante: " + getNombre() + "\n" +
+                "Email: " + getEmail();
     }
 }
