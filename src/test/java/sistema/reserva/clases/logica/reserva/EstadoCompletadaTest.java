@@ -59,4 +59,14 @@ public class EstadoCompletadaTest {
         }, "Debe lanzar IllegalStateException al intentar cancelar una reserva que ya está en estado completada.");
     }
 
+    /**
+     * Comprueba que el sistema rechace cualquier intento de marcar como completada una reserva
+     * que ya se encuentra en dicho estado, lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testCompletarReservaLanzaExcepcion() {
+        assertThrows(IllegalStateException.class, () -> {
+            estadoCompletada.completarReserva(reserva);
+        }, "Debe lanzar IllegalStateException al intentar completar una reserva que ya está completada.");
+    }
 }
