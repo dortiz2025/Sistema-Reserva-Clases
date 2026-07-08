@@ -74,7 +74,4 @@ public class SistemaTutoriasGUI extends JFrame {
         return new JButton(texto);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SistemaTutoriasGUI().setVisible(true));
-    }
 }
