@@ -86,4 +86,33 @@ public class GestorReservasTest {
                 addHorarioDisponible(bloqueMartes);
             }
         };
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            gestor.registrarReserva(estudiante1, tutorMartes, "Matemáticas", bloqueMartes, fechaFuturaLunes);
+        });
+    }
+
+    /**
+     * Comprueba que el sistema rechace la reserva si el tutor no imparte la materia solicitada,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarReservaTutorNoImparteMateriaLanzaExcepcion() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            gestor.registrarReserva(estudiante1, tutor, "Química", bloqueLunes, fechaFuturaLunes);
+        });
+    }
+
+    /**
+     * Comprueba que el sistema rechace la reserva si el estudiante ya tiene una agendada en el mismo horario,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarReservaEstudianteYaRegistradoLanzaExcepcion() throws Exception {
+        gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+
+        assertThrows(EstudianteYaRegistradoException.class, () -> {
+            gestor.registrarReserva(estudiante1, tutor, "Matemáticas", bloqueLunes, fechaFuturaLunes);
+        });
+    }
 }
