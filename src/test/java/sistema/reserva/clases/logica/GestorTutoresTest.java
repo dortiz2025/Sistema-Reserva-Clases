@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GestorTutoresTest {
 /**
  * Pruebas unitarias para la clase GestorTutores.
  * Verifica el correcto registro, modificación y administración de horarios y materias asociadas a los tutores.
@@ -32,6 +31,34 @@ public class GestorTutoresTest {
         gestor = new GestorTutores();
         tutor = new Tutor("Tutor Ciencias", "ciencias@udec.cl", 10000, 5);
         bloque = new BloqueHorario(DiaSemana.MIERCOLES, Bloque.BLOQUE_4);
+    }
+
+    /**
+     * Comprueba que el sistema registre exitosamente un tutor en el mapa de perfiles utilizando su ID.
+     */
+    @Test
+    public void testRegistrarTutorExito() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+
+        assertNotNull(gestor.buscarPorId(tutor.getId()));
+        assertEquals(1, gestor.obtenerPerfiles().size());
+    }
+
+    /**
+     * Comprueba que se puedan modificar exitosamente tanto los datos básicos heredados como los datos específicos del tutor.
+     */
+    @Test
+    public void testModificarTutorExito() throws Exception {
+        gestor.registrarTutor(tutor);
+        String id = tutor.getId();
+
+        gestor.modificarTutor(id, "Tutor Modificado", "nuevo@udec.cl", 20000, 10);
+
+        Tutor tutorModificado = gestor.buscarPorId(id);
+        assertEquals("Tutor Modificado", tutorModificado.getNombre());
+        assertEquals("nuevo@udec.cl", tutorModificado.getEmail());
+        assertEquals(20000, tutorModificado.getTarifa());
+        assertEquals(10, tutorModificado.getCupoMaximo());
     }
 
 
