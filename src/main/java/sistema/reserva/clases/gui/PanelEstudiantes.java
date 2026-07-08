@@ -7,15 +7,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PanelEstudiantes extends JPanel{
+/**
+ * Clase que representa el panel de gestión de estudiantes en la interfaz gráfica.
+ * Permite registrar nuevos estudiantes, modificar sus datos básicos,
+ * visualizar la lista actualizada y eliminar perfiles.
+ */
+public class PanelEstudiantes extends JPanel {
 
+    /**
+     * Constructor del panel de estudiantes.
+     * Inicializa los componentes visuales organizados por pestañas y define
+     * los eventos de los botones para conectar con el facade del sistema.
+     *
+     * @param sistema Referencia al facade principal de la lógica del sistema.
+     * @param lblEstado Etiqueta compartida para mostrar el estado de las operaciones en la ventana principal.
+     */
     public PanelEstudiantes(Sistema sistema, JLabel lblEstado) {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JTabbedPane pestanasHerramientas = new JTabbedPane();
 
-        //registro
+        // registro
         JPanel panelRegistro = new JPanel(new GridLayout(5, 2, 10, 20));
         panelRegistro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtNombre = new JTextField(15);
@@ -38,7 +51,7 @@ public class PanelEstudiantes extends JPanel{
         panelRegistro.add(new JLabel("")); panelRegistro.add(new JLabel(""));
         panelRegistro.add(new JLabel("")); panelRegistro.add(btnGuardar);
 
-        //modificar
+        // modificar
         JPanel panelModificar = new JPanel(new GridLayout(5, 2, 10, 20));
         panelModificar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JTextField txtMatMod = new JTextField(15);
@@ -63,13 +76,14 @@ public class PanelEstudiantes extends JPanel{
         pestanasHerramientas.addTab("Registrar", panelRegistro);
         pestanasHerramientas.addTab("Modificar", panelModificar);
 
-        //visualizacion
+        // visualizacion
         JPanel panelLista = new JPanel(new BorderLayout());
         panelLista.setBorder(BorderFactory.createTitledBorder("Estudiantes Registrados"));
         JTextArea txtAreaEstudiantes = new JTextArea();
         txtAreaEstudiantes.setEditable(false);
         txtAreaEstudiantes.setLineWrap(true);
         txtAreaEstudiantes.setWrapStyleWord(true);
+
         JButton btnActualizarLista = new JButton("Actualizar Lista");
 
         btnActualizarLista.addActionListener(e -> {
@@ -89,7 +103,7 @@ public class PanelEstudiantes extends JPanel{
         panelLista.add(new JScrollPane(txtAreaEstudiantes), BorderLayout.CENTER);
         panelLista.add(btnActualizarLista, BorderLayout.SOUTH);
 
-        //eliminación
+        // eliminacion
         JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Perfil"));
         JTextField txtMatriculaEliminar = new JTextField(15);
