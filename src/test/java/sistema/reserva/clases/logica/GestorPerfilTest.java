@@ -128,4 +128,55 @@ public class GestorPerfilTest {
         });
     }
 
+    /**
+     * Comprueba que se puedan modificar exitosamente los datos básicos de un perfil.
+     */
+    @Test
+    public void testModificarDatosBasicosExito() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        gestor.modificarDatosBasicos("ID01", "Juan Modificado", "nuevo@correo.com");
+
+        assertEquals("Juan Modificado", perfil1.getNombre());
+        assertEquals("nuevo@correo.com", perfil1.getEmail());
+    }
+
+    /**
+     * Comprueba que el sistema permita modificar el perfil conservando el mismo correo original sin lanzar errores de duplicidad.
+     */
+    @Test
+    public void testModificarDatosBasicosMismoCorreoExito() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        gestor.modificarDatosBasicos("ID01", "Juan Nuevo Nombre", "juan@udec.cl");
+
+        assertEquals("Juan Nuevo Nombre", perfil1.getNombre());
+        assertEquals("juan@udec.cl", perfil1.getEmail());
+    }
+
+    /**
+     * Comprueba que el sistema rechace la modificación si un usuario intenta cambiar su correo a uno que ya pertenece a otro,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testModificarDatosBasicosCorreoEnUsoPorOtroLanzaExcepcion() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+        gestor.registrarPerfil("ID02", perfil2);
+
+        assertThrows(CorreoYaRegistradoException.class, () -> {
+            gestor.modificarDatosBasicos("ID01", "Juan Díaz", "martin@udec.cl");
+        });
+    }
+
+    /**
+     * Comprueba que el sistema rechace la modificación si se entrega un nombre nulo o vacío.
+     */
+    @Test
+    public void testModificarDatosBasicosNombreInvalidoLanzaExcepcion() throws Exception {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        assertThrows(IllegalArgumentException.class, () -> gestor.modificarDatosBasicos("ID01", null, "test@correo.com"));
+        assertThrows(IllegalArgumentException.class, () -> gestor.modificarDatosBasicos("ID01", "   ", "test@correo.com"));
+    }
+
 }
