@@ -61,5 +61,32 @@ public class GestorTutoresTest {
         assertEquals(10, tutorModificado.getCupoMaximo());
     }
 
+    /**
+     * Comprueba que el gestor agregue correctamente un bloque horario a la disponibilidad del tutor.
+     */
+    @Test
+    public void testAgregarHorarioDisponibleExito() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+        String id = tutor.getId();
+
+        gestor.agregarHorarioDisponible(id, bloque);
+
+        assertTrue(tutor.getHorariosDisponibles().contains(bloque));
+    }
+
+    /**
+     * Comprueba que el gestor elimine exitosamente un bloque horario que previamente existía en la disponibilidad del tutor.
+     */
+    @Test
+    public void testEliminarHorarioDisponibleExito() throws CorreoYaRegistradoException {
+        gestor.registrarTutor(tutor);
+        String id = tutor.getId();
+        gestor.agregarHorarioDisponible(id, bloque);
+
+        gestor.eliminarHorarioDisponible(id, bloque);
+
+        assertFalse(tutor.getHorariosDisponibles().contains(bloque));
+    }
+
 
 }
