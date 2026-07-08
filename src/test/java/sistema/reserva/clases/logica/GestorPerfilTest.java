@@ -201,4 +201,28 @@ public class GestorPerfilTest {
             gestor.modificarDatosBasicos("ID01", "Juan", "correosinarroba.com");
         });
     }
+
+    /**
+     * Comprueba que el sistema elimine correctamente un perfil pasando un ID válido.
+     */
+    @Test
+    public void testEliminarPerfilExito() throws CorreoYaRegistradoException {
+        gestor.registrarPerfil("ID01", perfil1);
+        assertEquals(1, gestor.obtenerPerfiles().size());
+
+        gestor.eliminarPerfil("ID01");
+
+        assertEquals(0, gestor.obtenerPerfiles().size());
+    }
+
+    /**
+     * Comprueba que el sistema lance una excepción al intentar eliminar un perfil que no existe.
+     */
+    @Test
+    public void testEliminarPerfilNoEncontradoLanzaExcepcion() {
+        assertThrows(NoSuchElementException.class, () -> {
+            gestor.eliminarPerfil("ID_INEXISTENTE");
+        });
+    }
+
 }
