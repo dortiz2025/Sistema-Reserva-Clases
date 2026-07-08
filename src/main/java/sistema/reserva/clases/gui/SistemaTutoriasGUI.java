@@ -71,7 +71,11 @@ public class SistemaTutoriasGUI extends JFrame {
     }
 
     private JButton crearBotonMenu(String texto) {
-        return new JButton(texto);
+        JButton btn = new JButton(texto);
+        btn.setBackground(new Color(63, 149, 207));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        return btn;
     }
 
 }
