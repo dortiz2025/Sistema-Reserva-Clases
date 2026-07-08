@@ -80,6 +80,8 @@ public class PanelCalendario extends JPanel {
         JTextField txtIdentificador = new JTextField(15);
         JButton btnCompletar = new JButton("Completar (Realizada)");
         JButton btnCancelar = new JButton("Cancelar Reserva");
+        btnCancelar.setBackground(new Color(231, 76, 60));
+        btnCancelar.setForeground(Color.WHITE);
 
         btnCompletar.addActionListener(e -> {
             try {
