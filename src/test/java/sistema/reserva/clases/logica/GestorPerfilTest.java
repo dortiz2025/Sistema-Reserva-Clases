@@ -91,5 +91,41 @@ public class GestorPerfilTest {
         assertTrue(exception.getMessage().contains("ya se encuentra asociado a un perfil"));
     }
 
+    /**
+     * Comprueba que el sistema rechace el registro de un perfil si el correo ingresado ya está en uso,
+     * lanzando la excepción correspondiente.
+     */
+    @Test
+    public void testRegistrarPerfilCorreoDuplicadoLanzaExcepcion() throws CorreoYaRegistradoException, CorreoInvalidoException {
+        gestor.registrarPerfil("ID01", perfil1);
+        PerfilDummy perfilMismoCorreo = new PerfilDummy("Juan Falso", "juan@udec.cl");
+
+        assertThrows(CorreoYaRegistradoException.class, () -> {
+            gestor.registrarPerfil("ID02", perfilMismoCorreo);
+        });
+    }
+
+    /**
+     * Comprueba que el sistema devuelva el perfil correcto cuando se busca por un ID existente.
+     */
+    @Test
+    public void testBuscarPorIdExito() throws CorreoYaRegistradoException {
+        gestor.registrarPerfil("ID01", perfil1);
+
+        PerfilDummy encontrado = gestor.buscarPorId("ID01");
+
+        assertNotNull(encontrado);
+        assertEquals("Juan Díaz", encontrado.getNombre());
+    }
+
+    /**
+     * Comprueba que el sistema lance una excepción al buscar un ID que no se encuentra registrado.
+     */
+    @Test
+    public void testBuscarPorIdNoEncontradoLanzaExcepcion() {
+        assertThrows(NoSuchElementException.class, () -> {
+            gestor.buscarPorId("ID_INEXISTENTE");
+        });
+    }
 
 }
