@@ -1,37 +1,58 @@
-# Sistema-Reserva-Clases
-Proyecto Semestral - Desarrollo Orientado a Objetos - Ingeniería Civil Informática
+Número de Grupo y Nombres
+   Desarrolladores:
 
-Desarrolladores: Martin Ignacio Bastias Neira, Daniel Esteban Ortiz Estrada y Benjamin Alonso Silva Sepúlveda.
+Martín Ignacio Bastías Neira
 
-Patrones Implementados:
+Daniel Esteban Ortiz Estrada
 
-State: "Aplicamos el patrón State para eliminar la lógica condicional compleja (bloques if/else o switch) dentro de la clase Reserva al intentar modificarla o cancelarla. Esto nos permitió respetar el Principio de Responsabilidad Única (SRP), ya que cada estado gestiona sus propias reglas de negocio; y el Principio Abierto/Cerrado (OCP), porque si en el futuro queremos añadir un estado 'En Curso', solo creamos una nueva clase sin tener que modificar el código de la clase Reserva".
+Benjamín Alonso Silva Sepúlveda
 
+2. Enunciado del Proyecto
+   El presente proyecto consiste en el diseño e implementación de un Sistema de Reserva de Clases enfocado en la gestión de tutorías académicas. La plataforma permite a los estudiantes buscar tutores, revisar sus disponibilidades horarias, materias impartidas y tarifas, para finalmente concretar reservas de clases.
 
-Análisis Crítico de Patrones Propuestos
-1. Strategy (Filtros de Calendario) - Excelente elección El enunciado exige explícitamente mantener un calendario con "vistas filtradas para cada tutor o estudiante". El patrón Strategy encaja a la perfección.
-   Implementación: Ya tienes la interfaz FiltrarStrategy. Puedes crear clases concretas como FiltroPorMateria y FiltroPorTutor.
-   Para usar múltiples filtros a la vez: En lugar de crear combinaciones fijas (lo cual rompe la escalabilidad), puedes aplicar un enfoque donde tu método de filtrado reciba una lista de FiltrarStrategy. La lógica iterará sobre las reservas y solo devolverá aquellas que cumplan con todos los strategies proporcionados.
-2. Facade (Fachada para la Interfaz) - Muy pertinente La rúbrica penaliza severamente si no hay una "clara separación de responsabilidades". La GUI (SistemaTutoriasGUI) jamás debe instanciar reservas ni validar conflictos de horario.
-   Implementación: Tu clase Administrador puede actuar perfectamente como el Facade. Este patrón expone un método simple hacia la GUI, por ejemplo: administrador.agendarClase(matricula, idTutor, materia, horario). Por debajo, el Facade se encarga de llamar a GestorPerfil para buscar al estudiante y al tutor, y luego a GestorReservas para verificar que no haya choques de horario o de cupos (lanzando tu CupoExcedidoException si es necesario).
-3. State (Estado de la Reserva) - No es forzado si se aplica correctamente El patrón State es forzado solo cuando se usa para reemplazar un simple String o Enum que no hace nada más que mostrar un texto. Para que el patrón esté bien justificado y sume puntos en complejidad, el estado debe cambiar el comportamiento de la reserva.
-   Implementación: Si una reserva está Pendiente, sus métodos modificar() o cancelar() ejecutan la acción. Si el estado cambia a Cancelada o Completada, llamar a modificar() debe lanzar una excepción (ej. IllegalStateException), bloqueando cualquier intento de alterar el historial.
-   Sobre la "basura" de las clases canceladas: En sistemas reales de software, los registros casi nunca se borran permanentemente (Hard Delete). Se ocultan de las vistas principales mediante un "Soft Delete" o cambio de estado. Mantener el registro de clases canceladas es una excelente práctica para temas de auditoría o métricas del administrador.
-4. Observer y Factory Method (Tus dudas)
-   Observer (Muy recomendado): Es ideal para comunicar la capa lógica con la GUI sin acoplarlas. Cuando el GestorReservas concreta una nueva reserva, notifica a sus observadores (en este caso, el panel del calendario en SistemaTutoriasGUI) para que actualice la vista automáticamente, sin necesidad de que el usuario presione un botón de "Actualizar Calendario".
+El sistema garantiza la integridad de las reglas de negocio a través de una validación estricta, previniendo topes de horario, controlando los cupos máximos por clase y gestionando el ciclo de vida transaccional de cada reserva.
 
+3. Diagrama de Casos de Uso
+   A continuación, se presentan los actores principales y sus interacciones con los casos de uso definidos para el sistema.
 
-"Durante el desarrollo, identificamos una ambigüedad en el dominio: la diferencia entre una 'Clase' (el evento del tutor) y una 'Reserva' (el cupo del estudiante). Por restricciones de tiempo, optamos por un modelo donde la Reserva actúa como el ticket individual, manejando las cancelaciones masivas de clases iterando sobre las reservas afectadas. Como propuesta de mejora arquitectónica para una futura iteración, sugerimos separar la entidad 'Clase' de la entidad 'Reserva' para que ambas posean sus propios ciclos de vida y estados independientes."
+4. Interfaz Gráfica
+   Captura de la interfaz desarrollada para la interacción del usuario con la lógica del sistema, priorizando una clara separación de responsabilidades entre la presentación y el dominio.
 
-Para la búsqueda y vistas filtradas del calendario, combinamos el Patrón Strategy con el Patrón Composite. En lugar de alterar la clase base o crear una infinidad de estrategias anidadas para cada combinación de la interfaz gráfica, desarrollamos un FiltroCompuesto que actúa como contenedor dinámico de estrategias simples. Esto nos permitió respetar estrictamente los principios SOLID, manteniendo nuestras clases cerradas a la modificación pero infinitamente abiertas a nuevos filtros."
+5. Diagrama de Clases UML
+   El siguiente diagrama refleja la arquitectura del software, detallando la jerarquía, relaciones y componentes de la capa lógica.
 
+6. Patrones de Diseño Implementados y Justificación
+   Para garantizar que el software cumpla estrictamente con los principios SOLID y las directrices GRASP, se implementaron los siguientes patrones de diseño:
 
-Informe de Arquitectura y Patrones de Diseño Proyecto: Sistema de Reserva de Clases Particulares
-1. Resumen de Evolución del Diseño El sistema fue sometido a una profunda refactorización arquitectónica para aislar la capa de dominio de la capa de presentación (GUI), basándonos en los principios SOLID y las directrices GRASP. Se eliminó la dependencia bidireccional y se erradicó el antipatrón "God Object", delegando la responsabilidad de la gestión de memoria a repositorios especializados (Gestores), logrando un alto grado de cohesión y un bajo acoplamiento estructural. Se implementó una lógica de validación transaccional (Fail-Fast) para evitar estados corruptos en memoria.
-2. Implementación de Patrones de Diseño
-   Facade + Singleton (Control Centralizado): La clase Sistema actúa como el único punto de entrada (Facade) para la interfaz gráfica. Centraliza la orquestación de operaciones complejas que cruzan múltiples dominios (ej. al eliminar un tutor, se comunican el GestorTutores y el GestorReservas). Su instanciación está bloqueada (private Sistema()) garantizando una única fuente de verdad en memoria mediante el patrón Singleton.
-   State Pattern (Ciclo de Vida Transaccional): Para manejar la volatilidad funcional de una clase particular, se delegó el comportamiento de la clase Reserva a la interfaz EstadoReserva. Los estados concretos (EstadoPendiente, EstadoCompletada, EstadoCancelada) dictan en tiempo de ejecución si una reserva puede modificarse, ocupar cupos físicos o cancelarse, erradicando el uso masivo de sentencias if-else en la lógica de negocio.
-   Strategy + Composite (Búsqueda Dinámica): El motor de búsqueda de tutores evita la sobrecarga de consultas SQL-like en código duro mediante el patrón Strategy (FiltrarStrategy). Para soportar búsquedas multicriterio (ej. Nombre + Materia simultáneamente), se incorporó el patrón Composite a través de FiltroCompuesto, permitiendo apilar dinámicamente múltiples estrategias de filtrado sin alterar el núcleo del gestor.
-3. Coherencia con la Rúbrica El diseño actual cumple estrictamente con el principio de Responsabilidad Única (SRP), separando las vistas de la lógica de dominio. La inmutabilidad de colecciones (Collections.unmodifiableList()) y el uso avanzado de Java Streams garantizan la integridad referencial y algorítmica exigida en los requerimientos del proyecto.
+6.1. State (Estado)
+Justificación: Aplicamos el patrón State para eliminar la lógica condicional compleja (bloques if/else o switch) dentro de la clase Reserva al intentar modificarla o cancelarla. Esto nos permitió respetar el Principio de Responsabilidad Única (SRP), ya que cada estado gestiona sus propias reglas de negocio; y el Principio Abierto/Cerrado (OCP), porque si en el futuro queremos añadir un nuevo estado, solo creamos una nueva clase sin tener que modificar el código original de la reserva.
 
+Clases Involucradas: EstadoReserva (Interfaz), EstadoPendiente, EstadoCompletada, EstadoCancelada, Reserva.
 
+6.2. Strategy y Composite
+Justificación: Para la búsqueda y las vistas filtradas del calendario, combinamos el Patrón Strategy con el Patrón Composite para evitar la sobrecarga de consultas estáticas en el código. En lugar de alterar la clase base o crear una infinidad de estrategias anidadas para cada combinación de la interfaz gráfica, desarrollamos un FiltroCompuesto que actúa como contenedor dinámico de estrategias simples. Esto nos permitió mantener nuestras clases cerradas a la modificación pero infinitamente abiertas a nuevos filtros.
+
+Clases Involucradas: FiltrarStrategy (Interfaz), FiltroPorNombre, FiltroTutorPorMateria, FiltroCompuesto.
+
+6.3. Facade (Fachada) y Singleton
+Justificación: La clase Sistema actúa como el único punto de entrada (Facade) para la interfaz gráfica, orquestando las operaciones complejas que cruzan múltiples dominios (por ejemplo, al eliminar un tutor, se comunican el GestorTutores y el GestorReservas). Su instanciación está bloqueada mediante el patrón Singleton, garantizando un control centralizado y una única fuente de verdad en memoria.
+
+Clases Involucradas: Sistema, GestorTutores, GestorEstudiantes, GestorReservas.
+
+7. Decisiones Importantes del Proyecto
+   El sistema fue sometido a una profunda refactorización arquitectónica para aislar la capa de dominio de la capa de presentación. A lo largo del ciclo de desarrollo, tomamos las siguientes decisiones clave:
+
+Eliminación del antipatrón "God Object": Se eliminó la dependencia bidireccional y se delegó la responsabilidad de la gestión de memoria a repositorios especializados (Gestores). Esto nos permitió lograr un alto grado de cohesión y un bajo acoplamiento estructural.
+
+Validación Transaccional (Fail-Fast): Implementamos una lógica de validación preventiva para evitar estados corruptos en memoria. Las operaciones fallan rápidamente lanzando excepciones específicas antes de alterar los objetos.
+
+Inmutabilidad: Decidimos utilizar Collections.unmodifiableList() y el uso avanzado de Java Streams en las consultas para garantizar la integridad referencial y proteger las colecciones internas de modificaciones no deseadas desde el exterior.
+
+Manejo de registros (Soft Delete): Optamos por no borrar permanentemente los registros de las clases canceladas. Mantener el registro mediante un cambio de estado es una práctica que adoptamos para mantener la trazabilidad de los datos.
+
+8. Problemas Identificados y Autocrítica
+   Durante el desarrollo, identificamos una ambigüedad en el dominio: la diferencia conceptual entre una "Clase" (el evento general del tutor) y una "Reserva" (el cupo individual del estudiante). Por restricciones de tiempo para esta entrega, optamos por un modelo donde la Reserva actúa directamente como el ticket individual, manejando las cancelaciones masivas iterando sobre las reservas afectadas.
+
+Como propuesta de mejora arquitectónica para una futura iteración, sugerimos separar la entidad "Clase" de la entidad "Reserva" para que ambas posean sus propios ciclos de vida y estados independientes.
+
+Finalmente, a modo de autocrítica respecto a la gestión del equipo, en las etapas iniciales existió un desajuste entre los diagramas UML propuestos y el código que se estaba implementando. Esto generó cuellos de botella que nos forzaron a realizar refactorizaciones estructurales avanzadas. Este proceso nos dejó como lección la importancia fundamental de consolidar y respetar el diseño de la arquitectura antes de comenzar la fase de codificación.
